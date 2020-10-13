@@ -48,7 +48,7 @@ function App() {
             </Button>
             <Title style={{ display: 'inline' }} useIcon={false} hideText={!collapse} />
           </Layout.Header>
-          <Layout.Content style={{ margin: '24px 16px', padding: 24 }}>
+          <Layout.Content style={{ margin: '7px 16px', padding: 24 }}>
             <Switch>
               <Route path="/" exact component={Main} />
               <Route component={NotFoundPage} />

@@ -12,10 +12,13 @@
     "@types/react-dom": "^16.9.0",
     "antd": "^4.7.0",
     "axios": "^0.20.0",
+    "immutability-helper": "^3.1.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
+    "react-hotkeys": "^2.0.0",
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.3",
+    "shortid": "^2.2.15",
     "typescript": "~3.7.2"
   },
   "scripts": {
@@ -42,6 +45,8 @@
   "devDependencies": {
     "@types/antd": "^1.0.0",
     "@types/axios": "^0.14.0",
-    "@types/react-router-dom": "^5.1.6"
+    "@types/immutability-helper": "^2.6.3",
+    "@types/react-router-dom": "^5.1.6",
+    "@types/shortid": "^0.0.29"
   }
 }
