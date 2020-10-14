@@ -1,4 +1,5 @@
-import { Divider, Form, Input, message, Select, Spin, Tabs, Tag, Typography } from 'antd'
+import { PlusOutlined, DeleteOutlined } from '@ant-design/icons'
+import { Button, Divider, Form, Input, message, Select, Space, Spin, Tabs, Tag, Typography } from 'antd'
 import { useForm } from 'antd/lib/form/Form'
 import Axios from 'axios'
 import React, { useEffect, useState } from 'react'
@@ -180,6 +181,27 @@ const Main: React.FC = () => {
             </Form.Item>
             <Tabs defaultActiveKey="0">
               <Tabs.TabPane tab="Params" key="0">
+                <Form.List name="params">
+                  {(fields, { add, remove }) => (
+                    <>
+                      {fields.map((field, i) => (
+                        <Space key={i} style={{ display: 'flex' }} align="baseline">
+                          <Form.Item style={{ width: '30vw' }} { ...field } name={[field.name, 'key']} fieldKey={[field.fieldKey, 'key']}>
+                            <Input placeholder="key" autoComplete="off" />
+                          </Form.Item>
+                          <Form.Item style={{ width: '30vw' }} { ...field } name={[field.name, 'value']} fieldKey={[field.fieldKey, 'value']}>
+                            <Input placeholder="value" autoComplete="off" />
+                          </Form.Item>
+                          <DeleteOutlined onClick={() => remove(field.name)} />
+                        </Space>
+                      ))}
+
+                      <Form.Item>
+                        <Button onClick={() => add()} type="default"><PlusOutlined /> Add params</Button>
+                      </Form.Item>
+                    </>
+                  )}
+                </Form.List>
               </Tabs.TabPane>
               <Tabs.TabPane tab="Headers" key="1">
               </Tabs.TabPane>
