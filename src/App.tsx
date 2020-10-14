@@ -1,4 +1,4 @@
-import { MenuUnfoldOutlined, MenuFoldOutlined, FireOutlined, HomeOutlined, HistoryOutlined } from '@ant-design/icons'
+import { MenuUnfoldOutlined, MenuFoldOutlined, FireOutlined, HomeOutlined, HistoryOutlined, InfoCircleOutlined } from '@ant-design/icons'
 import React, { useState } from 'react'
 import { Button, Layout, Menu, Typography } from 'antd'
 import { BrowserRouter, Link, Route, Switch } from 'react-router-dom'
@@ -39,6 +39,9 @@ function App() {
             <Menu.Item key={2} icon={<HistoryOutlined />}>
               <Link to="/history">History</Link>
             </Menu.Item>
+            <Menu.Item key={3} icon={<InfoCircleOutlined />}>
+              <Link to="/about">About</Link>
+            </Menu.Item>
           </Menu>
         </Layout.Sider>
         <Layout>
@@ -48,7 +51,7 @@ function App() {
             </Button>
             <Title style={{ display: 'inline' }} useIcon={false} hideText={!collapse} />
           </Layout.Header>
-          <Layout.Content style={{ margin: '7px 16px', padding: 24 }}>
+          <Layout.Content style={{ margin: '7px 10px', padding: 24 }}>
             <Switch>
               <Route path="/" exact component={Main} />
               <Route component={NotFoundPage} />
