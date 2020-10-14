@@ -1,9 +1,8 @@
-import { Form, Input, message, Select, Spin, Tabs, Tag } from 'antd'
+import { Divider, Form, Input, message, Select, Spin, Tabs, Tag, Typography } from 'antd'
 import { useForm } from 'antd/lib/form/Form'
 import Axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import AceEditor from 'react-ace'
-import Beautify from 'ace-builds/src-noconflict/ext-beautify'
 import { generate as createId } from 'shortid'
 
 import 'ace-builds/src-noconflict/mode-json'
@@ -21,7 +20,8 @@ type Request = {
   method: string,
   url?: string,
   headers?: any,
-  requestBody?: any,
+  body?: any,
+  params?: any
 }
 
 type RequestData = {
@@ -118,13 +118,30 @@ const Main: React.FC = () => {
       return message.error('Please fill the URL first')
     }
     setIsLoading(true)
-    const getResponse = await Axios.get(activeRequest.request.url)
-    Beautify.beautify((document.querySelector('.aceEditor') as any)?.env.editor.session)
-    updateTab({}, {
-      status: getResponse.status,
-      body: getResponse.data,
-      headers: getResponse.headers
-    })
+    let method = activeRequest.request.method
+    if (method === 'del') {
+      method = 'delete'
+    } else if (method === 'opt') {
+      method = 'options'
+    }
+    try {
+      const getResponse = await Axios[method](activeRequest.request.url, method === 'get' ? {} : JSON.parse(activeRequest.request.body))
+      updateTab({}, {
+        status: getResponse.status,
+        body: getResponse.data,
+        headers: getResponse.headers
+      })
+    } catch (error) {
+      if (error?.response) {
+        updateTab({}, {
+          status: error?.response?.status,
+          body: error?.response?.data,
+          headers: error?.response?.headers
+        })
+      } else {
+        message.error('Something error')
+      }
+    }
     setIsLoading(false)
   }
 
@@ -161,28 +178,62 @@ const Main: React.FC = () => {
                   onChange={e => updateTab({ url: e.target.value })} />
               </span>
             </Form.Item>
+            <Tabs defaultActiveKey="0">
+              <Tabs.TabPane tab="Params" key="0">
+              </Tabs.TabPane>
+              <Tabs.TabPane tab="Headers" key="1">
+              </Tabs.TabPane>
+              <Tabs.TabPane tab="Body" key="2">
+                <AceEditor
+                  mode="json"
+                  theme="tomorrow_night"
+                  className="aceEditor"
+                  name="editor1"
+                  fontSize={12}
+                  width="100%"
+                  height="250px"
+                  showPrintMargin={true}
+                  showGutter={true}
+                  highlightActiveLine={true}
+                  onChange={body => updateTab({ body })}
+                  setOptions={{
+                    showLineNumbers: false,
+                    tabSize: 2,
+                    showPrintMargin: false,
+                    useWorker: false
+                  }}
+                />
+              </Tabs.TabPane>
+            </Tabs>
           </Form>
+          <Divider />
           <Spin spinning={isLoading}>
-            <AceEditor
-              mode={findMode()}
-              theme="tomorrow_night"
-              className="aceEditor"
-              name="editor"
-              fontSize={14}
-              width="100%"
-              height="300px"
-              showPrintMargin={true}
-              showGutter={true}
-              highlightActiveLine={true}
-              value={typeof activeRequest?.response?.body === 'object' ? JSON.stringify(activeRequest?.response?.body, null, 2) : activeRequest?.response?.body || ''}
-              setOptions={{
-                showLineNumbers: false,
-                tabSize: 2,
-                showPrintMargin: false,
-                readOnly: true,
-                useWorker: false
-              }}
-            />
+            <Typography.Title level={5} type="secondary">Response</Typography.Title>
+            <Tabs>
+              <Tabs.TabPane tab="Body">
+                <AceEditor
+                  mode={findMode()}
+                  theme="tomorrow_night"
+                  className="aceEditor"
+                  name="editor2"
+                  fontSize={12}
+                  width="100%"
+                  height="250px"
+                  showPrintMargin={true}
+                  showGutter={true}
+                  highlightActiveLine={true}
+                  value={typeof activeRequest?.response?.body === 'object' ? JSON.stringify(activeRequest?.response?.body, null, 2) : activeRequest?.response?.body || ''}
+                  setOptions={{
+                    showLineNumbers: false,
+                    tabSize: 2,
+                    showPrintMargin: false,
+                    readOnly: true,
+                    wrap: true,
+                    useWorker: false
+                  }}
+                />
+              </Tabs.TabPane>
+            </Tabs>
           </Spin>
         </Tabs.TabPane>
       )) }
