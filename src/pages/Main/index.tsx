@@ -1,15 +1,16 @@
 import { PlusOutlined, DeleteOutlined } from '@ant-design/icons'
 import { Button, Divider, Form, Input, message, Select, Space, Spin, Tabs, Tag, Typography } from 'antd'
 import { useForm } from 'antd/lib/form/Form'
-import Axios from 'axios'
+import Axios, { AxiosRequestConfig } from 'axios'
 import React, { useEffect, useState } from 'react'
+import queryString from 'query-string'
 import AceEditor from 'react-ace'
 import { generate as createId } from 'shortid'
 
 import 'ace-builds/src-noconflict/mode-json'
 import 'ace-builds/src-noconflict/mode-html'
 import 'ace-builds/src-noconflict/mode-plain_text'
-import 'ace-builds/src-noconflict/theme-tomorrow_night'
+import 'ace-builds/src-noconflict/theme-vibrant_ink'
 
 type Response = {
   status: number,
@@ -56,25 +57,22 @@ const Main: React.FC = () => {
   }, [requestData])
 
   useEffect(() => {
-    const present = requestData?.find(req => req.id === activeTab)
+    const present = [...requestData || []]?.find(req => req.id === activeTab)
     setActiveRequest(present)
     form.setFieldsValue({
-      params: present?.request.params || []
+      params: present?.request.params?.map(param => ({ [`${present.id}_key`]: param.key, [`${present.id}_value`]: param.value })) || [],
+      headers: present?.request.headers?.map(header => ({ [`${present.id}_key`]: header.key, [`${present.id}_value`]: header.value })) || []
     })
-    // if (form.getFieldsValue().params?.length) {
-    //   console.log('OIALSKASSA', form.getFieldsValue()['params'], present?.request.params)
-    //   form.setFieldsValue({
-    //     params: []
-    //   })
-    // }
   }, [activeTab, requestData, form])
 
   const mutateTabs = (key: any, action: string) => {
-    console.log(key, action)
     if (action === 'add') {
       setRequestData([...requestData || [], buildInitialRequestData()])
     } else if (action === 'remove') {
       setRequestData(requestData?.filter(req => req.id !== key))
+      if (activeTab === key) {
+        setActiveTab(requestData?.[0].id)
+      }
     }
   }
 
@@ -124,10 +122,16 @@ const Main: React.FC = () => {
     return candidate
   }
 
+  const updateListField = async (i: number, data: 'params' | 'headers', key: 'key' | 'value', { target }) => {
+    const { value } = target
+    const params = activeRequest?.request[data] || []
+    params[i] = { ...params[i], [key]: value || null }
+    return updateTab({ [data]: params })
+  }
+
   const send = async () => {
-    console.log(activeRequest?.request)
     const params = activeRequest?.request.params?.reduce((res: any, param: any) => ({ ...res, [param.key]: param.value }), {})
-    console.log(params)
+    const headers = activeRequest?.request.headers?.reduce((res: any, header: any) => ({ ...res, [header.key]: header.value }), {})
     if (!activeRequest?.request.url) {
       return message.error('Please fill the URL first')
     }
@@ -140,13 +144,18 @@ const Main: React.FC = () => {
     }
 
     try {
-      const getResponse = await Axios[method](activeRequest.request.url, method === 'get' ? {} : JSON.parse(activeRequest.request.body))
+      const options: AxiosRequestConfig = {
+        params: params || {},
+        headers: headers || {},
+      }
+      const getResponse = await Axios[method](activeRequest.request.url, method === 'get' ? options : JSON.parse(activeRequest.request.body) || {}, options)
       updateTab({}, {
         status: getResponse.status,
         body: getResponse.data,
         headers: getResponse.headers
       })
     } catch (error) {
+      console.log(error)
       if (error?.response) {
         updateTab({}, {
           status: error?.response?.status,
@@ -177,7 +186,7 @@ const Main: React.FC = () => {
   )
 
   return (
-    <Tabs defaultActiveKey={activeTab?.toString() || '0'} activeKey={activeTab} type="editable-card" onEdit={mutateTabs} onChange={setActiveTab} size="small">
+    <Tabs defaultActiveKey={activeTab?.toString() || requestData?.[0].id} activeKey={activeTab} type="editable-card" onEdit={mutateTabs} onChange={setActiveTab} size="small">
       { requestData?.map(tab => (
         <Tabs.TabPane tab={<tab.title />} key={tab.id}>
           <Form form={form} onFinish={send}>
@@ -190,11 +199,18 @@ const Main: React.FC = () => {
                   value={tab?.request?.url}
                   required
                   onSearch={send}
-                  onChange={e => updateTab({ url: e.target.value })} />
+                  onChange={e => updateTab({ url: e.target.value || '' })} />
               </span>
             </Form.Item>
             <Tabs defaultActiveKey="0">
               <Tabs.TabPane tab="Params" key="0">
+                { activeRequest?.request.params?.length && activeRequest?.request?.url ? (
+                  <Typography.Paragraph type="secondary">URL generated:&nbsp;
+                    <em>
+                      {queryString.stringifyUrl({ url: activeRequest?.request?.url, query: activeRequest?.request.params?.reduce((res: any, param: any) => ({ ...res, [param.key]: param.value }), {}) || {} })}
+                    </em>
+                  </Typography.Paragraph>
+                ) : '' }
                 <Form.List name="params">
                   {(fields, { add, remove }) => {
                     return (
@@ -202,23 +218,12 @@ const Main: React.FC = () => {
                         {fields.map((field, i) => {
                           return (
                             <Space key={i} style={{ display: 'flex' }} align="baseline">
-                              <Form.Item style={{ width: '35vw', marginBottom: '12px' }} { ...field } name={[field.name, 'key']} fieldKey={[field.fieldKey, 'key']}>
-                                <Input placeholder="Key" autoComplete="off" onChange={e => {
-                                  const params = activeRequest?.request.params || []
-                                  params[i] = { ...params[i], key: e.target.value || null }
-                                  console.log('NMNMNN', i, params[i])
-                                  return updateTab({ params })
-                                }} />
-                                {/* <Input placeholder="Key" autoComplete="off" /> */}
+                              <Form.Item style={{ width: '35vw', marginBottom: '12px' }} { ...field } name={[field.name, `${tab.id}_key`]} fieldKey={[field.fieldKey, `${tab.id}_key`]}>
+                                <Input placeholder="Key" autoComplete="off" onChange={e => updateListField(i, 'params', 'key', e)} />
                               </Form.Item>
                               <Form.Item
-                                style={{ width: '35vw', marginBottom: '12px' }} { ...field } name={[field.name, 'value']} fieldKey={[field.fieldKey, 'value']}>
-                                <Input placeholder="Value" autoComplete="off" onChange={e => {
-                                  const params = activeRequest?.request.params || []
-                                  params[i] = { ...params[i], value: e.target.value || null }
-                                  return updateTab({ params })
-                                }} />
-                                {/* <Input placeholder="Value" autoComplete="off" /> */}
+                                style={{ width: '35vw', marginBottom: '12px' }} { ...field } name={[field.name, `${tab.id}_value`]} fieldKey={[field.fieldKey, `${tab.id}_value`]}>
+                                <Input placeholder="Value" autoComplete="off" onChange={e => updateListField(i, 'params', 'value', e)} />
                               </Form.Item>
                               <DeleteOutlined onClick={() => {
                                 updateTab({ params: [...activeRequest?.request.params || []].filter((_, j) => j !== i) })
@@ -228,7 +233,7 @@ const Main: React.FC = () => {
                           )
                         })}
                         <Form.Item>
-                          <Button onClick={() => add()} type="default"><PlusOutlined /> Add params</Button>
+                          <Button onClick={() => add()} type="default"><PlusOutlined /> Add param</Button>
                         </Form.Item>
                       </>
                     )
@@ -236,22 +241,51 @@ const Main: React.FC = () => {
                 </Form.List>
               </Tabs.TabPane>
               <Tabs.TabPane tab="Headers" key="1">
+                <Form.List name="headers">
+                  {(fields, { add, remove }) => {
+                    return (
+                      <>
+                        {fields.map((field, i) => {
+                          return (
+                            <Space key={i} style={{ display: 'flex' }} align="baseline">
+                              <Form.Item style={{ width: '35vw', marginBottom: '12px' }} { ...field } name={[field.name, `${tab.id}_key`]} fieldKey={[field.fieldKey, `${tab.id}_key`]}>
+                                <Input placeholder="Key" autoComplete="off" onChange={e => updateListField(i, 'headers', 'key', e)} />
+                              </Form.Item>
+                              <Form.Item
+                                style={{ width: '35vw', marginBottom: '12px' }} { ...field } name={[field.name, `${tab.id}_value`]} fieldKey={[field.fieldKey, `${tab.id}_value`]}>
+                                <Input placeholder="Value" autoComplete="off" onChange={e => updateListField(i, 'headers', 'value', e)} />
+                              </Form.Item>
+                              <DeleteOutlined onClick={() => {
+                                updateTab({ headers: [...activeRequest?.request.headers || []].filter((_, j) => j !== i) })
+                                return remove(field.name)
+                              }} />
+                            </Space>
+                          )
+                        })}
+                        <Form.Item>
+                          <Button onClick={() => add()} type="default"><PlusOutlined /> Add header</Button>
+                        </Form.Item>
+                      </>
+                    )
+                  }}
+                </Form.List>
               </Tabs.TabPane>
               <Tabs.TabPane tab="Body" key="2">
                 <AceEditor
                   mode="json"
-                  theme="tomorrow_night"
+                  theme="vibrant_ink"
                   className="aceEditor"
                   name="editor1"
                   fontSize={12}
                   width="100%"
-                  height="250px"
                   showPrintMargin={true}
                   showGutter={true}
                   highlightActiveLine={true}
                   onChange={body => updateTab({ body })}
                   setOptions={{
-                    showLineNumbers: false,
+                    maxLines: 15,
+                    minLines: 10,
+                    wrap: true,
                     tabSize: 2,
                     showPrintMargin: false,
                     useWorker: false
@@ -262,23 +296,23 @@ const Main: React.FC = () => {
           </Form>
           <Divider />
           <Spin spinning={isLoading}>
-            <Typography.Title level={5} type="secondary">Response</Typography.Title>
+              <Typography.Title level={5} type="secondary">Response <Typography.Text>{activeRequest?.response?.status}</Typography.Text></Typography.Title>
             <Tabs>
               <Tabs.TabPane tab="Body">
                 <AceEditor
                   mode={findMode()}
-                  theme="tomorrow_night"
+                  theme="vibrant_ink"
                   className="aceEditor"
                   name="editor2"
                   fontSize={12}
                   width="100%"
-                  height="250px"
                   showPrintMargin={true}
                   showGutter={true}
                   highlightActiveLine={true}
                   value={typeof activeRequest?.response?.body === 'object' ? JSON.stringify(activeRequest?.response?.body, null, 2) : activeRequest?.response?.body || ''}
                   setOptions={{
-                    showLineNumbers: false,
+                    maxLines: Infinity,
+                    minLines: 20,
                     tabSize: 2,
                     showPrintMargin: false,
                     readOnly: true,
