@@ -15,9 +15,11 @@ type Response = {
 
 type Request = {
   method: string,
+  contentType?: string,
   url?: string,
   headers?: any,
   body?: any,
+  forms?: any[],
   params?: any[]
 }
 
@@ -134,8 +136,7 @@ const Main: React.FC = () => {
     try {
       const options: AxiosRequestConfig = {
         params: params || {},
-        headers: headers || {},
-        withCredentials: true
+        headers: headers || {}
       }
       const getResponse = await Axios[method](
         activeRequest.request.url, method === 'get' ? options : JSON.parse(activeRequest.request.body) || {}, options)
@@ -149,10 +150,13 @@ const Main: React.FC = () => {
       if (error?.response) {
         updateTab({}, {
           status: error?.response?.status,
-          body: error?.response?.data,
+          body: error?.response?.data || JSON.stringify(error),
           headers: error?.response?.headers
         })
       } else {
+        updateTab({}, {
+          body: typeof error === 'object' ? JSON.stringify(error, null, 2) : error.toString()
+        })
         message.error('Something error')
       }
     }
@@ -200,13 +204,23 @@ const Main: React.FC = () => {
                     </em>
                   </Typography.Paragraph>
                 ) : '' }
-                <FieldList name="params" tab={tab} activeRequest={activeRequest} updateTab={updateTab} />
+                <FieldList name="params" form={form} tab={tab} activeRequest={activeRequest} updateTab={updateTab} buttonAddText="Add param" />
               </Tabs.TabPane>
               <Tabs.TabPane tab="Headers" key="1">
-                <FieldList name="headers" tab={tab} activeRequest={activeRequest} updateTab={updateTab} />
+                <FieldList name="headers" form={form} tab={tab} activeRequest={activeRequest} updateTab={updateTab} buttonAddText="Add header" />
               </Tabs.TabPane>
               <Tabs.TabPane tab="Body" key="2">
-                <Editor mode="json" onChange={body => updateTab({ body })} />
+                <Form.Item label="Content Type" wrapperCol={{ lg: { span: 6 }, md: { span: 12 } }}>
+                  <Select style={{ minWidth: '240px' }} defaultValue={activeRequest?.request.contentType || 'none'} onChange={e => updateTab({ contentType: e })}>
+                    <Select.Option value="none">none</Select.Option>
+                    <Select.Option value="multipart/form-data">multipart/form-data</Select.Option>
+                    <Select.Option value="application/x-www-form-urlencoded">application/x-www-form-urlencoded</Select.Option>
+                    <Select.Option value="application/json">application/json</Select.Option>
+                  </Select>
+                </Form.Item>
+                { activeRequest?.request.contentType === 'application/json' ? <Editor mode="json" onChange={body => updateTab({ body })} /> : '' }
+                { activeRequest?.request.contentType === 'multipart/form-data' ? <FieldList name="forms" form={form} tab={tab} activeRequest={activeRequest} updateTab={updateTab} buttonAddText="Add field" useTypeField /> : '' }
+                { activeRequest?.request.contentType === 'application/x-www-form-urlencoded' ? <FieldList name="forms" form={form} tab={tab} activeRequest={activeRequest} updateTab={updateTab} buttonAddText="Add field" /> : '' }
               </Tabs.TabPane>
             </Tabs>
           </Form>
@@ -217,7 +231,8 @@ const Main: React.FC = () => {
               <Tabs.TabPane tab="Body">
                 <Editor
                   mode={findMode()}
-                  value={typeof activeRequest?.response?.body === 'object' ? JSON.stringify(activeRequest?.response?.body, null, 2) : activeRequest?.response?.body || ''} onChange={body => updateTab({ body })}
+                  value={typeof activeRequest?.response?.body === 'object' ? JSON.stringify(activeRequest?.response?.body, null, 2) : activeRequest?.response?.body || ''}
+                  onChange={body => updateTab({ body })}
                   options={{ maxLines: Infinity, minLines: 20, readOnly: true }} />
               </Tabs.TabPane>
             </Tabs>

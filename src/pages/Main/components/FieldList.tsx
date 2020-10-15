@@ -1,21 +1,25 @@
-import { DeleteOutlined, PlusOutlined } from '@ant-design/icons'
-import { Button, Form, Input, Space } from 'antd'
+import { DeleteOutlined, PlusOutlined, UploadOutlined } from '@ant-design/icons'
+import { Button, Form, Input, Select, Space, Upload } from 'antd'
+import { FormInstance } from 'antd/lib/form'
 import React from 'react'
 
 interface Props {
   name: string,
+  form: FormInstance,
   tab: {
     id: string
   },
   updateTab: (request: any, response?: any) => any,
   activeRequest?: {
     request: any
-  }
+  },
+  buttonAddText?: string,
+  useTypeField?: boolean
 }
 
-const FieldList: React.FC<Props> = ({ name, tab, activeRequest, updateTab }) => {
+const FieldList: React.FC<Props> = ({ name, form, tab, activeRequest, updateTab, buttonAddText, useTypeField }) => {
 
-  const updateListField = async (i: number, key: 'key' | 'value', { target }) => {
+  const updateListField = async (i: number, key: 'key' | 'value' | 'type', { target }) => {
     const { value } = target
     const data = activeRequest?.request[name] || []
     data[i] = { ...data[i], [key]: value || null }
@@ -30,13 +34,27 @@ const FieldList: React.FC<Props> = ({ name, tab, activeRequest, updateTab }) => 
             {fields.map((field, i) => {
               return (
                 <Space key={i} style={{ display: 'flex' }} align="baseline">
-                  <Form.Item style={{ width: '35vw', marginBottom: '12px' }} { ...field } name={[field.name, `${tab.id}_key`]} fieldKey={[field.fieldKey, `${tab.id}_key`]}>
+                  { useTypeField ? (
+                    <Form.Item style={{ width: '90px', marginBottom: '12px' }} { ...field } name={[field.name, `${tab.id}_type`]} fieldKey={[field.fieldKey, `${tab.id}_type`]}>
+                      <Select onChange={e => updateListField(i, 'type', { target: { value: e } })}>
+                        <Select.Option value="string">string</Select.Option>
+                        <Select.Option value="file">file</Select.Option>
+                      </Select>
+                    </Form.Item>
+                  ) : '' }
+                  <Form.Item style={{ width: '30vw', marginBottom: '12px' }} { ...field } name={[field.name, `${tab.id}_key`]} fieldKey={[field.fieldKey, `${tab.id}_key`]}>
                     <Input placeholder="Key" autoComplete="off" onChange={e => updateListField(i, 'key', e)} />
                   </Form.Item>
-                  <Form.Item
-                    style={{ width: '35vw', marginBottom: '12px' }} { ...field } name={[field.name, `${tab.id}_value`]} fieldKey={[field.fieldKey, `${tab.id}_value`]}>
-                    <Input placeholder="Value" autoComplete="off" onChange={e => updateListField(i, 'value', e)} />
-                  </Form.Item>
+                  { !form.getFieldValue([name, i, `${tab.id}_type`]) || form.getFieldValue([name, i, `${tab.id}_type`]) === 'string' ? (
+                    <Form.Item
+                      style={{ width: '30vw', marginBottom: '12px' }} { ...field } name={[field.name, `${tab.id}_value`]} fieldKey={[field.fieldKey, `${tab.id}_value`]}>
+                      <Input placeholder="Value" autoComplete="off" onChange={e => updateListField(i, 'value', e)} />
+                    </Form.Item>
+                  ) : (
+                    <Upload>
+                      <Button icon={<UploadOutlined />}>Upload</Button>
+                    </Upload>
+                  ) }
                   <DeleteOutlined onClick={() => {
                     updateTab({ [name]: [...activeRequest?.request[name] || []].filter((_, j) => j !== i) })
                     return remove(field.name)
@@ -45,7 +63,7 @@ const FieldList: React.FC<Props> = ({ name, tab, activeRequest, updateTab }) => 
               )
             })}
             <Form.Item>
-              <Button onClick={() => add()} type="default"><PlusOutlined /> Add {name}</Button>
+              <Button onClick={() => add({ [`${tab.id}_type`]: 'string' })} type="default"><PlusOutlined /> {buttonAddText || `Add ${name}`}</Button>
             </Form.Item>
           </>
         )
