@@ -14,6 +14,7 @@
     "antd": "^4.7.0",
     "axios": "^0.20.0",
     "immutability-helper": "^3.1.1",
+    "query-string": "^6.13.5",
     "react": "^16.13.1",
     "react-ace": "^9.1.4",
     "react-dom": "^16.13.1",
@@ -48,6 +49,7 @@
     "@types/antd": "^1.0.0",
     "@types/axios": "^0.14.0",
     "@types/immutability-helper": "^2.6.3",
+    "@types/query-string": "^6.3.0",
     "@types/react-router-dom": "^5.1.6",
     "@types/shortid": "^0.0.29"
   }

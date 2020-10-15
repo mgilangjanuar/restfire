@@ -22,7 +22,7 @@ type Request = {
   url?: string,
   headers?: any,
   body?: any,
-  params?: any
+  params?: any[]
 }
 
 type RequestData = {
@@ -39,7 +39,7 @@ const Main: React.FC = () => {
   const [activeTab, setActiveTab] = useState<string>()
   const [isLoading, setIsLoading] = useState<boolean>(false)
 
-  const buildInitialRequestData = () => ({
+  const buildInitialRequestData = (): RequestData => ({
     id: createId(),
     title: () => <>Untitled</>,
     request: {
@@ -56,8 +56,18 @@ const Main: React.FC = () => {
   }, [requestData])
 
   useEffect(() => {
-    setActiveRequest(requestData?.find(req => req.id === activeTab))
-  }, [activeTab, requestData])
+    const present = requestData?.find(req => req.id === activeTab)
+    setActiveRequest(present)
+    form.setFieldsValue({
+      params: present?.request.params || []
+    })
+    // if (form.getFieldsValue().params?.length) {
+    //   console.log('OIALSKASSA', form.getFieldsValue()['params'], present?.request.params)
+    //   form.setFieldsValue({
+    //     params: []
+    //   })
+    // }
+  }, [activeTab, requestData, form])
 
   const mutateTabs = (key: any, action: string) => {
     console.log(key, action)
@@ -115,6 +125,9 @@ const Main: React.FC = () => {
   }
 
   const send = async () => {
+    console.log(activeRequest?.request)
+    const params = activeRequest?.request.params?.reduce((res: any, param: any) => ({ ...res, [param.key]: param.value }), {})
+    console.log(params)
     if (!activeRequest?.request.url) {
       return message.error('Please fill the URL first')
     }
@@ -125,6 +138,7 @@ const Main: React.FC = () => {
     } else if (method === 'opt') {
       method = 'options'
     }
+
     try {
       const getResponse = await Axios[method](activeRequest.request.url, method === 'get' ? {} : JSON.parse(activeRequest.request.body))
       updateTab({}, {
@@ -182,25 +196,43 @@ const Main: React.FC = () => {
             <Tabs defaultActiveKey="0">
               <Tabs.TabPane tab="Params" key="0">
                 <Form.List name="params">
-                  {(fields, { add, remove }) => (
-                    <>
-                      {fields.map((field, i) => (
-                        <Space key={i} style={{ display: 'flex' }} align="baseline">
-                          <Form.Item style={{ width: '30vw' }} { ...field } name={[field.name, 'key']} fieldKey={[field.fieldKey, 'key']}>
-                            <Input placeholder="key" autoComplete="off" />
-                          </Form.Item>
-                          <Form.Item style={{ width: '30vw' }} { ...field } name={[field.name, 'value']} fieldKey={[field.fieldKey, 'value']}>
-                            <Input placeholder="value" autoComplete="off" />
-                          </Form.Item>
-                          <DeleteOutlined onClick={() => remove(field.name)} />
-                        </Space>
-                      ))}
-
-                      <Form.Item>
-                        <Button onClick={() => add()} type="default"><PlusOutlined /> Add params</Button>
-                      </Form.Item>
-                    </>
-                  )}
+                  {(fields, { add, remove }) => {
+                    return (
+                      <>
+                        {fields.map((field, i) => {
+                          return (
+                            <Space key={i} style={{ display: 'flex' }} align="baseline">
+                              <Form.Item style={{ width: '35vw', marginBottom: '12px' }} { ...field } name={[field.name, 'key']} fieldKey={[field.fieldKey, 'key']}>
+                                <Input placeholder="Key" autoComplete="off" onChange={e => {
+                                  const params = activeRequest?.request.params || []
+                                  params[i] = { ...params[i], key: e.target.value || null }
+                                  console.log('NMNMNN', i, params[i])
+                                  return updateTab({ params })
+                                }} />
+                                {/* <Input placeholder="Key" autoComplete="off" /> */}
+                              </Form.Item>
+                              <Form.Item
+                                style={{ width: '35vw', marginBottom: '12px' }} { ...field } name={[field.name, 'value']} fieldKey={[field.fieldKey, 'value']}>
+                                <Input placeholder="Value" autoComplete="off" onChange={e => {
+                                  const params = activeRequest?.request.params || []
+                                  params[i] = { ...params[i], value: e.target.value || null }
+                                  return updateTab({ params })
+                                }} />
+                                {/* <Input placeholder="Value" autoComplete="off" /> */}
+                              </Form.Item>
+                              <DeleteOutlined onClick={() => {
+                                updateTab({ params: [...activeRequest?.request.params || []].filter((_, j) => j !== i) })
+                                return remove(field.name)
+                              }} />
+                            </Space>
+                          )
+                        })}
+                        <Form.Item>
+                          <Button onClick={() => add()} type="default"><PlusOutlined /> Add params</Button>
+                        </Form.Item>
+                      </>
+                    )
+                  }}
                 </Form.List>
               </Tabs.TabPane>
               <Tabs.TabPane tab="Headers" key="1">
