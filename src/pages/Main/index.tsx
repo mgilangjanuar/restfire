@@ -1,16 +1,11 @@
-import { PlusOutlined, DeleteOutlined } from '@ant-design/icons'
+import { DeleteOutlined, PlusOutlined } from '@ant-design/icons'
 import { Button, Divider, Form, Input, message, Select, Space, Spin, Tabs, Tag, Typography } from 'antd'
 import { useForm } from 'antd/lib/form/Form'
 import Axios, { AxiosRequestConfig } from 'axios'
-import React, { useEffect, useState } from 'react'
 import queryString from 'query-string'
-import AceEditor from 'react-ace'
+import React, { useEffect, useState } from 'react'
 import { generate as createId } from 'shortid'
-
-import 'ace-builds/src-noconflict/mode-json'
-import 'ace-builds/src-noconflict/mode-html'
-import 'ace-builds/src-noconflict/mode-plain_text'
-import 'ace-builds/src-noconflict/theme-vibrant_ink'
+import Editor from './components/Editor'
 
 type Response = {
   status: number,
@@ -271,26 +266,7 @@ const Main: React.FC = () => {
                 </Form.List>
               </Tabs.TabPane>
               <Tabs.TabPane tab="Body" key="2">
-                <AceEditor
-                  mode="json"
-                  theme="vibrant_ink"
-                  className="aceEditor"
-                  name="editor1"
-                  fontSize={12}
-                  width="100%"
-                  showPrintMargin={true}
-                  showGutter={true}
-                  highlightActiveLine={true}
-                  onChange={body => updateTab({ body })}
-                  setOptions={{
-                    maxLines: 15,
-                    minLines: 10,
-                    wrap: true,
-                    tabSize: 2,
-                    showPrintMargin: false,
-                    useWorker: false
-                  }}
-                />
+                <Editor mode="json" onChange={body => updateTab({ body })} />
               </Tabs.TabPane>
             </Tabs>
           </Form>
@@ -299,27 +275,10 @@ const Main: React.FC = () => {
               <Typography.Title level={5} type="secondary">Response <Typography.Text>{activeRequest?.response?.status}</Typography.Text></Typography.Title>
             <Tabs>
               <Tabs.TabPane tab="Body">
-                <AceEditor
+                <Editor
                   mode={findMode()}
-                  theme="vibrant_ink"
-                  className="aceEditor"
-                  name="editor2"
-                  fontSize={12}
-                  width="100%"
-                  showPrintMargin={true}
-                  showGutter={true}
-                  highlightActiveLine={true}
-                  value={typeof activeRequest?.response?.body === 'object' ? JSON.stringify(activeRequest?.response?.body, null, 2) : activeRequest?.response?.body || ''}
-                  setOptions={{
-                    maxLines: Infinity,
-                    minLines: 20,
-                    tabSize: 2,
-                    showPrintMargin: false,
-                    readOnly: true,
-                    wrap: true,
-                    useWorker: false
-                  }}
-                />
+                  value={typeof activeRequest?.response?.body === 'object' ? JSON.stringify(activeRequest?.response?.body, null, 2) : activeRequest?.response?.body || ''} onChange={body => updateTab({ body })}
+                  options={{ maxLines: Infinity, minLines: 20, readOnly: true }} />
               </Tabs.TabPane>
             </Tabs>
           </Spin>
