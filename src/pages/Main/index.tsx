@@ -1,11 +1,11 @@
-import { DeleteOutlined, PlusOutlined } from '@ant-design/icons'
-import { Button, Divider, Form, Input, message, Select, Space, Spin, Tabs, Tag, Typography } from 'antd'
+import { Divider, Form, Input, message, Select, Spin, Tabs, Tag, Typography } from 'antd'
 import { useForm } from 'antd/lib/form/Form'
 import Axios, { AxiosRequestConfig } from 'axios'
 import queryString from 'query-string'
 import React, { useEffect, useState } from 'react'
 import { generate as createId } from 'shortid'
 import Editor from './components/Editor'
+import FieldList from './components/FieldList'
 
 type Response = {
   status: number,
@@ -38,9 +38,7 @@ const Main: React.FC = () => {
   const buildInitialRequestData = (): RequestData => ({
     id: createId(),
     title: () => <>Untitled</>,
-    request: {
-      method: 'get'
-    }
+    request: { method: 'get' }
   })
 
   useEffect(() => {
@@ -62,7 +60,9 @@ const Main: React.FC = () => {
 
   const mutateTabs = (key: any, action: string) => {
     if (action === 'add') {
-      setRequestData([...requestData || [], buildInitialRequestData()])
+      const initial = buildInitialRequestData()
+      setRequestData([...requestData || [], initial])
+      setActiveTab(initial.id)
     } else if (action === 'remove') {
       setRequestData(requestData?.filter(req => req.id !== key))
       if (activeTab === key) {
@@ -117,13 +117,6 @@ const Main: React.FC = () => {
     return candidate
   }
 
-  const updateListField = async (i: number, data: 'params' | 'headers', key: 'key' | 'value', { target }) => {
-    const { value } = target
-    const params = activeRequest?.request[data] || []
-    params[i] = { ...params[i], [key]: value || null }
-    return updateTab({ [data]: params })
-  }
-
   const send = async () => {
     const params = activeRequest?.request.params?.reduce((res: any, param: any) => ({ ...res, [param.key]: param.value }), {})
     const headers = activeRequest?.request.headers?.reduce((res: any, header: any) => ({ ...res, [header.key]: header.value }), {})
@@ -142,8 +135,10 @@ const Main: React.FC = () => {
       const options: AxiosRequestConfig = {
         params: params || {},
         headers: headers || {},
+        withCredentials: true
       }
-      const getResponse = await Axios[method](activeRequest.request.url, method === 'get' ? options : JSON.parse(activeRequest.request.body) || {}, options)
+      const getResponse = await Axios[method](
+        activeRequest.request.url, method === 'get' ? options : JSON.parse(activeRequest.request.body) || {}, options)
       updateTab({}, {
         status: getResponse.status,
         body: getResponse.data,
@@ -167,7 +162,6 @@ const Main: React.FC = () => {
   const SelectMethod = () => (
     <Select
       defaultValue={activeRequest?.request?.method || 'get'}
-      value={activeRequest?.request.method}
       onChange={e => updateTab({ method: e })}
       style={{ minWidth: '90px' }}
     >
@@ -206,64 +200,10 @@ const Main: React.FC = () => {
                     </em>
                   </Typography.Paragraph>
                 ) : '' }
-                <Form.List name="params">
-                  {(fields, { add, remove }) => {
-                    return (
-                      <>
-                        {fields.map((field, i) => {
-                          return (
-                            <Space key={i} style={{ display: 'flex' }} align="baseline">
-                              <Form.Item style={{ width: '35vw', marginBottom: '12px' }} { ...field } name={[field.name, `${tab.id}_key`]} fieldKey={[field.fieldKey, `${tab.id}_key`]}>
-                                <Input placeholder="Key" autoComplete="off" onChange={e => updateListField(i, 'params', 'key', e)} />
-                              </Form.Item>
-                              <Form.Item
-                                style={{ width: '35vw', marginBottom: '12px' }} { ...field } name={[field.name, `${tab.id}_value`]} fieldKey={[field.fieldKey, `${tab.id}_value`]}>
-                                <Input placeholder="Value" autoComplete="off" onChange={e => updateListField(i, 'params', 'value', e)} />
-                              </Form.Item>
-                              <DeleteOutlined onClick={() => {
-                                updateTab({ params: [...activeRequest?.request.params || []].filter((_, j) => j !== i) })
-                                return remove(field.name)
-                              }} />
-                            </Space>
-                          )
-                        })}
-                        <Form.Item>
-                          <Button onClick={() => add()} type="default"><PlusOutlined /> Add param</Button>
-                        </Form.Item>
-                      </>
-                    )
-                  }}
-                </Form.List>
+                <FieldList name="params" tab={tab} activeRequest={activeRequest} updateTab={updateTab} />
               </Tabs.TabPane>
               <Tabs.TabPane tab="Headers" key="1">
-                <Form.List name="headers">
-                  {(fields, { add, remove }) => {
-                    return (
-                      <>
-                        {fields.map((field, i) => {
-                          return (
-                            <Space key={i} style={{ display: 'flex' }} align="baseline">
-                              <Form.Item style={{ width: '35vw', marginBottom: '12px' }} { ...field } name={[field.name, `${tab.id}_key`]} fieldKey={[field.fieldKey, `${tab.id}_key`]}>
-                                <Input placeholder="Key" autoComplete="off" onChange={e => updateListField(i, 'headers', 'key', e)} />
-                              </Form.Item>
-                              <Form.Item
-                                style={{ width: '35vw', marginBottom: '12px' }} { ...field } name={[field.name, `${tab.id}_value`]} fieldKey={[field.fieldKey, `${tab.id}_value`]}>
-                                <Input placeholder="Value" autoComplete="off" onChange={e => updateListField(i, 'headers', 'value', e)} />
-                              </Form.Item>
-                              <DeleteOutlined onClick={() => {
-                                updateTab({ headers: [...activeRequest?.request.headers || []].filter((_, j) => j !== i) })
-                                return remove(field.name)
-                              }} />
-                            </Space>
-                          )
-                        })}
-                        <Form.Item>
-                          <Button onClick={() => add()} type="default"><PlusOutlined /> Add header</Button>
-                        </Form.Item>
-                      </>
-                    )
-                  }}
-                </Form.List>
+                <FieldList name="headers" tab={tab} activeRequest={activeRequest} updateTab={updateTab} />
               </Tabs.TabPane>
               <Tabs.TabPane tab="Body" key="2">
                 <Editor mode="json" onChange={body => updateTab({ body })} />
