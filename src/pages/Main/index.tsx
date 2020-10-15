@@ -20,6 +20,7 @@ type Request = {
   headers?: any,
   body?: any,
   forms?: any[],
+  formsEncoded?: any[],
   params?: any[]
 }
 
@@ -56,7 +57,9 @@ const Main: React.FC = () => {
     setActiveRequest(present)
     form.setFieldsValue({
       params: present?.request.params?.map(param => ({ [`${present.id}_key`]: param.key, [`${present.id}_value`]: param.value })) || [],
-      headers: present?.request.headers?.map(header => ({ [`${present.id}_key`]: header.key, [`${present.id}_value`]: header.value })) || []
+      headers: present?.request.headers?.map((header: any) => ({ [`${present.id}_key`]: header.key, [`${present.id}_value`]: header.value })) || [],
+      forms: present?.request.forms?.map((form: any) => ({ [`${present.id}_type`]: form.type || 'string', [`${present.id}_key`]: form.key, [`${present.id}_value`]: form.value })) || [],
+      formsEncoded: present?.request.formsEncoded?.map((form: any) => ({ [`${present.id}_key`]: form.key, [`${present.id}_value`]: form.value })) || [],
     })
   }, [activeTab, requestData, form])
 
@@ -155,6 +158,7 @@ const Main: React.FC = () => {
         })
       } else {
         updateTab({}, {
+          headers: { 'content-type': 'application/json' },
           body: typeof error === 'object' ? JSON.stringify(error, null, 2) : error.toString()
         })
         message.error('Something error')
@@ -220,7 +224,7 @@ const Main: React.FC = () => {
                 </Form.Item>
                 { activeRequest?.request.contentType === 'application/json' ? <Editor mode="json" onChange={body => updateTab({ body })} /> : '' }
                 { activeRequest?.request.contentType === 'multipart/form-data' ? <FieldList name="forms" form={form} tab={tab} activeRequest={activeRequest} updateTab={updateTab} buttonAddText="Add field" useTypeField /> : '' }
-                { activeRequest?.request.contentType === 'application/x-www-form-urlencoded' ? <FieldList name="forms" form={form} tab={tab} activeRequest={activeRequest} updateTab={updateTab} buttonAddText="Add field" /> : '' }
+                { activeRequest?.request.contentType === 'application/x-www-form-urlencoded' ? <FieldList name="formsEncoded" form={form} tab={tab} activeRequest={activeRequest} updateTab={updateTab} buttonAddText="Add field" /> : '' }
               </Tabs.TabPane>
             </Tabs>
           </Form>
