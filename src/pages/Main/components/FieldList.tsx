@@ -35,19 +35,19 @@ const FieldList: React.FC<Props> = ({ name, form, tab, activeRequest, updateTab,
               return (
                 <Space key={i} style={{ display: 'flex' }} align="baseline">
                   { useTypeField ? (
-                    <Form.Item style={{ width: '90px', marginBottom: '12px' }} { ...field } name={[field.name, `${tab.id}_type`]} fieldKey={[field.fieldKey, `${tab.id}_type`]}>
-                      <Select onChange={e => updateListField(i, 'type', { target: { value: e } })}>
+                    <Form.Item style={{ width: '93px', marginBottom: '12px' }} { ...field } name={[field.name, `${tab.id}_type`]} fieldKey={[field.fieldKey, `${tab.id}_type`]}>
+                      <Select onChange={e => updateListField(i, 'type', { target: { value: e } })} bordered={false}>
                         <Select.Option value="string">string</Select.Option>
                         <Select.Option value="file">file</Select.Option>
                       </Select>
                     </Form.Item>
                   ) : '' }
-                  <Form.Item style={{ width: '30vw', marginBottom: '12px' }} { ...field } name={[field.name, `${tab.id}_key`]} fieldKey={[field.fieldKey, `${tab.id}_key`]}>
+                  <Form.Item style={{ width: useTypeField ? '25vw' : '32vw', marginBottom: '12px' }} { ...field } name={[field.name, `${tab.id}_key`]} fieldKey={[field.fieldKey, `${tab.id}_key`]}>
                     <Input placeholder="Key" autoComplete="off" onChange={e => updateListField(i, 'key', e)} />
                   </Form.Item>
                   { !form.getFieldValue([name, i, `${tab.id}_type`]) || form.getFieldValue([name, i, `${tab.id}_type`]) === 'string' ? (
                     <Form.Item
-                      style={{ width: '30vw', marginBottom: '12px' }} { ...field } name={[field.name, `${tab.id}_value`]} fieldKey={[field.fieldKey, `${tab.id}_value`]}>
+                      style={{ width: useTypeField ? '25vw' : '32vw', marginBottom: '12px' }} { ...field } name={[field.name, `${tab.id}_value`]} fieldKey={[field.fieldKey, `${tab.id}_value`]}>
                       <Input placeholder="Value" autoComplete="off" onChange={e => updateListField(i, 'value', e)} />
                     </Form.Item>
                   ) : (
@@ -63,7 +63,7 @@ const FieldList: React.FC<Props> = ({ name, form, tab, activeRequest, updateTab,
               )
             })}
             <Form.Item>
-              <Button onClick={() => add({ [`${tab.id}_type`]: 'string' })} type="default"><PlusOutlined /> {buttonAddText || `Add ${name}`}</Button>
+              <Button onClick={() => add(useTypeField ? { [`${tab.id}_type`]: 'string' } : undefined)} type="default"><PlusOutlined /> {buttonAddText || `Add ${name}`}</Button>
             </Form.Item>
           </>
         )
