@@ -1,4 +1,4 @@
-import { Divider, Form, Input, message, Select, Spin, Tabs, Tag, Typography } from 'antd'
+import { Descriptions, Divider, Form, Input, message, Select, Spin, Tabs, Tag, Typography } from 'antd'
 import { useForm } from 'antd/lib/form/Form'
 import Axios, { AxiosRequestConfig } from 'axios'
 import FormData from 'form-data'
@@ -13,7 +13,8 @@ type Response = {
   status: number,
   body: any,
   responseTime?: number,
-  headers: any
+  headers: any,
+  debugLog?: any
 }
 
 type Request = {
@@ -44,7 +45,9 @@ const Main: React.FC = () => {
   const buildInitialRequestData = (): RequestData => ({
     id: createId(),
     title: () => <>Untitled</>,
-    request: { method: 'get' }
+    request: {
+      method: 'get'
+    }
   })
 
   useEffect(() => {
@@ -173,7 +176,7 @@ const Main: React.FC = () => {
         headers: {
           ...headers,
           ...activeRequest?.request.contentType && activeRequest.request.contentType !== 'none' ? {
-            contentType: activeRequest.request.contentType
+            contentType: activeRequest.request.contentType,
           } : {}
         } || {},
         data,
@@ -203,7 +206,8 @@ const Main: React.FC = () => {
         status: getResponse.status,
         body: getResponse.data,
         headers: getResponse.headers,
-        responseTime: (getResponse as any).duration
+        responseTime: (getResponse as any).duration,
+        debugLog: getResponse
       })
     } catch (error) {
       console.error(error)
@@ -212,14 +216,18 @@ const Main: React.FC = () => {
           status: error?.response?.status,
           body: error?.response?.data || JSON.stringify(error),
           headers: error?.response?.headers,
-          responseTime: (error as any).duration
+          responseTime: (error as any).duration,
+          debugLog: error
         })
       } else {
         updateTab({}, {
           headers: { 'content-type': 'application/json' },
-          body: typeof error === 'object' ? JSON.stringify(error, null, 2) : error.toString()
+          body: typeof error === 'object' ? JSON.stringify(error, null, 2) : error.toString(),
+          responseTime: 0,
+          status: 0,
+          debugLog: error
         })
-        message.error('Something error')
+        message.error('Something error, please check the console for more info')
       }
     }
     setIsLoading(false)
@@ -282,7 +290,7 @@ const Main: React.FC = () => {
           <Divider />
           <Spin spinning={isLoading}>
             <Typography.Paragraph type="secondary">
-              Response <Typography.Text>{activeRequest?.response?.status}</Typography.Text>
+              Response {activeRequest?.response?.status ? <Typography.Text>{activeRequest?.response?.status}</Typography.Text> : '' }
               <Typography.Text style={{ float: 'right' }}>
                 { activeRequest?.response?.responseTime ? `${activeRequest?.response?.responseTime} ms` : '' }
               </Typography.Text>
@@ -296,7 +304,14 @@ const Main: React.FC = () => {
                   options={{ maxLines: Infinity, readOnly: true }} />
               </Tabs.TabPane>
               <Tabs.TabPane tab="Headers" key="1">
-
+                <Descriptions column={1} bordered size="small">
+                  { activeRequest?.response?.headers && Object.keys(activeRequest.response.headers)?.map((header, i) => (
+                    <Descriptions.Item key={i} label={header}>{activeRequest?.response?.headers[header]}</Descriptions.Item>
+                  )) }
+                </Descriptions>
+              </Tabs.TabPane>
+              <Tabs.TabPane tab="Debug" key="2">
+                { activeRequest?.response?.debugLog ? <pre>{JSON.stringify(activeRequest?.response?.debugLog, null, 2)}</pre> : '' }
               </Tabs.TabPane>
             </Tabs>
           </Spin>
