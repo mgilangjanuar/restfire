@@ -186,7 +186,7 @@ const Main: React.FC = () => {
       ...activeRequest?.request.axiosConfig ? JSON.parse(activeRequest?.request.axiosConfig) : {}
     }
 
-    const { data } = await Axios.post(process.env.REACT_APP_PROXY || 'http://localhost:4002/y', options)
+    const { data } = await Axios.post(process.env.REACT_APP_PROXY || '/y', options)
 
     if (data?.error) {
       const { error, response } = data
