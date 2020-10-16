@@ -26,7 +26,6 @@ const Editor: React.FC<Props> = ({ mode, onChange, value, defaultValue, options 
     showGutter={true}
     highlightActiveLine={false}
     onChange={onChange}
-    // onBlur={onChange}
     value={value}
     defaultValue={defaultValue}
     setOptions={{

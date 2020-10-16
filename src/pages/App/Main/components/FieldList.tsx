@@ -3,8 +3,8 @@ import { Button, Form, Input, Select, Space, Typography, Upload } from 'antd'
 import { FormInstance } from 'antd/lib/form'
 import filesize from 'filesize'
 import React from 'react'
-import './FieldList.css'
 
+import './FieldList.css'
 
 interface Props {
   name: string,
@@ -22,7 +22,7 @@ interface Props {
 
 const FieldList: React.FC<Props> = ({ name, form, tab, activeRequest, updateTab, buttonAddText, useTypeField }) => {
 
-  const updateListField = async (i: number, key: 'key' | 'value' | 'type' | 'file', { target }) => {
+  const updateListField = async (i: number, key: 'key' | 'value' | 'type' | 'file' | 'fileBase64', { target }) => {
     const { value } = target
     const data = activeRequest?.request[name] || []
     data[i] = { ...data[i], [key]: value || null }
@@ -31,6 +31,11 @@ const FieldList: React.FC<Props> = ({ name, form, tab, activeRequest, updateTab,
 
   const getFile = (i: number, file: any): boolean => {
     updateListField(i, 'file', { target: { value: file } })
+    const reader = new FileReader()
+    reader.readAsDataURL(file)
+    reader.onload = () => {
+      updateListField(i, 'fileBase64', { target: { value: reader.result } })
+    }
     return false
   }
 
