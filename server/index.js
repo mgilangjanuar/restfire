@@ -1,16 +1,33 @@
 const Axios = require('axios')
 const bodyParser = require('body-parser')
-const cors = require('cors')
-const fs = require('fs')
-const FormData = require('form-data')
 const circularJson = require('circular-json')
+const cors = require('cors')
+const express = require('express')
+const FormData = require('form-data')
+const fs = require('fs')
+const path = require('path')
 
-const app = require('express')()
+const app = express()
 
 app.use(cors())
 app.use(bodyParser.json({ limit: '100mb' }))
 
 app.post('/y', async (req, res) => {
+  const config = { ...req.body }
+  if (config.headers && config.headers.contentType === 'multipart/form-data') {
+    const formData = new FormData()
+    for (const key of Object.keys(config.data)) {
+      if (config.data[key].file) {
+        fs.writeFileSync(`${__dirname}/tmp/${config.data[key].file.name}`, config.data[key].base64.split(';base64,')[1], { encoding: 'base64' })
+        formData.append(key, fs.createReadStream(`${__dirname}/tmp/${config.data[key].file.name}`))
+      } else {
+        formData.append(key, config.data[key])
+      }
+    }
+    config.data = formData
+    config.headers = { ...config.headers, ...formData.getHeaders() }
+  }
+
   Axios.interceptors.request.use(config => {
     config.metadata = { startTime: new Date() }
     return config
@@ -29,26 +46,15 @@ app.post('/y', async (req, res) => {
     return Promise.reject(error)
   })
 
-  const config = { ...req.body }
-  if (config.headers && config.headers.contentType === 'multipart/form-data') {
-    const formData = new FormData()
-    for (const key of Object.keys(config.data)) {
-      if (config.data[key].file) {
-        fs.writeFileSync(`${__dirname}/tmp/${config.data[key].file.name}`, config.data[key].base64.split(';base64,')[1], { encoding: 'base64' })
-        formData.append(key, fs.createReadStream(`${__dirname}/tmp/${config.data[key].file.name}`))
-      } else {
-        formData.append(key, config.data[key])
-      }
-    }
-    config.data = formData
-    config.headers = { ...config.headers, ...formData.getHeaders() }
-  }
   try {
     const resp = await Axios(config)
     return res.status(resp.status).send(JSON.parse(circularJson.stringify(resp)))
   } catch (error) {
-    return res.send({ response: JSON.parse(circularJson.stringify(error.response)), error })
+    return res.send({ ...error.response ? { response: JSON.parse(circularJson.stringify(error.response)) } : {}, error })
   }
 })
+
+app.use(express.static(path.join(__dirname, '..', 'build')))
+app.use((_, res) => res.sendFile(path.join(__dirname, '..', 'build', 'index.html')))
 
 app.listen(4002, () => console.log('started...'))
