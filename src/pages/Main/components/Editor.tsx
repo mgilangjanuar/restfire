@@ -11,10 +11,11 @@ interface Props {
   mode?: string,
   onChange?: (body: string) => any,
   value?: string,
+  defaultValue?: string,
   options?: any
 }
 
-const Editor: React.FC<Props> = ({ mode, onChange, value, options }) => {
+const Editor: React.FC<Props> = ({ mode, onChange, value, defaultValue, options }) => {
   return <AceEditor
     mode={mode}
     theme="vibrant_ink"
@@ -25,7 +26,9 @@ const Editor: React.FC<Props> = ({ mode, onChange, value, options }) => {
     showGutter={true}
     highlightActiveLine={false}
     onChange={onChange}
+    // onBlur={onChange}
     value={value}
+    defaultValue={defaultValue}
     setOptions={{
       maxLines: 15,
       minLines: 10,

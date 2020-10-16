@@ -27,7 +27,7 @@ type Request = {
   formsEncoded?: any[],
   params?: any[],
   basicAuth?: Partial<AxiosBasicCredentials>,
-  axiosConfig?: Partial<AxiosRequestConfig>
+  axiosConfig?: string
 }
 
 type RequestData = {
@@ -182,13 +182,14 @@ const Main: React.FC = () => {
           } : {}
         } || {},
         ...activeRequest?.request.basicAuth ? { auth: activeRequest?.request.basicAuth as AxiosBasicCredentials } : {},
-        data
+        data,
+        ...activeRequest?.request.axiosConfig ? JSON.parse(activeRequest?.request.axiosConfig) : {}
       }
 
       Axios.interceptors.request.use(config => {
         (config as any).metadata = { startTime: new Date() }
         return config
-      }, error => Promise.reject(error))
+      }, () => {})
 
       Axios.interceptors.response.use(response => {
         (response.config as any).metadata.endTime = new Date()
@@ -296,9 +297,12 @@ const Main: React.FC = () => {
                     <Select.Option value="application/json">application/json</Select.Option>
                   </Select>
                 </Form.Item>
-                { activeRequest?.request.contentType === 'application/json' ? <Editor mode="json" value={activeRequest?.request.body} onChange={body => updateTab({ body })} /> : '' }
+                { activeRequest?.request.contentType === 'application/json' ? <Editor mode="json" defaultValue={activeRequest?.request.body} onChange={body => updateTab({ body })} /> : '' }
                 { activeRequest?.request.contentType === 'multipart/form-data' ? <FieldList name="forms" form={form} tab={tab} activeRequest={activeRequest} updateTab={updateTab} buttonAddText="Add field" useTypeField /> : '' }
                 { activeRequest?.request.contentType === 'application/x-www-form-urlencoded' ? <FieldList name="formsEncoded" form={form} tab={tab} activeRequest={activeRequest} updateTab={updateTab} buttonAddText="Add field" /> : '' }
+              </Tabs.TabPane>
+              <Tabs.TabPane tab="Axios Config" key="4">
+                <Editor mode="json" defaultValue={activeRequest?.request.axiosConfig} onChange={axiosConfig => updateTab({ axiosConfig })} />
               </Tabs.TabPane>
             </Tabs>
           </Form>
@@ -315,7 +319,6 @@ const Main: React.FC = () => {
                 <Editor
                   mode={findMode()}
                   value={typeof activeRequest?.response?.body === 'object' ? JSON.stringify(activeRequest?.response?.body, null, 2) : activeRequest?.response?.body || ''}
-                  onChange={body => updateTab({ body })}
                   options={{ maxLines: Infinity, readOnly: true }} />
               </Tabs.TabPane>
               <Tabs.TabPane tab="Headers" key="1">
