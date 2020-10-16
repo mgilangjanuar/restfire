@@ -226,7 +226,7 @@ const Main: React.FC = () => {
           status: 0,
           debugLog: error
         })
-        message.error('Something error, please check the console for more info')
+        message.error('Something error, please check the debug panel for the details')
       }
     }
     setIsLoading(false)
