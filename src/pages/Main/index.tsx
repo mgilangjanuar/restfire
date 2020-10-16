@@ -1,6 +1,6 @@
 import { Descriptions, Divider, Form, Input, message, Select, Spin, Tabs, Tag, Typography } from 'antd'
 import { useForm } from 'antd/lib/form/Form'
-import Axios, { AxiosRequestConfig } from 'axios'
+import Axios, { AxiosRequestConfig, AxiosBasicCredentials } from 'axios'
 import FormData from 'form-data'
 import qs from 'qs'
 import queryString from 'query-string'
@@ -25,7 +25,9 @@ type Request = {
   body?: any,
   forms?: any[],
   formsEncoded?: any[],
-  params?: any[]
+  params?: any[],
+  basicAuth?: Partial<AxiosBasicCredentials>,
+  axiosConfig?: Partial<AxiosRequestConfig>
 }
 
 type RequestData = {
@@ -179,7 +181,8 @@ const Main: React.FC = () => {
             contentType: activeRequest.request.contentType,
           } : {}
         } || {},
-        data,
+        ...activeRequest?.request.basicAuth ? { auth: activeRequest?.request.basicAuth as AxiosBasicCredentials } : {},
+        data
       }
 
       Axios.interceptors.request.use(config => {
@@ -272,7 +275,19 @@ const Main: React.FC = () => {
               <Tabs.TabPane tab="Headers" key="1">
                 <FieldList name="headers" form={form} tab={tab} activeRequest={activeRequest} updateTab={updateTab} buttonAddText="Add header" />
               </Tabs.TabPane>
-              <Tabs.TabPane tab="Body" key="2">
+              <Tabs.TabPane tab="Basic Auth" key="2">
+                <Form.Item label="Username" labelCol={{ span: 3 }} wrapperCol={{ span: 21 }}>
+                  <Input
+                    value={activeRequest?.request.basicAuth?.username}
+                    onChange={e => updateTab({ basicAuth: { ...activeRequest?.request.basicAuth, username: e.target.value } })} />
+                </Form.Item>
+                <Form.Item label="Password" labelCol={{ span: 3 }} wrapperCol={{ span: 21 }}>
+                  <Input.Password
+                    value={activeRequest?.request.basicAuth?.password}
+                    onChange={e => updateTab({ basicAuth: { ...activeRequest?.request.basicAuth, password: e.target.value } })} />
+                </Form.Item>
+              </Tabs.TabPane>
+              <Tabs.TabPane tab="Body" key="3">
                 <Form.Item label="Content Type" wrapperCol={{ lg: { span: 6 }, md: { span: 12 } }}>
                   <Select style={{ minWidth: '240px' }} defaultValue={activeRequest?.request.contentType || 'none'} onChange={e => updateTab({ contentType: e })}>
                     <Select.Option value="none">none</Select.Option>
