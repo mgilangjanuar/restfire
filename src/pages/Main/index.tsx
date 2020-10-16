@@ -1,6 +1,6 @@
-import { Descriptions, Divider, Form, Input, message, Select, Spin, Tabs, Tag, Typography } from 'antd'
+import { Divider, Form, Input, message, Select, Tabs, Tag, Typography } from 'antd'
 import { useForm } from 'antd/lib/form/Form'
-import Axios, { AxiosRequestConfig, AxiosBasicCredentials } from 'axios'
+import Axios, { AxiosBasicCredentials, AxiosRequestConfig } from 'axios'
 import FormData from 'form-data'
 import qs from 'qs'
 import queryString from 'query-string'
@@ -8,6 +8,7 @@ import React, { useEffect, useState } from 'react'
 import { generate as createId } from 'shortid'
 import Editor from './components/Editor'
 import FieldList from './components/FieldList'
+import ResponseSection from './components/ResponseSection'
 
 type Response = {
   status: number,
@@ -109,7 +110,7 @@ const Main: React.FC = () => {
       color = 'lime'
     }
 
-    const urlParsed = (data.url || activeRequest?.request.url)?.replace(/^http[s]*:\/\//gi, '')
+    const urlParsed = (data.url || activeRequest?.request.url)?.split('?')[0]?.replace(/^http[s]*:\/\//gi, '')
     const title = () => <>
       <Tag color={color}>{(data?.method || activeRequest?.request.method)?.toUpperCase()}</Tag> {urlParsed ? urlParsed?.substr(0, 12) + (urlParsed?.length > 12 ? '...' : '') : 'Untitled'}
     </>
@@ -117,6 +118,7 @@ const Main: React.FC = () => {
     if (activeRequest && requestData) {
       const idx = requestData?.indexOf(requestData!.find(req => req.id === activeRequest.id)!)
       const requests = [...requestData]
+      const params = data.params === undefined ? requests[idx]?.request.params : data.params || []
       requests[idx] = {
         ...requests[idx],
         title,
@@ -124,8 +126,8 @@ const Main: React.FC = () => {
           ...requests[idx].request,
           ...data,
           url: queryString.stringifyUrl({
-            url: data.url !== undefined ? data.url : requests[idx]?.request?.url || '',
-            query: requests[idx]?.request.params?.reduce((res: any, param: any) => ({ ...res, [param.key]: param.value }), {}) || {}
+            url: (data.url !== undefined ? data.url : requests[idx]?.request?.url || '').split('?')[0],
+            query: params?.reduce((res: any, param: any) => ({ ...res, [param.key]: param.value }), {}) || {}
           })
         },
         response: {
@@ -135,14 +137,6 @@ const Main: React.FC = () => {
       }
       setRequestData(requests)
     }
-  }
-
-  const findMode = (): string => {
-    const candidate = activeRequest?.response?.headers?.['content-type']?.split(';')[0].split('/')?.[1]
-    if (!candidate || candidate === 'plain') {
-      return 'plain_text'
-    }
-    return candidate
   }
 
   const send = async () => {
@@ -304,39 +298,14 @@ const Main: React.FC = () => {
               </Tabs.TabPane>
               <Tabs.TabPane tab="Axios Config" key="4">
                 <Typography.Paragraph type="secondary">
-                  Read this for details: <a href="https://github.com/axios/axios#request-config" target="_blank" rel="noopener noreferrer">https://github.com/axios/axios#request-config</a>
+                  Read this for the details: <a href="https://github.com/axios/axios#request-config" target="_blank" rel="noopener noreferrer">https://github.com/axios/axios#request-config</a>
                 </Typography.Paragraph>
                 <Editor mode="json" defaultValue={activeRequest?.request.axiosConfig} onChange={axiosConfig => updateTab({ axiosConfig })} />
               </Tabs.TabPane>
             </Tabs>
           </Form>
           <Divider />
-          <Spin spinning={isLoading}>
-            <Typography.Paragraph type="secondary">
-              Response {activeRequest?.response?.status ? <Typography.Text>{activeRequest?.response?.status}</Typography.Text> : '' }
-              <Typography.Text style={{ float: 'right' }}>
-                { activeRequest?.response?.responseTime ? `${activeRequest?.response?.responseTime} ms` : '' }
-              </Typography.Text>
-            </Typography.Paragraph>
-            <Tabs defaultActiveKey="0">
-              <Tabs.TabPane tab="Body" key="0">
-                <Editor
-                  mode={findMode()}
-                  value={typeof activeRequest?.response?.body === 'object' ? JSON.stringify(activeRequest?.response?.body, null, 2) : activeRequest?.response?.body || ''}
-                  options={{ maxLines: Infinity, readOnly: true }} />
-              </Tabs.TabPane>
-              <Tabs.TabPane tab="Headers" key="1">
-                <Descriptions column={1} bordered size="small">
-                  { activeRequest?.response?.headers && Object.keys(activeRequest.response.headers)?.map((header, i) => (
-                    <Descriptions.Item key={i} label={header}>{activeRequest?.response?.headers[header]}</Descriptions.Item>
-                  )) }
-                </Descriptions>
-              </Tabs.TabPane>
-              <Tabs.TabPane tab="Debug" key="2">
-                { activeRequest?.response?.debugLog ? <pre>{JSON.stringify(activeRequest?.response?.debugLog, null, 2)}</pre> : '' }
-              </Tabs.TabPane>
-            </Tabs>
-          </Spin>
+          <ResponseSection activeRequest={activeRequest} isLoading={isLoading} />
         </Tabs.TabPane>
       )) }
     </Tabs>
