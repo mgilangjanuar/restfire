@@ -152,13 +152,13 @@ const Main: React.FC = () => {
       method = 'options'
     }
 
-    let data: any = null
+    let body: any = null
     if (activeRequest.request.contentType === 'application/json' && activeRequest.request.body) {
-      data =  activeRequest.request.body
+      body =  activeRequest.request.body
     } else if (activeRequest.request.contentType === 'application/x-www-form-urlencoded' && activeRequest.request.formsEncoded) {
-      data = qs.stringify(activeRequest?.request.formsEncoded?.reduce((res: any, field: any) => ({ ...res, [field.key]: field.value }), {}))
+      body = qs.stringify(activeRequest?.request.formsEncoded?.reduce((res: any, field: any) => ({ ...res, [field.key]: field.value }), {}))
     } else if (activeRequest.request.contentType === 'multipart/form-data' && activeRequest.request.forms) {
-      data = activeRequest?.request.forms?.reduce(
+      body = activeRequest?.request.forms?.reduce(
         (res: any, field: any) => ({ ...res, [field.key]: field.type === 'string' ? field.value : {
           base64: field.fileBase64,
           file: {
@@ -182,21 +182,21 @@ const Main: React.FC = () => {
         } : {}
       } || {},
       ...activeRequest?.request.basicAuth ? { auth: activeRequest?.request.basicAuth as AxiosBasicCredentials } : {},
-      data,
+      data: body,
       ...activeRequest?.request.axiosConfig ? JSON.parse(activeRequest?.request.axiosConfig) : {}
     }
 
-    const getResponse = await Axios.post(process.env.REACT_APP_PROXY || 'http://localhost:4002/y', options)
+    const { data } = await Axios.post(process.env.REACT_APP_PROXY || 'http://localhost:4002/y', options)
 
-    if (getResponse.data?.error) {
-      const { error, response } = getResponse.data
+    if (data?.error) {
+      const { error, response } = data
       if (response) {
         updateTab({}, {
           status: response?.status,
           body: response?.data || JSON.stringify(error),
           headers: response?.headers,
           responseTime: new Date(response.config.metadata.endTime).getTime() - new Date(response.config.metadata.startTime).getTime(),
-          debugLog: getResponse.data
+          debugLog: data
         })
       } else {
         updateTab({}, {
@@ -204,17 +204,17 @@ const Main: React.FC = () => {
           body: typeof error === 'object' ? JSON.stringify(error, null, 2) : error.toString(),
           responseTime: 0,
           status: 0,
-          debugLog: getResponse.data
+          debugLog: data
         })
         message.error('Something error, please check the debug panel for the details')
       }
     } else {
       updateTab({}, {
-        status: getResponse.data.status,
-        body: getResponse.data?.data || getResponse.data,
-        headers: getResponse.data.headers,
-        responseTime: (getResponse.data as any).duration,
-        debugLog: getResponse.data
+        status: data.status,
+        body: data?.data || data,
+        headers: data.headers,
+        responseTime: (data as any).duration,
+        debugLog: data
       })
     }
     setIsLoading(false)
