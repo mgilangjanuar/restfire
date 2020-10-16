@@ -1,0 +1,13 @@
+.ant-space.space {
+  display: flex;
+  margin-bottom: 5px;
+  justify-content: flex-start;
+}
+
+.ant-space.space > .ant-space-item:nth-child(2) {
+  flex-grow: 0.2;
+}
+
+.ant-space.space > .ant-space-item:nth-child(3) {
+  flex-grow: 0.8;
+}

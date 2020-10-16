@@ -56,10 +56,20 @@ const Main: React.FC = () => {
     const present = [...requestData || []]?.find(req => req.id === activeTab)
     setActiveRequest(present)
     form.setFieldsValue({
-      params: present?.request.params?.map(param => ({ [`${present.id}_key`]: param.key, [`${present.id}_value`]: param.value })) || [],
-      headers: present?.request.headers?.map((header: any) => ({ [`${present.id}_key`]: header.key, [`${present.id}_value`]: header.value })) || [],
-      forms: present?.request.forms?.map((form: any) => ({ [`${present.id}_type`]: form.type || 'string', [`${present.id}_key`]: form.key, [`${present.id}_value`]: form.value })) || [],
-      formsEncoded: present?.request.formsEncoded?.map((form: any) => ({ [`${present.id}_key`]: form.key, [`${present.id}_value`]: form.value })) || [],
+      params: present?.request.params?.map(param => ({
+        [`${present.id}_key`]: param.key || null,
+        [`${present.id}_value`]: param.value || null })) || [],
+      headers: present?.request.headers?.map((header: any) => ({
+        [`${present.id}_key`]: header.key || null,
+        [`${present.id}_value`]: header.value || null })) || [],
+      forms: present?.request.forms?.map((form: any) => ({
+        [`${present.id}_type`]: form.type || 'string',
+        [`${present.id}_key`]: form.key || null,
+        [`${present.id}_value`]: form.value || null,
+        [`${present.id}_file`]: form.file || null })) || [],
+      formsEncoded: present?.request.formsEncoded?.map((form: any) => ({
+        [`${present.id}_key`]: form.key || null,
+        [`${present.id}_value`]: form.value || null })) || [],
     })
   }, [activeTab, requestData, form])
 

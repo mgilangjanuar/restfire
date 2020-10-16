@@ -22,7 +22,7 @@ const Editor: React.FC<Props> = ({ mode, onChange, value, options }) => {
     width="100%"
     showPrintMargin={true}
     showGutter={true}
-    highlightActiveLine={true}
+    highlightActiveLine={false}
     onChange={onChange}
     value={value}
     setOptions={{
