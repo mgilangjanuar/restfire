@@ -2,6 +2,7 @@ import { FireOutlined, HistoryOutlined, HomeOutlined, InfoCircleOutlined, MenuFo
 import { Button, Layout, Menu, Typography } from 'antd'
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
+import About from './About'
 import Main from './Main'
 
 interface Props {
@@ -51,6 +52,7 @@ const App: React.FC<Props> = ({ route }) => {
         </Layout.Header>
         <Layout.Content style={{ margin: '7px 10px', padding: 24 }}>
           { route === '/' ? <Main /> : '' }
+          { route === '/about' ? <About /> : '' }
         </Layout.Content>
       </Layout>
     </Layout>
