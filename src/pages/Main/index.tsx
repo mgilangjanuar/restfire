@@ -302,6 +302,9 @@ const Main: React.FC = () => {
                 { activeRequest?.request.contentType === 'application/x-www-form-urlencoded' ? <FieldList name="formsEncoded" form={form} tab={tab} activeRequest={activeRequest} updateTab={updateTab} buttonAddText="Add field" /> : '' }
               </Tabs.TabPane>
               <Tabs.TabPane tab="Axios Config" key="4">
+                <Typography.Paragraph type="secondary">
+                  Read this for details: <a href="https://github.com/axios/axios#request-config" target="_blank" rel="noopener noreferrer">https://github.com/axios/axios#request-config</a>
+                </Typography.Paragraph>
                 <Editor mode="json" defaultValue={activeRequest?.request.axiosConfig} onChange={axiosConfig => updateTab({ axiosConfig })} />
               </Tabs.TabPane>
             </Tabs>
