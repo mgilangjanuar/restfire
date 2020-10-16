@@ -48,7 +48,8 @@ const Main: React.FC = () => {
     id: createId(),
     title: () => <>Untitled</>,
     request: {
-      method: 'get'
+      method: 'get',
+      axiosConfig: '{\r\n  "timeout": 15000\r\n}'
     }
   })
 
