@@ -1,6 +1,8 @@
 import { Divider, Form, Input, message, Select, Spin, Tabs, Tag, Typography } from 'antd'
 import { useForm } from 'antd/lib/form/Form'
 import Axios, { AxiosRequestConfig } from 'axios'
+import FormData from 'form-data'
+import qs from 'qs'
 import queryString from 'query-string'
 import React, { useEffect, useState } from 'react'
 import { generate as createId } from 'shortid'
@@ -147,22 +149,40 @@ const Main: React.FC = () => {
     }
 
     try {
+      let data: any = null
+      if (activeRequest.request.contentType === 'application/json' && activeRequest.request.body) {
+        data =  activeRequest.request.body
+      } else if (activeRequest.request.contentType === 'application/x-www-form-urlencoded' && activeRequest.request.formsEncoded) {
+        data = qs.stringify(activeRequest?.request.formsEncoded?.reduce((res: any, field: any) => ({ ...res, [field.key]: field.value }), {}))
+      } else if (activeRequest.request.contentType === 'multipart/form-data' && activeRequest.request.forms) {
+        data = new FormData()
+        for (const field of activeRequest.request.forms) {
+          data.append(field.key, field.type === 'string' ? field.value : field.file)
+        }
+      }
+
       const options: AxiosRequestConfig = {
+        method: method as any,
+        url: activeRequest.request.url,
         params: params || {},
         headers: {
           ...headers,
-          ...activeRequest?.request.contentType && activeRequest?.request.contentType !== 'none' ? { contentType: activeRequest?.request.contentType } : {}
-        } || {}
+          ...activeRequest?.request.contentType && activeRequest.request.contentType !== 'none' ? {
+            contentType: activeRequest.request.contentType
+          } : {}
+        } || {},
+        data,
       }
-      const getResponse = await Axios[method](
-        activeRequest.request.url, method === 'get' ? options : JSON.parse(activeRequest.request.body) || {}, options)
+
+      const getResponse = await Axios(options)
+
       updateTab({}, {
         status: getResponse.status,
         body: getResponse.data,
         headers: getResponse.headers
       })
     } catch (error) {
-      console.log(error)
+      console.error(error)
       if (error?.response) {
         updateTab({}, {
           status: error?.response?.status,

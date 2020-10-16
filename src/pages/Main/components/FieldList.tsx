@@ -24,6 +24,7 @@ const FieldList: React.FC<Props> = ({ name, form, tab, activeRequest, updateTab,
 
   const updateListField = async (i: number, key: 'key' | 'value' | 'type' | 'file', { target }) => {
     const { value } = target
+    console.log('IUAHKSJASSA', value)
     const data = activeRequest?.request[name] || []
     data[i] = { ...data[i], [key]: value || null }
     return updateTab({ [name]: data })
