@@ -36,7 +36,6 @@ app.post('/y', async (req, res) => {
       if (config.data[key].file) {
         fs.writeFileSync(`${__dirname}/tmp/${config.data[key].file.name}`, config.data[key].base64.split(';base64,')[1], { encoding: 'base64' })
         formData.append(key, fs.createReadStream(`${__dirname}/tmp/${config.data[key].file.name}`))
-        fs.unlinkSync(`${__dirname}/tmp/${config.data[key].file.name}`)
       } else {
         formData.append(key, config.data[key])
       }
