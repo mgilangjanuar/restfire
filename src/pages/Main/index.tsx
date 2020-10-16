@@ -115,7 +115,11 @@ const Main: React.FC = () => {
         title,
         request: {
           ...requests[idx].request,
-          ...data
+          ...data,
+          url: queryString.stringifyUrl({
+            url: data.url !== undefined ? data.url : requests[idx]?.request?.url || '',
+            query: requests[idx]?.request.params?.reduce((res: any, param: any) => ({ ...res, [param.key]: param.value }), {}) || {}
+          })
         },
         response: {
           ...requests[idx].response || {},
@@ -234,13 +238,6 @@ const Main: React.FC = () => {
             </Form.Item>
             <Tabs defaultActiveKey="0">
               <Tabs.TabPane tab="Params" key="0">
-                { activeRequest?.request.params?.length && activeRequest?.request?.url ? (
-                  <Typography.Paragraph type="secondary">URL generated:&nbsp;
-                    <em>
-                      {queryString.stringifyUrl({ url: activeRequest?.request?.url, query: activeRequest?.request.params?.reduce((res: any, param: any) => ({ ...res, [param.key]: param.value }), {}) || {} })}
-                    </em>
-                  </Typography.Paragraph>
-                ) : '' }
                 <FieldList name="params" form={form} tab={tab} activeRequest={activeRequest} updateTab={updateTab} buttonAddText="Add param" />
               </Tabs.TabPane>
               <Tabs.TabPane tab="Headers" key="1">

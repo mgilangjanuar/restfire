@@ -3,8 +3,8 @@ import { Button, Form, Input, Select, Space, Typography, Upload } from 'antd'
 import { FormInstance } from 'antd/lib/form'
 import filesize from 'filesize'
 import React from 'react'
-
 import './FieldList.css'
+
 
 interface Props {
   name: string,
@@ -24,7 +24,6 @@ const FieldList: React.FC<Props> = ({ name, form, tab, activeRequest, updateTab,
 
   const updateListField = async (i: number, key: 'key' | 'value' | 'type' | 'file', { target }) => {
     const { value } = target
-    console.log('IUAHKSJASSA', value)
     const data = activeRequest?.request[name] || []
     data[i] = { ...data[i], [key]: value || null }
     return updateTab({ [name]: data })
@@ -79,7 +78,7 @@ const FieldList: React.FC<Props> = ({ name, form, tab, activeRequest, updateTab,
                   <Input placeholder="Value" autoComplete="off" onChange={e => updateListField(i, 'value', e)} />
                 </Form.Item>
               ) }
-              <Typography.Text type="danger">
+              <Typography.Text type="secondary">
                 <DeleteOutlined onClick={() => {
                   updateTab({ [name]: [...activeRequest?.request[name] || []].filter((_, j) => j !== i) })
                   return remove(field.name)
