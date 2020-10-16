@@ -18,7 +18,7 @@ const Editor: React.FC<Props> = ({ mode, onChange, value, options }) => {
     mode={mode}
     theme="vibrant_ink"
     className="aceEditor"
-    fontSize={12}
+    fontSize={12.5}
     width="100%"
     showPrintMargin={true}
     showGutter={true}

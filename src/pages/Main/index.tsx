@@ -149,7 +149,10 @@ const Main: React.FC = () => {
     try {
       const options: AxiosRequestConfig = {
         params: params || {},
-        headers: headers || {}
+        headers: {
+          ...headers,
+          ...activeRequest?.request.contentType && activeRequest?.request.contentType !== 'none' ? { contentType: activeRequest?.request.contentType } : {}
+        } || {}
       }
       const getResponse = await Axios[method](
         activeRequest.request.url, method === 'get' ? options : JSON.parse(activeRequest.request.body) || {}, options)
@@ -232,7 +235,7 @@ const Main: React.FC = () => {
                     <Select.Option value="application/json">application/json</Select.Option>
                   </Select>
                 </Form.Item>
-                { activeRequest?.request.contentType === 'application/json' ? <Editor mode="json" onChange={body => updateTab({ body })} /> : '' }
+                { activeRequest?.request.contentType === 'application/json' ? <Editor mode="json" value={activeRequest?.request.body} onChange={body => updateTab({ body })} /> : '' }
                 { activeRequest?.request.contentType === 'multipart/form-data' ? <FieldList name="forms" form={form} tab={tab} activeRequest={activeRequest} updateTab={updateTab} buttonAddText="Add field" useTypeField /> : '' }
                 { activeRequest?.request.contentType === 'application/x-www-form-urlencoded' ? <FieldList name="formsEncoded" form={form} tab={tab} activeRequest={activeRequest} updateTab={updateTab} buttonAddText="Add field" /> : '' }
               </Tabs.TabPane>
@@ -247,7 +250,7 @@ const Main: React.FC = () => {
                   mode={findMode()}
                   value={typeof activeRequest?.response?.body === 'object' ? JSON.stringify(activeRequest?.response?.body, null, 2) : activeRequest?.response?.body || ''}
                   onChange={body => updateTab({ body })}
-                  options={{ maxLines: Infinity, minLines: 20, readOnly: true }} />
+                  options={{ maxLines: Infinity, readOnly: true }} />
               </Tabs.TabPane>
             </Tabs>
           </Spin>
