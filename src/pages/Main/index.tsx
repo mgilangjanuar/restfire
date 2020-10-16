@@ -12,6 +12,7 @@ import FieldList from './components/FieldList'
 type Response = {
   status: number,
   body: any,
+  responseTime?: number,
   headers: any
 }
 
@@ -178,12 +179,31 @@ const Main: React.FC = () => {
         data,
       }
 
+      Axios.interceptors.request.use(config => {
+        (config as any).metadata = { startTime: new Date() }
+        return config
+      }, error => Promise.reject(error))
+
+      Axios.interceptors.response.use(response => {
+        (response.config as any).metadata.endTime = new Date()
+        response = {
+          ...response,
+          duration: (response.config as any).metadata.endTime - (response.config as any).metadata.startTime
+        } as any
+        return response
+      }, error => {
+        error.config.metadata.endTime = new Date()
+        error.duration = error.config.metadata.endTime - error.config.metadata.startTime
+        return Promise.reject(error)
+      })
+
       const getResponse = await Axios(options)
 
       updateTab({}, {
         status: getResponse.status,
         body: getResponse.data,
-        headers: getResponse.headers
+        headers: getResponse.headers,
+        responseTime: (getResponse as any).duration
       })
     } catch (error) {
       console.error(error)
@@ -191,7 +211,8 @@ const Main: React.FC = () => {
         updateTab({}, {
           status: error?.response?.status,
           body: error?.response?.data || JSON.stringify(error),
-          headers: error?.response?.headers
+          headers: error?.response?.headers,
+          responseTime: (error as any).duration
         })
       } else {
         updateTab({}, {
@@ -260,14 +281,22 @@ const Main: React.FC = () => {
           </Form>
           <Divider />
           <Spin spinning={isLoading}>
-              <Typography.Title level={5} type="secondary">Response <Typography.Text>{activeRequest?.response?.status}</Typography.Text></Typography.Title>
-            <Tabs>
-              <Tabs.TabPane tab="Body">
+            <Typography.Paragraph type="secondary">
+              Response <Typography.Text>{activeRequest?.response?.status}</Typography.Text>
+              <Typography.Text style={{ float: 'right' }}>
+                { activeRequest?.response?.responseTime ? `${activeRequest?.response?.responseTime} ms` : '' }
+              </Typography.Text>
+            </Typography.Paragraph>
+            <Tabs defaultActiveKey="0">
+              <Tabs.TabPane tab="Body" key="0">
                 <Editor
                   mode={findMode()}
                   value={typeof activeRequest?.response?.body === 'object' ? JSON.stringify(activeRequest?.response?.body, null, 2) : activeRequest?.response?.body || ''}
                   onChange={body => updateTab({ body })}
                   options={{ maxLines: Infinity, readOnly: true }} />
+              </Tabs.TabPane>
+              <Tabs.TabPane tab="Headers" key="1">
+
               </Tabs.TabPane>
             </Tabs>
           </Spin>
