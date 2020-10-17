@@ -1,6 +1,5 @@
 const Axios = require('axios')
 const bodyParser = require('body-parser')
-const circularJson = require('circular-json')
 const cors = require('cors')
 const express = require('express')
 const FormData = require('form-data')
@@ -48,9 +47,23 @@ app.post('/proxy', async (req, res) => {
 
   try {
     const resp = await Axios(config)
-    return res.status(resp.status).send(JSON.parse(circularJson.stringify(resp)))
+    const data = {
+      status: resp.status,
+      headers: resp.headers,
+      data: resp.data,
+      config: resp.config,
+      duration: resp.duration,
+    }
+    return res.status(resp.status).send(data)
   } catch (error) {
-    return res.send({ ...error.response ? { response: JSON.parse(circularJson.stringify(error.response)) } : {}, error })
+    const response = error.response ? {
+      status: error.response.status,
+      headers: error.response.headers,
+      data: error.response.data,
+      config: error.response.config,
+      duration: error.response.duration,
+    } : {}
+    return res.send({ ...error.response ? { response } : {}, error })
   }
 })
 

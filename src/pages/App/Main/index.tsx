@@ -224,7 +224,7 @@ const Main: React.FC<Props> = ({ onSend, appendRequest, onAppend }) => {
       ...activeRequest?.request.axiosConfig ? JSON.parse(activeRequest?.request.axiosConfig) : {}
     }
 
-    const { data } = await Axios.post(process.env.REACT_APP_PROXY || '/y', options)
+    const { data } = await Axios.post(process.env.REACT_APP_PROXY || '/proxy', options)
 
     let savedResponse: Partial<Response> = {}
     if (data?.error) {
