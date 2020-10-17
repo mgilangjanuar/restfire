@@ -35,7 +35,6 @@ const App: React.FC<Props> = ({ route }) => {
     }
 
     const urlParsed = data.request.url?.split('?')[0]?.replace(/^http[s]*:\/\//gi, '')
-    console.log(urlParsed)
     return <><Tag color={color}>{data.request.method?.toUpperCase()}</Tag> {urlParsed}</>
   }
 
