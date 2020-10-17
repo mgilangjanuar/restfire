@@ -7,6 +7,7 @@ import React, { useCallback, useEffect, useState } from 'react'
 import { generate as createId } from 'shortid'
 import Editor from './components/Editor'
 import FieldList from './components/FieldList'
+import GettingStarted from './components/GettingStarted'
 import ResponseSection from './components/ResponseSection'
 
 type Response = {
@@ -128,9 +129,10 @@ const Main: React.FC = () => {
         setRequestData(data?.map((req: RequestData) => ({ ...req, title: buildTitle(req.request) })))
         setActiveTab(window.localStorage.getItem('activeTab') || data[0].id)
       } catch (error) {
-        const initial = buildInitialRequestData()
-        setRequestData([initial])
-        setActiveTab(initial.id)
+        // console.log(error)
+        // const initial = buildInitialRequestData()
+        // setRequestData([initial])
+        // setActiveTab(initial.id)
       }
     }
   }, [requestData, buildTitle])
@@ -254,67 +256,70 @@ const Main: React.FC = () => {
   )
 
   return (
-    <Tabs defaultActiveKey={activeTab?.toString() || requestData?.[0].id} activeKey={activeTab} type="editable-card" onEdit={mutateTabs} onChange={setActiveTab} size="small">
-      { requestData?.map(tab => (
-        <Tabs.TabPane tab={<tab.title />} key={tab.id}>
-          <Form form={form} onFinish={send}>
-            <Form.Item name="url">
-              <span>
-                <Input.Search
-                  placeholder="Enter URL"
-                  addonBefore={<SelectMethod />}
-                  enterButton="Send"
-                  value={tab?.request?.url}
-                  required
-                  onSearch={send}
-                  onChange={e => updateTab({ url: e.target.value || '' })} />
-              </span>
-            </Form.Item>
-            <Tabs defaultActiveKey="0">
-              <Tabs.TabPane tab="Params" key="0">
-                <FieldList name="params" form={form} tab={tab} activeRequest={activeRequest} updateTab={updateTab} buttonAddText="Add param" />
-              </Tabs.TabPane>
-              <Tabs.TabPane tab="Headers" key="1">
-                <FieldList name="headers" form={form} tab={tab} activeRequest={activeRequest} updateTab={updateTab} buttonAddText="Add header" />
-              </Tabs.TabPane>
-              <Tabs.TabPane tab="Basic Auth" key="2">
-                <Form.Item label="Username" labelCol={{ span: 3 }} wrapperCol={{ span: 21 }}>
-                  <Input
-                    value={activeRequest?.request.basicAuth?.username}
-                    onChange={e => updateTab({ basicAuth: { ...activeRequest?.request.basicAuth, username: e.target.value } })} />
-                </Form.Item>
-                <Form.Item label="Password" labelCol={{ span: 3 }} wrapperCol={{ span: 21 }}>
-                  <Input.Password
-                    value={activeRequest?.request.basicAuth?.password}
-                    onChange={e => updateTab({ basicAuth: { ...activeRequest?.request.basicAuth, password: e.target.value } })} />
-                </Form.Item>
-              </Tabs.TabPane>
-              <Tabs.TabPane tab="Body" key="3">
-                <Form.Item label="Content Type" wrapperCol={{ lg: { span: 6 }, md: { span: 12 } }}>
-                  <Select style={{ minWidth: '240px' }} defaultValue={activeRequest?.request.contentType || 'none'} onChange={e => updateTab({ contentType: e })}>
-                    <Select.Option value="none">none</Select.Option>
-                    <Select.Option value="multipart/form-data">multipart/form-data</Select.Option>
-                    <Select.Option value="application/x-www-form-urlencoded">application/x-www-form-urlencoded</Select.Option>
-                    <Select.Option value="application/json">application/json</Select.Option>
-                  </Select>
-                </Form.Item>
-                { activeRequest?.request.contentType === 'application/json' ? <Editor mode="json" defaultValue={activeRequest?.request.body} onChange={body => updateTab({ body })} /> : '' }
-                { activeRequest?.request.contentType === 'multipart/form-data' ? <FieldList name="forms" form={form} tab={tab} activeRequest={activeRequest} updateTab={updateTab} buttonAddText="Add field" useTypeField /> : '' }
-                { activeRequest?.request.contentType === 'application/x-www-form-urlencoded' ? <FieldList name="formsEncoded" form={form} tab={tab} activeRequest={activeRequest} updateTab={updateTab} buttonAddText="Add field" /> : '' }
-              </Tabs.TabPane>
-              <Tabs.TabPane tab="Axios Config" key="4">
-                <Typography.Paragraph type="secondary">
-                  Read this for the details: <a href="https://github.com/axios/axios#request-config" target="_blank" rel="noopener noreferrer">https://github.com/axios/axios#request-config</a>
-                </Typography.Paragraph>
-                <Editor mode="json" defaultValue={activeRequest?.request.axiosConfig} onChange={axiosConfig => updateTab({ axiosConfig })} />
-              </Tabs.TabPane>
-            </Tabs>
-          </Form>
-          <Divider />
-          <ResponseSection activeRequest={activeRequest} isLoading={isLoading} />
-        </Tabs.TabPane>
-      )) }
-    </Tabs>
+    <>
+      <Tabs defaultActiveKey={activeTab?.toString() || requestData?.[0].id} activeKey={activeTab} type="editable-card" onEdit={mutateTabs} onChange={setActiveTab} size="small">
+        { requestData?.map(tab => (
+          <Tabs.TabPane tab={<tab.title />} key={tab.id}>
+            <Form form={form} onFinish={send}>
+              <Form.Item name="url">
+                <span>
+                  <Input.Search
+                    placeholder="Enter URL"
+                    addonBefore={<SelectMethod />}
+                    enterButton="Send"
+                    value={tab?.request?.url}
+                    required
+                    onSearch={send}
+                    onChange={e => updateTab({ url: e.target.value || '' })} />
+                </span>
+              </Form.Item>
+              <Tabs defaultActiveKey="0">
+                <Tabs.TabPane tab="Params" key="0">
+                  <FieldList name="params" form={form} tab={tab} activeRequest={activeRequest} updateTab={updateTab} buttonAddText="Add param" />
+                </Tabs.TabPane>
+                <Tabs.TabPane tab="Headers" key="1">
+                  <FieldList name="headers" form={form} tab={tab} activeRequest={activeRequest} updateTab={updateTab} buttonAddText="Add header" />
+                </Tabs.TabPane>
+                <Tabs.TabPane tab="Basic Auth" key="2">
+                  <Form.Item label="Username" labelCol={{ span: 3 }} wrapperCol={{ span: 21 }}>
+                    <Input
+                      value={activeRequest?.request.basicAuth?.username}
+                      onChange={e => updateTab({ basicAuth: { ...activeRequest?.request.basicAuth, username: e.target.value } })} />
+                  </Form.Item>
+                  <Form.Item label="Password" labelCol={{ span: 3 }} wrapperCol={{ span: 21 }}>
+                    <Input.Password
+                      value={activeRequest?.request.basicAuth?.password}
+                      onChange={e => updateTab({ basicAuth: { ...activeRequest?.request.basicAuth, password: e.target.value } })} />
+                  </Form.Item>
+                </Tabs.TabPane>
+                <Tabs.TabPane tab="Body" key="3">
+                  <Form.Item label="Content Type" wrapperCol={{ lg: { span: 6 }, md: { span: 12 } }}>
+                    <Select style={{ minWidth: '240px' }} defaultValue={activeRequest?.request.contentType || 'none'} onChange={e => updateTab({ contentType: e })}>
+                      <Select.Option value="none">none</Select.Option>
+                      <Select.Option value="multipart/form-data">multipart/form-data</Select.Option>
+                      <Select.Option value="application/x-www-form-urlencoded">application/x-www-form-urlencoded</Select.Option>
+                      <Select.Option value="application/json">application/json</Select.Option>
+                    </Select>
+                  </Form.Item>
+                  { activeRequest?.request.contentType === 'application/json' ? <Editor mode="json" defaultValue={activeRequest?.request.body} onChange={body => updateTab({ body })} /> : '' }
+                  { activeRequest?.request.contentType === 'multipart/form-data' ? <FieldList name="forms" form={form} tab={tab} activeRequest={activeRequest} updateTab={updateTab} buttonAddText="Add field" useTypeField /> : '' }
+                  { activeRequest?.request.contentType === 'application/x-www-form-urlencoded' ? <FieldList name="formsEncoded" form={form} tab={tab} activeRequest={activeRequest} updateTab={updateTab} buttonAddText="Add field" /> : '' }
+                </Tabs.TabPane>
+                <Tabs.TabPane tab="Axios Config" key="4">
+                  <Typography.Paragraph type="secondary">
+                    Read this for the details: <a href="https://github.com/axios/axios#request-config" target="_blank" rel="noopener noreferrer">https://github.com/axios/axios#request-config</a>
+                  </Typography.Paragraph>
+                  <Editor mode="json" defaultValue={activeRequest?.request.axiosConfig} onChange={axiosConfig => updateTab({ axiosConfig })} />
+                </Tabs.TabPane>
+              </Tabs>
+            </Form>
+            <Divider />
+            <ResponseSection activeRequest={activeRequest} isLoading={isLoading} />
+          </Tabs.TabPane>
+        )) }
+      </Tabs>
+      { !requestData?.length ? <GettingStarted /> : '' }
+    </>
   )
 }
 
