@@ -12,7 +12,7 @@ const app = express()
 app.use(cors())
 app.use(bodyParser.json({ limit: '100mb' }))
 
-app.post('/y', async (req, res) => {
+app.post('/proxy', async (req, res) => {
   const config = { ...req.body }
   if (config.headers && config.headers.contentType === 'multipart/form-data') {
     const formData = new FormData()

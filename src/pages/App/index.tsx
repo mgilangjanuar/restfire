@@ -50,7 +50,7 @@ const App: React.FC<Props> = ({ route }) => {
     <Layout>
       <Layout.Sider
         collapsible
-        width={250}
+        width={350}
         trigger={null}
         collapsed={collapse}
         onBreakpoint={e => setCollapse(e)}
