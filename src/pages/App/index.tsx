@@ -31,14 +31,14 @@ const App: React.FC<Props> = ({ route }) => {
         style={{ overflow: 'auto', minHeight: '100vh' }}
       >
         <Title hideText={collapse} />
-        <Menu mode="inline" defaultSelectedKeys={['1']}>
-          <Menu.Item key={1} icon={<HomeOutlined />}>
+        <Menu mode="inline" defaultSelectedKeys={[route]}>
+          <Menu.Item key="/" icon={<HomeOutlined />}>
             <Link to="/app">Main</Link>
           </Menu.Item>
-          <Menu.Item key={2} icon={<HistoryOutlined />}>
+          <Menu.Item key="/history" icon={<HistoryOutlined />}>
             <Link to="/app/history">History</Link>
           </Menu.Item>
-          <Menu.Item key={3} icon={<InfoCircleOutlined />}>
+          <Menu.Item key="/about" icon={<InfoCircleOutlined />}>
             <Link to="/app/about">About</Link>
           </Menu.Item>
         </Menu>
