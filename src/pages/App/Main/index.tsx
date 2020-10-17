@@ -89,7 +89,7 @@ const Main: React.FC<Props> = ({ onSend, appendRequest, onAppend }) => {
       const updateTabs = [...requestData || []].filter(req => req.id !== key)
       setRequestData(updateTabs)
       if (activeTab === key) {
-        setActiveTab(updateTabs?.[0].id)
+        setActiveTab(updateTabs?.[0]?.id)
       }
     }
   }
@@ -280,7 +280,7 @@ const Main: React.FC<Props> = ({ onSend, appendRequest, onAppend }) => {
 
   return (
     <>
-      <Tabs defaultActiveKey={activeTab?.toString() || requestData?.[0].id} activeKey={activeTab} type="editable-card" onEdit={mutateTabs} onChange={setActiveTab} size="small">
+      <Tabs defaultActiveKey={activeTab?.toString() || requestData?.[0]?.id} activeKey={activeTab} type="editable-card" onEdit={mutateTabs} onChange={setActiveTab} size="small">
         { requestData?.map(tab => (
           <Tabs.TabPane tab={<tab.title />} key={tab.id}>
             <Form form={form} onFinish={send}>

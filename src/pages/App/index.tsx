@@ -1,5 +1,5 @@
 import { FireOutlined, HistoryOutlined, HomeOutlined, InfoCircleOutlined, MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons'
-import { Button, Layout, Menu, Tag, Typography } from 'antd'
+import { Button, Empty, Layout, Menu, Tag, Typography } from 'antd'
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import About from './About'
@@ -57,14 +57,11 @@ const App: React.FC<Props> = ({ route }) => {
             <Link to="/app">Main</Link>
           </Menu.Item>
           <Menu.SubMenu key="/history" icon={<HistoryOutlined />} title="History">
-            { histories?.map((req: any, i: number) => (
+            { histories?.length ? histories?.map((req: any, i: number) => (
               <Menu.Item key={i} onClick={() => setRequestSent(req)}>
                 <TitleHistory data={req} />
               </Menu.Item>
-            )) }
-            <Menu.Item key="historyAll">
-              <Link to="/app/history">See all</Link>
-            </Menu.Item>
+            )) : <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} /> }
           </Menu.SubMenu>
           <Menu.Item key="/about" icon={<InfoCircleOutlined />}>
             <Link to="/app/about">About</Link>
