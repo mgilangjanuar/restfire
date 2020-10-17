@@ -1,7 +1,7 @@
 import { FireOutlined, HistoryOutlined, HomeOutlined, InfoCircleOutlined, MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons'
 import { Button, Empty, Layout, Menu, Tag, Typography } from 'antd'
 import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 import About from './About'
 import History from './History'
 import Main from './Main'
@@ -11,6 +11,7 @@ interface Props {
 }
 
 const App: React.FC<Props> = ({ route }) => {
+  const history = useHistory()
   const [collapse, setCollapse] = useState<boolean>()
   const [requestSent, setRequestSent] = useState<any>()
   const [histories, setHistories] = useState<any[]>(window.localStorage.getItem('histories') ? JSON.parse(window.localStorage.getItem('histories')!) : [])
@@ -39,6 +40,12 @@ const App: React.FC<Props> = ({ route }) => {
     return <><Tag color={color}>{data.request.method?.toUpperCase()}</Tag> {urlParsed}</>
   }
 
+  const sendRequest = async (req: any) => {
+    history.push('/app')
+    await new Promise(res => setTimeout(res, 100))
+    setRequestSent(req)
+  }
+
   return (
     <Layout>
       <Layout.Sider
@@ -58,7 +65,7 @@ const App: React.FC<Props> = ({ route }) => {
           </Menu.Item>
           <Menu.SubMenu key="/history" icon={<HistoryOutlined />} title="History">
             { histories?.length ? histories?.map((req: any, i: number) => (
-              <Menu.Item key={i} onClick={() => setRequestSent(req)}>
+              <Menu.Item key={i} onClick={() => sendRequest(req)}>
                 <TitleHistory data={req} />
               </Menu.Item>
             )) : <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} /> }
