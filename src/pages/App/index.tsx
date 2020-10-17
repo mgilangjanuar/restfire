@@ -12,7 +12,7 @@ interface Props {
 
 const App: React.FC<Props> = ({ route }) => {
   const history = useHistory()
-  const [collapse, setCollapse] = useState<boolean>()
+  const [collapseLeft, setCollapseLeft] = useState<boolean>()
   const [requestSent, setRequestSent] = useState<any>()
   const [histories, setHistories] = useState<any[]>(window.localStorage.getItem('histories') ? JSON.parse(window.localStorage.getItem('histories')!) : [])
 
@@ -52,13 +52,13 @@ const App: React.FC<Props> = ({ route }) => {
         collapsible
         width={350}
         trigger={null}
-        collapsed={collapse}
-        onBreakpoint={e => setCollapse(e)}
+        collapsed={collapseLeft}
+        onBreakpoint={e => setCollapseLeft(e)}
         breakpoint="lg"
         collapsedWidth={0}
         style={{ overflow: 'auto', minHeight: '100vh' }}
       >
-        <Title hideText={collapse} />
+        <Title hideText={collapseLeft} />
         <Menu mode="inline" defaultSelectedKeys={[route]} defaultOpenKeys={['/history']} theme="dark">
           <Menu.Item key="/" icon={<HomeOutlined />}>
             <Link to="/app">Main</Link>
@@ -77,10 +77,10 @@ const App: React.FC<Props> = ({ route }) => {
       </Layout.Sider>
       <Layout>
         <Layout.Header style={{ padding: 0 }}>
-          <Button type="text" onClick={() => setCollapse(!collapse)}>
-            { collapse ? <MenuUnfoldOutlined /> : <MenuFoldOutlined /> }
+          <Button type="text" onClick={() => setCollapseLeft(!collapseLeft)}>
+            { collapseLeft ? <MenuUnfoldOutlined /> : <MenuFoldOutlined /> }
           </Button>
-          <Title style={{ display: 'inline' }} useIcon={false} hideText={!collapse} />
+          <Title style={{ display: 'inline' }} useIcon={false} hideText={!collapseLeft} />
         </Layout.Header>
         <Layout.Content style={{ margin: '7px 10px', padding: 24 }}>
           { route === '/' ? <Main
