@@ -242,7 +242,7 @@ const Main: React.FC<Props> = ({ onSend }) => {
       })
     }
     window.localStorage.setItem('histories', JSON.stringify(
-      [...(window.localStorage.getItem('histories') ? JSON.parse(window.localStorage.getItem('histories')!) : []), activeRequest]
+      [activeRequest, ...(window.localStorage.getItem('histories') ? JSON.parse(window.localStorage.getItem('histories')!) : [])]
     ))
     onSend()
     setIsLoading(false)

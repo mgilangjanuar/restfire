@@ -1,5 +1,5 @@
 import { FireOutlined, HistoryOutlined, HomeOutlined, InfoCircleOutlined, MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons'
-import { Button, Layout, Menu, Typography } from 'antd'
+import { Button, Layout, Menu, Tag, Typography } from 'antd'
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import About from './About'
@@ -20,6 +20,25 @@ const App: React.FC<Props> = ({ route }) => {
     </Typography.Title>
   )
 
+  const TitleHistory = ({ data }) => {
+    let color: string | undefined = undefined
+    if (data.request.method === 'post') {
+      color = 'green'
+    } else if (data.request.method === 'patch') {
+      color = 'orange'
+    } else if (data.request.method === 'put') {
+      color = 'cyan'
+    } else if (data.request.method === 'del') {
+      color = 'red'
+    } else if (data.request.method === 'opt') {
+      color = 'lime'
+    }
+
+    const urlParsed = data.request.url?.split('?')[0]?.replace(/^http[s]*:\/\//gi, '')
+    console.log(urlParsed)
+    return <><Tag color={color}>{data.request.method?.toUpperCase()}</Tag> {urlParsed}</>
+  }
+
   return (
     <Layout>
       <Layout.Sider
@@ -38,9 +57,9 @@ const App: React.FC<Props> = ({ route }) => {
             <Link to="/app">Main</Link>
           </Menu.Item>
           <Menu.SubMenu key="/history" icon={<HistoryOutlined />} title="History">
-            { histories?.map((req: any) => (
-              <Menu.Item key={req.id}>
-                <Link to="/app/history">{req.request.url}</Link>
+            { histories?.map((req: any, i: number) => (
+              <Menu.Item key={i}>
+                <Link to="/app/history"><TitleHistory data={req} /></Link>
               </Menu.Item>
             )) }
             <Menu.Item key="historyAll">
