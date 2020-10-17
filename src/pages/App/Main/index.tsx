@@ -3,7 +3,7 @@ import { useForm } from 'antd/lib/form/Form'
 import Axios, { AxiosBasicCredentials, AxiosRequestConfig } from 'axios'
 import qs from 'qs'
 import queryString from 'query-string'
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { generate as createId } from 'shortid'
 import Editor from './components/Editor'
 import FieldList from './components/FieldList'
@@ -53,34 +53,25 @@ const Main: React.FC = () => {
     }
   })
 
-  useEffect(() => {
-    if (!requestData?.length) {
-      const initial = buildInitialRequestData()
-      setRequestData([initial])
-      setActiveTab(initial.id)
+  const buildTitle = useCallback((data: Partial<Request>) => {
+    let color: string | undefined = undefined
+    if ((data?.method || activeRequest?.request.method) === 'post') {
+      color = 'green'
+    } else if ((data?.method || activeRequest?.request.method) === 'patch') {
+      color = 'orange'
+    } else if ((data?.method || activeRequest?.request.method) === 'put') {
+      color = 'cyan'
+    } else if ((data?.method || activeRequest?.request.method) === 'del') {
+      color = 'red'
+    } else if ((data?.method || activeRequest?.request.method) === 'opt') {
+      color = 'lime'
     }
-  }, [requestData])
 
-  useEffect(() => {
-    const present = [...requestData || []]?.find(req => req.id === activeTab)
-    setActiveRequest(present)
-    form.setFieldsValue({
-      params: present?.request.params?.map(param => ({
-        [`${present.id}_key`]: param.key || null,
-        [`${present.id}_value`]: param.value || null })) || [],
-      headers: present?.request.headers?.map((header: any) => ({
-        [`${present.id}_key`]: header.key || null,
-        [`${present.id}_value`]: header.value || null })) || [],
-      forms: present?.request.forms?.map((form: any) => ({
-        [`${present.id}_type`]: form.type || 'string',
-        [`${present.id}_key`]: form.key || null,
-        [`${present.id}_value`]: form.value || null,
-        [`${present.id}_file`]: form.file || null })) || [],
-      formsEncoded: present?.request.formsEncoded?.map((form: any) => ({
-        [`${present.id}_key`]: form.key || null,
-        [`${present.id}_value`]: form.value || null })) || [],
-    })
-  }, [activeTab, requestData, form])
+    const urlParsed = (data.url || activeRequest?.request.url)?.split('?')[0]?.replace(/^http[s]*:\/\//gi, '')
+    return () => <>
+      <Tag color={color}>{(data?.method || activeRequest?.request.method)?.toUpperCase()}</Tag> {urlParsed ? urlParsed?.substr(0, 12) + (urlParsed?.length > 12 ? '...' : '') : 'Untitled'}
+    </>
+  }, [activeRequest])
 
   const mutateTabs = (key: any, action: string) => {
     if (action === 'add') {
@@ -96,24 +87,7 @@ const Main: React.FC = () => {
   }
 
   const updateTab = async (data: Partial<Request>, resp?: Partial<Response>) => {
-    let color: string | undefined = undefined
-    if ((data?.method || activeRequest?.request.method) === 'post') {
-      color = 'green'
-    } else if ((data?.method || activeRequest?.request.method) === 'patch') {
-      color = 'orange'
-    } else if ((data?.method || activeRequest?.request.method) === 'put') {
-      color = 'cyan'
-    } else if ((data?.method || activeRequest?.request.method) === 'del') {
-      color = 'red'
-    } else if ((data?.method || activeRequest?.request.method) === 'opt') {
-      color = 'lime'
-    }
-
-    const urlParsed = (data.url || activeRequest?.request.url)?.split('?')[0]?.replace(/^http[s]*:\/\//gi, '')
-    const title = () => <>
-      <Tag color={color}>{(data?.method || activeRequest?.request.method)?.toUpperCase()}</Tag> {urlParsed ? urlParsed?.substr(0, 12) + (urlParsed?.length > 12 ? '...' : '') : 'Untitled'}
-    </>
-
+    const title = buildTitle(data)
     if (activeRequest && requestData) {
       const idx = requestData?.indexOf(requestData!.find(req => req.id === activeRequest.id)!)
       const requests = [...requestData]
@@ -137,6 +111,50 @@ const Main: React.FC = () => {
       setRequestData(requests)
     }
   }
+
+  useEffect(() => {
+    return () => {
+      if (requestData?.length) {
+        window.localStorage.setItem('requestData', JSON.stringify(requestData))
+      }
+    }
+  }, [requestData])
+
+  useEffect(() => {
+    if (!requestData?.length) {
+      try {
+        const data = JSON.parse(window.localStorage.getItem('requestData')!)
+        console.log(data[0])
+        setRequestData(data?.map((req: RequestData) => ({ ...req, title: buildTitle(req.request) })))
+        setActiveTab(data[0].id)
+      } catch (error) {
+        const initial = buildInitialRequestData()
+        setRequestData([initial])
+        setActiveTab(initial.id)
+      }
+    }
+  }, [requestData, buildTitle])
+
+  useEffect(() => {
+    const present = [...requestData || []]?.find(req => req.id === activeTab)
+    setActiveRequest(present)
+    form.setFieldsValue({
+      params: present?.request.params?.map(param => ({
+        [`${present.id}_key`]: param.key || null,
+        [`${present.id}_value`]: param.value || null })) || [],
+      headers: present?.request.headers?.map((header: any) => ({
+        [`${present.id}_key`]: header.key || null,
+        [`${present.id}_value`]: header.value || null })) || [],
+      forms: present?.request.forms?.map((form: any) => ({
+        [`${present.id}_type`]: form.type || 'string',
+        [`${present.id}_key`]: form.key || null,
+        [`${present.id}_value`]: form.value || null,
+        [`${present.id}_file`]: form.file || null })) || [],
+      formsEncoded: present?.request.formsEncoded?.map((form: any) => ({
+        [`${present.id}_key`]: form.key || null,
+        [`${present.id}_value`]: form.value || null })) || [],
+    })
+  }, [activeTab, requestData, form])
 
   const send = async () => {
     const params = activeRequest?.request.params?.reduce((res: any, param: any) => ({ ...res, [param.key]: param.value }), {})
