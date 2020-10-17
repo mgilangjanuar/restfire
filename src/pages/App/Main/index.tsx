@@ -131,9 +131,9 @@ const Main: React.FC<Props> = ({ onSend, appendRequest, onAppend }) => {
 
   useEffect(() => {
     return () => {
-      if (requestData !== undefined) {
-        window.localStorage.setItem('requestData', JSON.stringify(requestData))
-        window.localStorage.setItem('activeTab', activeTab!)
+      window.localStorage.setItem('requestData', JSON.stringify(requestData || []))
+      if (activeTab) {
+        window.localStorage.setItem('activeTab', activeTab)
       }
     }
   }, [requestData, activeTab])
