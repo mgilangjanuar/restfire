@@ -39,10 +39,12 @@ type RequestData = {
 }
 
 interface Props {
-  onSend: () => void
+  onSend: () => void,
+  appendRequest?: any,
+  onAppend?: () => void
 }
 
-const Main: React.FC<Props> = ({ onSend }) => {
+const Main: React.FC<Props> = ({ onSend, appendRequest, onAppend }) => {
   const [form] = useForm()
   const [requestData, setRequestData] = useState<RequestData[]>()
   const [activeRequest, setActiveRequest] = useState<RequestData>()
@@ -84,9 +86,10 @@ const Main: React.FC<Props> = ({ onSend }) => {
       setRequestData([...requestData || [], initial])
       setActiveTab(initial.id)
     } else if (action === 'remove') {
-      setRequestData(requestData?.filter(req => req.id !== key))
+      const updateTabs = [...requestData || []].filter(req => req.id !== key)
+      setRequestData(updateTabs)
       if (activeTab === key) {
-        setActiveTab(requestData?.[0].id)
+        setActiveTab(updateTabs?.[0].id)
       }
     }
   }
@@ -116,6 +119,15 @@ const Main: React.FC<Props> = ({ onSend }) => {
       setRequestData(requests)
     }
   }
+
+  useEffect(() => {
+    if (appendRequest) {
+      const request = { ...appendRequest, id: createId(), title: buildTitle(appendRequest.request) }
+      setRequestData([...requestData || [], request])
+      setActiveTab(request.id)
+      onAppend?.()
+    }
+  }, [requestData, appendRequest, onAppend, buildTitle])
 
   useEffect(() => {
     return () => {
@@ -212,37 +224,40 @@ const Main: React.FC<Props> = ({ onSend }) => {
 
     const { data } = await Axios.post(process.env.REACT_APP_PROXY || '/y', options)
 
+    let savedResponse: Partial<Response> = {}
     if (data?.error) {
       const { error, response } = data
       if (response) {
-        updateTab({}, {
+        savedResponse = {
           status: response?.status,
           body: response?.data || JSON.stringify(error),
           headers: response?.headers,
           responseTime: new Date(response.config.metadata.endTime).getTime() - new Date(response.config.metadata.startTime).getTime(),
           debugLog: data
-        })
+        }
       } else {
-        updateTab({}, {
+        savedResponse = {
           headers: { 'content-type': 'application/json' },
           body: typeof error === 'object' ? JSON.stringify(error, null, 2) : error.toString(),
           responseTime: 0,
           status: 0,
           debugLog: data
-        })
+        }
         message.error('Something error, please check the debug panel for the details')
       }
     } else {
-      updateTab({}, {
+      savedResponse = {
         status: data.status,
         body: data?.data || data,
         headers: data.headers,
         responseTime: (data as any).duration,
         debugLog: data
-      })
+      }
     }
+    updateTab({}, savedResponse)
+
     window.localStorage.setItem('histories', JSON.stringify(
-      [activeRequest, ...(window.localStorage.getItem('histories') ? JSON.parse(window.localStorage.getItem('histories')!) : []).slice(0, 15)]
+      [{ ...activeRequest, response: savedResponse }, ...(window.localStorage.getItem('histories') ? JSON.parse(window.localStorage.getItem('histories')!) : []).slice(0, 15)]
     ))
     onSend()
     setIsLoading(false)

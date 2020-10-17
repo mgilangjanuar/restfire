@@ -12,6 +12,7 @@ interface Props {
 
 const App: React.FC<Props> = ({ route }) => {
   const [collapse, setCollapse] = useState<boolean>()
+  const [requestSent, setRequestSent] = useState<any>()
   const [histories, setHistories] = useState<any[]>(window.localStorage.getItem('histories') ? JSON.parse(window.localStorage.getItem('histories')!) : [])
 
   const Title = ({ style = {}, useIcon = true, hideText = false }) => (
@@ -57,8 +58,8 @@ const App: React.FC<Props> = ({ route }) => {
           </Menu.Item>
           <Menu.SubMenu key="/history" icon={<HistoryOutlined />} title="History">
             { histories?.map((req: any, i: number) => (
-              <Menu.Item key={i}>
-                <Link to="/app/history"><TitleHistory data={req} /></Link>
+              <Menu.Item key={i} onClick={() => setRequestSent(req)}>
+                <TitleHistory data={req} />
               </Menu.Item>
             )) }
             <Menu.Item key="historyAll">
@@ -78,7 +79,10 @@ const App: React.FC<Props> = ({ route }) => {
           <Title style={{ display: 'inline' }} useIcon={false} hideText={!collapse} />
         </Layout.Header>
         <Layout.Content style={{ margin: '7px 10px', padding: 24 }}>
-          { route === '/' ? <Main onSend={() => setHistories(window.localStorage.getItem('histories') ? JSON.parse(window.localStorage.getItem('histories')!) : [])} /> : '' }
+          { route === '/' ? <Main
+            appendRequest={requestSent}
+            onAppend={() => setRequestSent(undefined)}
+            onSend={() => setHistories(window.localStorage.getItem('histories') ? JSON.parse(window.localStorage.getItem('histories')!) : [])} /> : '' }
           { route === '/history' ? <History /> : '' }
           { route === '/about' ? <About /> : '' }
         </Layout.Content>
