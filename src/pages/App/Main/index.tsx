@@ -116,17 +116,17 @@ const Main: React.FC = () => {
     return () => {
       if (requestData?.length) {
         window.localStorage.setItem('requestData', JSON.stringify(requestData))
+        window.localStorage.setItem('activeTab', activeTab!)
       }
     }
-  }, [requestData])
+  }, [requestData, activeTab])
 
   useEffect(() => {
     if (!requestData?.length) {
       try {
         const data = JSON.parse(window.localStorage.getItem('requestData')!)
-        console.log(data[0])
         setRequestData(data?.map((req: RequestData) => ({ ...req, title: buildTitle(req.request) })))
-        setActiveTab(data[0].id)
+        setActiveTab(window.localStorage.getItem('activeTab') || data[0].id)
       } catch (error) {
         const initial = buildInitialRequestData()
         setRequestData([initial])
