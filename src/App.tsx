@@ -15,6 +15,7 @@ function App() {
       <Layout>
         <Switch>
           <Route path="/app" exact><MyApp route="/" /></Route>
+          <Route path="/app/history" exact><MyApp route="/history" /></Route>
           <Route path="/app/about" exact><MyApp route="/about" /></Route>
           <Route path="/" exact component={Home} />
           <Route component={NotFoundPage} />

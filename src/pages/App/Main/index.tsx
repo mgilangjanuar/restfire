@@ -38,7 +38,11 @@ type RequestData = {
   response?: Response
 }
 
-const Main: React.FC = () => {
+interface Props {
+  onSend: () => void
+}
+
+const Main: React.FC<Props> = ({ onSend }) => {
   const [form] = useForm()
   const [requestData, setRequestData] = useState<RequestData[]>()
   const [activeRequest, setActiveRequest] = useState<RequestData>()
@@ -237,6 +241,10 @@ const Main: React.FC = () => {
         debugLog: data
       })
     }
+    window.localStorage.setItem('histories', JSON.stringify(
+      [...(window.localStorage.getItem('histories') ? JSON.parse(window.localStorage.getItem('histories')!) : []), activeRequest]
+    ))
+    onSend()
     setIsLoading(false)
   }
 

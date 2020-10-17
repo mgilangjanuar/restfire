@@ -3,6 +3,7 @@ import { Button, Layout, Menu, Typography } from 'antd'
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import About from './About'
+import History from './History'
 import Main from './Main'
 
 interface Props {
@@ -11,6 +12,7 @@ interface Props {
 
 const App: React.FC<Props> = ({ route }) => {
   const [collapse, setCollapse] = useState<boolean>()
+  const [histories, setHistories] = useState<any[]>(window.localStorage.getItem('histories') ? JSON.parse(window.localStorage.getItem('histories')!) : [])
 
   const Title = ({ style = {}, useIcon = true, hideText = false }) => (
     <Typography.Title style={{ padding: '17px 5px 17px', marginBottom: 0, textAlign: 'center', ...style }} level={4}>
@@ -31,13 +33,20 @@ const App: React.FC<Props> = ({ route }) => {
         style={{ overflow: 'auto', minHeight: '100vh' }}
       >
         <Title hideText={collapse} />
-        <Menu mode="inline" defaultSelectedKeys={[route]}>
+        <Menu mode="inline" defaultSelectedKeys={[route]} defaultOpenKeys={['/history']} theme="dark">
           <Menu.Item key="/" icon={<HomeOutlined />}>
             <Link to="/app">Main</Link>
           </Menu.Item>
-          <Menu.Item key="/history" icon={<HistoryOutlined />}>
-            <Link to="/app/history">History</Link>
-          </Menu.Item>
+          <Menu.SubMenu key="/history" icon={<HistoryOutlined />} title="History">
+            { histories?.map((req: any) => (
+              <Menu.Item key={req.id}>
+                <Link to="/app/history">{req.request.url}</Link>
+              </Menu.Item>
+            )) }
+            <Menu.Item key="historyAll">
+              <Link to="/app/history">See all</Link>
+            </Menu.Item>
+          </Menu.SubMenu>
           <Menu.Item key="/about" icon={<InfoCircleOutlined />}>
             <Link to="/app/about">About</Link>
           </Menu.Item>
@@ -51,7 +60,8 @@ const App: React.FC<Props> = ({ route }) => {
           <Title style={{ display: 'inline' }} useIcon={false} hideText={!collapse} />
         </Layout.Header>
         <Layout.Content style={{ margin: '7px 10px', padding: 24 }}>
-          { route === '/' ? <Main /> : '' }
+          { route === '/' ? <Main onSend={() => setHistories(window.localStorage.getItem('histories') ? JSON.parse(window.localStorage.getItem('histories')!) : [])} /> : '' }
+          { route === '/history' ? <History /> : '' }
           { route === '/about' ? <About /> : '' }
         </Layout.Content>
       </Layout>
