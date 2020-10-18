@@ -20,21 +20,22 @@ const App: React.FC<Props> = ({ route }) => {
 
   useEffect(() => {
     let theme = window.localStorage.getItem('theme')
-    if (!theme) {
-      window.localStorage.setItem('theme', 'dark')
+    if (isDarkMode !== undefined) {
+      theme = isDarkMode ? 'dark' : 'light'
+    } else if (!theme) {
       theme = 'dark'
     }
+    window.localStorage.setItem('theme', theme)
     setIsDarkMode(theme === 'dark')
     switcher({ theme: theme === 'dark' ? themes.dark : themes.light })
-  }, [switcher, themes])
+  }, [switcher, themes, isDarkMode])
 
   const Title = ({ style = {}, useIcon = true, hideText = false }) => (
-    // <Typography.Title style={{ padding: '16px 5px 16px', marginBottom: 0, textAlign: 'center', ...style }} level={4}>
-    //   { useIcon ? <FireOutlined /> : '' } { hideText ? '' : 'RestFire Studio' }
-    // </Typography.Title>
-    <span style={{ fontSize: '1.2em', padding: '16px 5px 16px', marginBottom: 0, textAlign: 'center', ...style }}>
-      { useIcon ? <FireOutlined /> : '' } { hideText ? '' : 'RestFire Studio' }
-    </span>
+    <Link to="/">
+      <span style={{ fontSize: '1.2em', padding: '16px 5px 16px', marginBottom: 0, textAlign: 'center', color: isDarkMode ? '#fff' : '#000', ...style }}>
+        { useIcon ? <FireOutlined /> : '' } { hideText ? '' : 'RestFire Studio' }
+      </span>
+    </Link>
   )
 
   const TitleHistory = ({ data }) => {
@@ -97,11 +98,7 @@ const App: React.FC<Props> = ({ route }) => {
             { collapseLeft ? <MenuUnfoldOutlined /> : <MenuFoldOutlined /> }
           </Button>
           <Title style={{ display: 'inline' }} useIcon={false} hideText={!collapseLeft} />
-          <Button style={{ float: 'right', top: '16px', right: '10px' }} type="text" icon={<BulbOutlined />} shape="circle" onClick={() => setIsDarkMode(prev => {
-            switcher({ theme: prev ? themes.light : themes.dark })
-            localStorage.setItem('theme', prev ? 'light' : 'dark')
-            return !prev
-          })} />
+          <Button style={{ float: 'right', top: '16px', right: '10px' }} type="text" icon={<BulbOutlined />} shape="circle" onClick={() => setIsDarkMode(!isDarkMode)} />
         </Layout.Header>
         <Layout.Content style={{ margin: '7px 10px', padding: 24 }}>
           { route === '/' ? <Main
