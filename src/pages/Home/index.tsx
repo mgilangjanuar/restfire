@@ -43,8 +43,8 @@ const Home: React.FC = () => {
             <img alt="asset-1" src="/assets/smartmockups_kgewcl0o.png" style={{ maxWidth: '270px', width: '100%' }} />
           </Col>
         </Row>
-        <Row align="middle" style={{ padding: '10px' }}>
-          <Col lg={12} style={{ textAlign: 'right', padding: '36px 12px 0' }}>
+        <Row style={{ padding: '10px' }}>
+          <Col lg={12} style={{ textAlign: 'right', padding: '56px 12px 0' }}>
             <Typography.Title level={3}>
               Designed for developers
             </Typography.Title>
@@ -55,10 +55,16 @@ const Home: React.FC = () => {
           <Col lg={12} style={{ textAlign: 'center', padding: '56px 12px 56px 12px' }}>
             <Carousel autoplay dots={false} effect="scrollx">
               <div>
-                <img alt="asset-1" src="/assets/Screen Shot 2020-10-18 at 11.47.37.png" style={{ maxWidth: '650px', width: '100%' }} />
+                <img alt="asset-1" src="/assets/Screen Shot 2020-10-18 at 11.50.23.png" style={{ maxWidth: '650px', width: '100%' }} />
               </div>
               <div>
-                <img alt="asset-1" src="/assets/Screen Shot 2020-10-18 at 11.52.19.png" style={{ maxWidth: '650px', width: '100%' }} />
+                <img alt="asset-2" src="/assets/Screen Shot 2020-10-18 at 11.49.37.png" style={{ maxWidth: '650px', width: '100%' }} />
+              </div>
+              <div>
+                <img alt="asset-3" src="/assets/Screen Shot 2020-10-18 at 11.52.19.png" style={{ maxWidth: '650px', width: '100%' }} />
+              </div>
+              <div>
+                <img alt="asset-4" src="/assets/Screen Shot 2020-10-18 at 11.47.37.png" style={{ maxWidth: '650px', width: '100%' }} />
               </div>
             </Carousel>
           </Col>
