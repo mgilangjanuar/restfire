@@ -6,7 +6,7 @@ import App from './App'
 import * as serviceWorker from './serviceWorker'
 
 ReactDOM.render(
-  <ThemeSwitcherProvider defaultTheme="dark" themeMap={{ light: '/antd.min.css', dark: '/antd.dark.min.css' }}>
+  <ThemeSwitcherProvider defaultTheme={localStorage.getItem('theme') || 'dark'} themeMap={{ light: '/antd.min.css', dark: '/antd.dark.min.css' }}>
     <App />
   </ThemeSwitcherProvider>,
   document.getElementById('root')

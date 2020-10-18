@@ -1,35 +1,19 @@
-import { AntDesignOutlined, BulbOutlined, FireOutlined } from '@ant-design/icons'
+import { FireOutlined } from '@ant-design/icons'
 import { Button, Carousel, Col, Layout, Row, Switch, Typography } from 'antd'
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { useThemeSwitcher } from 'react-css-theme-switcher'
 import { Link } from 'react-router-dom'
+import Footer from '../../components/Footer'
+import Header from '../../components/Header'
 
 const Home: React.FC = () => {
-  const [isDarkMode, setIsDarkMode] = useState<boolean>()
-  const { switcher, themes } = useThemeSwitcher()
-
-  useEffect(() => {
-    let theme = window.localStorage.getItem('theme')
-    if (isDarkMode !== undefined) {
-      theme = isDarkMode ? 'dark' : 'light'
-    } else if (!theme) {
-      theme = 'dark'
-    }
-    window.localStorage.setItem('theme', theme)
-    setIsDarkMode(theme === 'dark')
-    switcher({ theme: theme === 'dark' ? themes.dark : themes.light })
-  }, [switcher, themes, isDarkMode])
+  const { switcher, themes, currentTheme } = useThemeSwitcher()
 
   return (
     <Layout>
-      <Layout.Header style={{ padding: 0, ...isDarkMode ? {} : { backgroundColor: '#fff' } }}>
-        <Link to="/">
-          <span style={{ fontSize: '1.2em', paddingLeft: '24px', color: isDarkMode ? '#fff' : '#000' }}><FireOutlined /> RestFire Studio</span>
-        </Link>
-        <Button style={{ float: 'right', top: '16px', right: '24px', display: 'inline' }} type="text" icon={<BulbOutlined />} shape="circle" onClick={() => setIsDarkMode(!isDarkMode)} />
-      </Layout.Header>
-      <Layout.Content style={{ minHeight: '90vh', padding: '10px' }}>
-        <Row align="middle">
+      <Header />
+      <Layout.Content style={{ minHeight: '90vh', padding: '10px 0' }}>
+        <Row align="middle" style={{ padding: '10px' }}>
           <Col lg={16} style={{ textAlign: 'center', padding: '56px 12px 56px 12px' }}>
             <img alt="asset-1" src="/assets/Untitled 2.png" style={{ maxWidth: '850px', width: '100%' }} />
           </Col>
@@ -46,7 +30,7 @@ const Home: React.FC = () => {
             </Typography.Paragraph>
           </Col>
         </Row>
-        <Row align="middle" style={{ backgroundColor: isDarkMode ? '#1f1f1f' : '#fff' }}>
+        <Row align="middle" style={{ padding: '10px', backgroundColor: currentTheme === 'dark' ? '#1f1f1f' : '#fff' }}>
           <Col lg={12} style={{ textAlign: 'right', padding: '36px 12px 0' }}>
             <Typography.Title level={3}>
               Now in your hand
@@ -59,7 +43,7 @@ const Home: React.FC = () => {
             <img alt="asset-1" src="/assets/smartmockups_kgewcl0o.png" style={{ maxWidth: '270px', width: '100%' }} />
           </Col>
         </Row>
-        <Row align="middle">
+        <Row align="middle" style={{ padding: '10px' }}>
           <Col lg={12} style={{ textAlign: 'right', padding: '36px 12px 0' }}>
             <Typography.Title level={3}>
               Designed for developers
@@ -79,20 +63,24 @@ const Home: React.FC = () => {
             </Carousel>
           </Col>
         </Row>
-        <Row align="middle" style={{ backgroundColor: isDarkMode ? '#1f1f1f' : '#fff' }}>
+        <Row align="middle" style={{ padding: '10px', backgroundColor: currentTheme === 'dark' ? '#1f1f1f' : '#fff' }}>
           <Col lg={8} style={{ textAlign: 'right', padding: '36px 12px 0' }}>
             <Typography.Title level={3}>
               With two theme options
             </Typography.Title>
             <Typography.Paragraph>
-              Dark &nbsp;<Switch checked={!isDarkMode} onChange={e => setIsDarkMode(!e)} />&nbsp; Light
+              Dark &nbsp;<Switch checked={currentTheme !== 'dark'} onChange={() => switcher({ theme: currentTheme === 'dark' ? themes.light : themes.dark })} />&nbsp; Light
             </Typography.Paragraph>
           </Col>
           <Col lg={16} style={{ textAlign: 'center', padding: '56px 12px 56px 12px' }}>
-            { isDarkMode ? <img alt="asset-1" src="/assets/Screen Shot 2020-10-18 at 09.57.10.png" style={{ maxWidth: '850px', width: '100%' }} /> : <img alt="asset-1" src="/assets/Screen Shot 2020-10-18 at 10.02.18.png" style={{ maxWidth: '850px', width: '100%' }} /> }
+            { currentTheme === 'dark' ? (
+              <img alt="asset-1" src="/assets/Screen Shot 2020-10-18 at 09.57.10.png" style={{ maxWidth: '850px', width: '100%' }} />
+            ) : (
+              <img alt="asset-1" src="/assets/Screen Shot 2020-10-18 at 10.02.18.png" style={{ maxWidth: '850px', width: '100%' }} />
+            ) }
           </Col>
         </Row>
-        <Row align="middle">
+        <Row align="middle" style={{ padding: '10px' }}>
           <Col lg={12} style={{ textAlign: 'center', padding: '56px 12px 56px 12px' }}>
             <img alt="asset-1" src="/assets/Screen Shot 2020-10-18 at 11.56.07.png" style={{ maxWidth: '380px', width: '100%' }} />
           </Col>
@@ -106,10 +94,7 @@ const Home: React.FC = () => {
           </Col>
         </Row>
       </Layout.Content>
-      <br /><br />
-      <Layout.Footer style={{ textAlign: 'center' }}>
-        <FireOutlined /> RestFire Studio &copy; 2020 &mdash; React components by <a href="https://ant.design"><AntDesignOutlined /> Ant Design</a>
-      </Layout.Footer>
+      <Footer />
     </Layout>
   )
 }
