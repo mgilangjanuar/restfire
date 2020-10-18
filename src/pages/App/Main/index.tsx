@@ -321,7 +321,7 @@ const Main: React.FC<Props> = ({ onSend, appendRequest, onAppend }) => {
                       <Select.Option value="application/json">application/json</Select.Option>
                     </Select>
                   </Form.Item>
-                  { activeRequest?.request.contentType === 'application/json' ? <Editor mode="json" defaultValue={activeRequest?.request.body} onChange={body => updateTab({ body })} /> : '' }
+                  { activeRequest?.request.contentType === 'application/json' ? <><Editor mode="json" defaultValue={activeRequest?.request.body} onChange={body => updateTab({ body })} /><br /></> : '' }
                   { activeRequest?.request.contentType === 'multipart/form-data' ? <FieldList name="forms" form={form} tab={tab} activeRequest={activeRequest} updateTab={updateTab} buttonAddText="Add field" useTypeField /> : '' }
                   { activeRequest?.request.contentType === 'application/x-www-form-urlencoded' ? <FieldList name="formsEncoded" form={form} tab={tab} activeRequest={activeRequest} updateTab={updateTab} buttonAddText="Add field" /> : '' }
                 </Tabs.TabPane>
@@ -330,6 +330,7 @@ const Main: React.FC<Props> = ({ onSend, appendRequest, onAppend }) => {
                     Read this for the details: <a href="https://github.com/axios/axios#request-config" target="_blank" rel="noopener noreferrer">https://github.com/axios/axios#request-config</a>
                   </Typography.Paragraph>
                   <Editor mode="json" defaultValue={activeRequest?.request.axiosConfig} onChange={axiosConfig => updateTab({ axiosConfig })} />
+                  <br />
                 </Tabs.TabPane>
               </Tabs>
             </Form>

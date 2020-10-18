@@ -1,5 +1,5 @@
 import { BulbOutlined, FireOutlined, HistoryOutlined, HomeOutlined, InfoCircleOutlined, MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons'
-import { Button, Empty, Layout, Menu, Tag, Typography } from 'antd'
+import { Button, Empty, Layout, Menu, Tag } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { useThemeSwitcher } from 'react-css-theme-switcher'
 import { Link, useHistory } from 'react-router-dom'
@@ -29,9 +29,12 @@ const App: React.FC<Props> = ({ route }) => {
   }, [switcher, themes])
 
   const Title = ({ style = {}, useIcon = true, hideText = false }) => (
-    <Typography.Title style={{ padding: '16px 5px 16px', marginBottom: 0, textAlign: 'center', ...style }} level={4}>
+    // <Typography.Title style={{ padding: '16px 5px 16px', marginBottom: 0, textAlign: 'center', ...style }} level={4}>
+    //   { useIcon ? <FireOutlined /> : '' } { hideText ? '' : 'RestFire Studio' }
+    // </Typography.Title>
+    <span style={{ fontSize: '1.2em', padding: '16px 5px 16px', marginBottom: 0, textAlign: 'center', ...style }}>
       { useIcon ? <FireOutlined /> : '' } { hideText ? '' : 'RestFire Studio' }
-    </Typography.Title>
+    </span>
   )
 
   const TitleHistory = ({ data }) => {
@@ -71,7 +74,7 @@ const App: React.FC<Props> = ({ route }) => {
         theme={isDarkMode ? 'dark' : 'light'}
         style={{ overflow: 'auto', minHeight: '100vh' }}
       >
-        <Title hideText={collapseLeft} />
+        <Title hideText={collapseLeft} style={{ display: 'block', margin: '2px 0 1px' }} />
         <Menu mode="inline" defaultSelectedKeys={[route]} defaultOpenKeys={['/history']} theme={isDarkMode ? 'dark' : 'light'}>
           <Menu.Item key="/" icon={<HomeOutlined />}>
             <Link to="/app">Main</Link>
