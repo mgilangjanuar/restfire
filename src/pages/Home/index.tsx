@@ -14,10 +14,10 @@ const Home: React.FC = () => {
       <Header />
       <Layout.Content style={{ minHeight: '90vh', padding: '10px 0' }}>
         <Row align="middle" style={{ padding: '10px' }}>
-          <Col lg={16} style={{ textAlign: 'center', padding: '56px 12px 56px 12px' }}>
+          <Col lg={14} style={{ textAlign: 'right', padding: '56px 36px 56px 12px' }}>
             <img alt="asset-1" src="/assets/Untitled 2.png" style={{ maxWidth: '850px', width: '100%' }} />
           </Col>
-          <Col lg={8} style={{ textAlign: 'left', padding: '12px' }}>
+          <Col lg={10} style={{ textAlign: 'left', padding: '12px' }}>
             <Typography.Title>
               The Web-based Test and Design API Platform
             </Typography.Title>
@@ -31,7 +31,7 @@ const Home: React.FC = () => {
           </Col>
         </Row>
         <Row align="middle" style={{ padding: '10px', backgroundColor: currentTheme === 'dark' ? '#1f1f1f' : '#fff' }}>
-          <Col lg={12} style={{ textAlign: 'right', padding: '36px 12px 0' }}>
+          <Col lg={11} style={{ textAlign: 'right', padding: '36px 12px 0' }}>
             <Typography.Title level={3}>
               Now in your hand
             </Typography.Title>
@@ -39,7 +39,7 @@ const Home: React.FC = () => {
               Open <strong><FireOutlined /> RestFire Studio</strong> anytime and anywhere.
             </Typography.Paragraph>
           </Col>
-          <Col lg={12} style={{ textAlign: 'center', padding: '56px 12px 56px 12px' }}>
+          <Col lg={13} style={{ textAlign: 'left', padding: '56px 12px 56px 36px' }}>
             <img alt="asset-1" src="/assets/smartmockups_kgewcl0o.png" style={{ maxWidth: '270px', width: '100%' }} />
           </Col>
         </Row>
@@ -52,7 +52,7 @@ const Home: React.FC = () => {
               We built <strong><FireOutlined /> RestFire Studio</strong> for developers to make it easier for you to keep track of your API. You can fully customize the request with your own configuration and show the response log in debug mode.
             </Typography.Paragraph>
           </Col>
-          <Col lg={12} style={{ textAlign: 'center', padding: '56px 12px 56px 12px' }}>
+          <Col lg={12} style={{ textAlign: 'left', padding: '56px 12px 56px 36px' }}>
             <Carousel autoplay dots={false} effect="scrollx">
               <div>
                 <img alt="asset-1" src="/assets/Screen Shot 2020-10-18 at 11.50.23.png" style={{ maxWidth: '650px', width: '100%' }} />
@@ -70,7 +70,7 @@ const Home: React.FC = () => {
           </Col>
         </Row>
         <Row align="middle" style={{ padding: '10px', backgroundColor: currentTheme === 'dark' ? '#1f1f1f' : '#fff' }}>
-          <Col lg={8} style={{ textAlign: 'right', padding: '36px 12px 0' }}>
+          <Col lg={9} style={{ textAlign: 'right', padding: '36px 12px 0' }}>
             <Typography.Title level={3}>
               With two theme options
             </Typography.Title>
@@ -78,7 +78,7 @@ const Home: React.FC = () => {
               Dark &nbsp;<Switch checked={currentTheme !== 'dark'} onChange={() => switcher({ theme: currentTheme === 'dark' ? themes.light : themes.dark })} />&nbsp; Light
             </Typography.Paragraph>
           </Col>
-          <Col lg={16} style={{ textAlign: 'center', padding: '56px 12px 56px 12px' }}>
+          <Col lg={15} style={{ textAlign: 'left', padding: '24px 12px 56px 36px' }}>
             { currentTheme === 'dark' ? (
               <img alt="asset-1" src="/assets/Screen Shot 2020-10-18 at 09.57.10.png" style={{ maxWidth: '850px', width: '100%' }} />
             ) : (
@@ -87,7 +87,7 @@ const Home: React.FC = () => {
           </Col>
         </Row>
         <Row align="middle" style={{ padding: '10px' }}>
-          <Col lg={12} style={{ textAlign: 'center', padding: '56px 12px 56px 12px' }}>
+          <Col lg={12} style={{ textAlign: 'right', padding: '56px 36px 0 12px' }}>
             <img alt="asset-1" src="/assets/Screen Shot 2020-10-18 at 11.56.07.png" style={{ maxWidth: '380px', width: '100%' }} />
           </Col>
           <Col lg={12} style={{ textAlign: 'left', padding: '36px 12px 0' }}>
