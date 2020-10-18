@@ -1,9 +1,9 @@
-import { FireOutlined, HistoryOutlined, HomeOutlined, InfoCircleOutlined, MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons'
+import { BulbOutlined, FireOutlined, HistoryOutlined, HomeOutlined, InfoCircleOutlined, MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons'
 import { Button, Empty, Layout, Menu, Tag, Typography } from 'antd'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import { useThemeSwitcher } from 'react-css-theme-switcher'
 import { Link, useHistory } from 'react-router-dom'
 import About from './About'
-import History from './History'
 import Main from './Main'
 
 interface Props {
@@ -15,6 +15,18 @@ const App: React.FC<Props> = ({ route }) => {
   const [collapseLeft, setCollapseLeft] = useState<boolean>()
   const [requestSent, setRequestSent] = useState<any>()
   const [histories, setHistories] = useState<any[]>(window.localStorage.getItem('histories') ? JSON.parse(window.localStorage.getItem('histories')!) : [])
+  const [isDarkMode, setIsDarkMode] = useState<boolean>()
+  const { switcher, themes } = useThemeSwitcher()
+
+  useEffect(() => {
+    let theme = window.localStorage.getItem('theme')
+    if (!theme) {
+      window.localStorage.setItem('theme', 'dark')
+      theme = 'dark'
+    }
+    setIsDarkMode(theme === 'dark')
+    switcher({ theme: theme === 'dark' ? themes.dark : themes.light })
+  }, [switcher, themes])
 
   const Title = ({ style = {}, useIcon = true, hideText = false }) => (
     <Typography.Title style={{ padding: '17px 5px 17px', marginBottom: 0, textAlign: 'center', ...style }} level={4}>
@@ -56,10 +68,11 @@ const App: React.FC<Props> = ({ route }) => {
         onBreakpoint={e => setCollapseLeft(e)}
         breakpoint="lg"
         collapsedWidth={0}
+        theme={isDarkMode ? 'dark' : 'light'}
         style={{ overflow: 'auto', minHeight: '100vh' }}
       >
         <Title hideText={collapseLeft} />
-        <Menu mode="inline" defaultSelectedKeys={[route]} defaultOpenKeys={['/history']} theme="dark">
+        <Menu mode="inline" defaultSelectedKeys={[route]} defaultOpenKeys={['/history']} theme={isDarkMode ? 'dark' : 'light'}>
           <Menu.Item key="/" icon={<HomeOutlined />}>
             <Link to="/app">Main</Link>
           </Menu.Item>
@@ -76,18 +89,22 @@ const App: React.FC<Props> = ({ route }) => {
         </Menu>
       </Layout.Sider>
       <Layout>
-        <Layout.Header style={{ padding: 0 }}>
+        <Layout.Header style={{ padding: 0, ...isDarkMode ? {} : { backgroundColor: 'rgb(240, 242, 245)' } }}>
           <Button type="text" onClick={() => setCollapseLeft(!collapseLeft)}>
             { collapseLeft ? <MenuUnfoldOutlined /> : <MenuFoldOutlined /> }
           </Button>
           <Title style={{ display: 'inline' }} useIcon={false} hideText={!collapseLeft} />
+          <Button style={{ float: 'right', top: '16px', right: '10px' }} type="text" icon={<BulbOutlined />} shape="circle" onClick={() => setIsDarkMode(prev => {
+            switcher({ theme: prev ? themes.light : themes.dark })
+            localStorage.setItem('theme', prev ? 'light' : 'dark')
+            return !prev
+          })} />
         </Layout.Header>
         <Layout.Content style={{ margin: '7px 10px', padding: 24 }}>
           { route === '/' ? <Main
             appendRequest={requestSent}
             onAppend={() => setRequestSent(undefined)}
             onSend={() => setHistories(window.localStorage.getItem('histories') ? JSON.parse(window.localStorage.getItem('histories')!) : [])} /> : '' }
-          { route === '/history' ? <History /> : '' }
           { route === '/about' ? <About /> : '' }
         </Layout.Content>
       </Layout>

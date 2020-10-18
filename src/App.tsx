@@ -6,7 +6,6 @@ import Home from './pages/Home'
 import MyApp from './pages/App'
 import NotFoundPage from './pages/Error/404'
 
-import 'antd/dist/antd.dark.css'
 import './App.css'
 
 function App() {

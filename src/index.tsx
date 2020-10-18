@@ -1,11 +1,14 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
+import { ThemeSwitcherProvider } from 'react-css-theme-switcher'
 import './index.css'
 import App from './App'
 import * as serviceWorker from './serviceWorker'
 
 ReactDOM.render(
-  <App />,
+  <ThemeSwitcherProvider defaultTheme="dark" themeMap={{ light: '/antd.min.css', dark: '/antd.dark.min.css' }}>
+    <App />
+  </ThemeSwitcherProvider>,
   document.getElementById('root')
 )
 

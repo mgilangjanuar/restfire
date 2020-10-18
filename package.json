@@ -20,6 +20,7 @@
     "query-string": "^6.13.5",
     "react": "^16.13.1",
     "react-ace": "^9.1.4",
+    "react-css-theme-switcher": "^0.1.6",
     "react-dom": "^16.13.1",
     "react-hotkeys": "^2.0.0",
     "react-router-dom": "^5.2.0",
@@ -57,6 +58,7 @@
     "@types/qs": "^6.9.5",
     "@types/query-string": "^6.3.0",
     "@types/react-router-dom": "^5.1.6",
-    "@types/shortid": "^0.0.29"
+    "@types/shortid": "^0.0.29",
+    "electron": "^10.1.3"
   }
 }
