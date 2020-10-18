@@ -29,7 +29,7 @@ const App: React.FC<Props> = ({ route }) => {
   }, [switcher, themes])
 
   const Title = ({ style = {}, useIcon = true, hideText = false }) => (
-    <Typography.Title style={{ padding: '17px 5px 17px', marginBottom: 0, textAlign: 'center', ...style }} level={4}>
+    <Typography.Title style={{ padding: '16px 5px 16px', marginBottom: 0, textAlign: 'center', ...style }} level={4}>
       { useIcon ? <FireOutlined /> : '' } { hideText ? '' : 'RestFire Studio' }
     </Typography.Title>
   )
@@ -89,7 +89,7 @@ const App: React.FC<Props> = ({ route }) => {
         </Menu>
       </Layout.Sider>
       <Layout>
-        <Layout.Header style={{ padding: 0, ...isDarkMode ? {} : { backgroundColor: 'rgb(240, 242, 245)' } }}>
+        <Layout.Header style={{ padding: 0, ...isDarkMode ? {} : { backgroundColor: '#fff' } }}>
           <Button type="text" onClick={() => setCollapseLeft(!collapseLeft)}>
             { collapseLeft ? <MenuUnfoldOutlined /> : <MenuFoldOutlined /> }
           </Button>
