@@ -1,11 +1,13 @@
 import React from 'react'
 import AceEditor from 'react-ace'
+import { useThemeSwitcher } from 'react-css-theme-switcher'
 
 import 'ace-builds/src-noconflict/mode-json'
 import 'ace-builds/src-noconflict/mode-html'
 import 'ace-builds/src-noconflict/mode-xml'
 import 'ace-builds/src-noconflict/mode-plain_text'
 import 'ace-builds/src-noconflict/theme-vibrant_ink'
+import 'ace-builds/src-noconflict/theme-eclipse'
 
 interface Props {
   mode?: string,
@@ -16,9 +18,11 @@ interface Props {
 }
 
 const Editor: React.FC<Props> = ({ mode, onChange, value, defaultValue, options }) => {
+  const { currentTheme } = useThemeSwitcher()
+
   return <AceEditor
     mode={mode}
-    theme="vibrant_ink"
+    theme={currentTheme === 'light' ? 'eclipse' : 'vibrant_ink'}
     className="aceEditor"
     fontSize={12.5}
     width="100%"

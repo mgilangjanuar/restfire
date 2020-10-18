@@ -1,4 +1,4 @@
-import { Divider, Form, Input, message, Select, Tabs, Tag, Typography } from 'antd'
+import { Form, Input, message, Select, Tabs, Tag, Typography } from 'antd'
 import { useForm } from 'antd/lib/form/Form'
 import Axios, { AxiosBasicCredentials, AxiosRequestConfig } from 'axios'
 import qs from 'qs'
@@ -333,7 +333,6 @@ const Main: React.FC<Props> = ({ onSend, appendRequest, onAppend }) => {
                 </Tabs.TabPane>
               </Tabs>
             </Form>
-            <Divider />
             <ResponseSection activeRequest={activeRequest} isLoading={isLoading} />
           </Tabs.TabPane>
         )) }
