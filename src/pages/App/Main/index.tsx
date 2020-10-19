@@ -338,7 +338,11 @@ const Main: React.FC<Props> = ({ onSend, appendRequest, onAppend }) => {
           </Tabs.TabPane>
         )) }
       </Tabs>
-      { !requestData?.length ? <GettingStarted /> : '' }
+      { !requestData?.length ? <GettingStarted init={() => {
+        const initial = buildInitialRequestData()
+        setRequestData([initial])
+        setActiveTab(initial.id)
+      }} /> : '' }
     </>
   )
 }

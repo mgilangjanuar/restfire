@@ -1,5 +1,5 @@
 import { BulbOutlined, FireOutlined, MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons'
-import { Button, Layout, Menu } from 'antd'
+import { Button, Layout, Menu, message } from 'antd'
 import React, { useEffect } from 'react'
 import { useThemeSwitcher } from 'react-css-theme-switcher'
 import { Link, useHistory } from 'react-router-dom'
@@ -30,7 +30,10 @@ const Header: React.FC<Props> = ({ withSidebar, collapseLeft, defaultSelectedKey
   )
 
   const BulbButton = () => (
-    <Button style={{ float: 'right', top: '16px', right: '24px', display: 'inline' }} type="text" icon={<BulbOutlined />} shape="circle" onClick={() => switcher({ theme: currentTheme === 'dark' ? themes.light : themes.dark })} />
+    <Button style={{ float: 'right', top: '16px', right: '24px', display: 'inline' }} type="text" icon={<BulbOutlined />} shape="circle" onClick={() => {
+      message.info('Sorry for the blinking 😂')
+      switcher({ theme: currentTheme === 'dark' ? themes.light : themes.dark })
+    }} />
   )
 
   return (
