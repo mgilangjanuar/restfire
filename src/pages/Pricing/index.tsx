@@ -4,10 +4,10 @@ import Footer from '../../components/Footer'
 import Header from '../../components/Header'
 import Maintenance from '../../components/Maintenance'
 
-const Privacy: React.FC = () => {
+const Pricing: React.FC = () => {
   return (
     <Layout>
-      <Header defaultSelectedKey="privacy" />
+      <Header defaultSelectedKey="pricing" />
       <Layout.Content style={{ minHeight: '90vh', padding: '20px 24px' }}>
         <Maintenance />
       </Layout.Content>
@@ -16,4 +16,4 @@ const Privacy: React.FC = () => {
   )
 }
 
-export default Privacy
+export default Pricing
