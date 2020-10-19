@@ -70,7 +70,14 @@ const Home: React.FC = () => {
           </Col>
         </Row>
         <Row align="middle" style={{ padding: '10px', backgroundColor: currentTheme === 'dark' ? '#1f1f1f' : '#fff' }}>
-          <Col lg={9} style={{ textAlign: 'right', padding: '36px 12px 0' }}>
+          <Col lg={12} style={{ textAlign: 'right', padding: '24px 36px 0 12px' }}>
+            { currentTheme === 'dark' ? (
+              <img alt="asset-1" src="/assets/Screen Shot 2020-10-18 at 09.57.10.png" style={{ maxWidth: '850px', width: '100%' }} />
+            ) : (
+              <img alt="asset-1" src="/assets/Screen Shot 2020-10-18 at 10.02.18.png" style={{ maxWidth: '850px', width: '100%' }} />
+            ) }
+          </Col>
+          <Col lg={12} style={{ textAlign: 'left', padding: '36px 12px 56px' }}>
             <Typography.Title level={3}>
               With two theme options
             </Typography.Title>
@@ -78,19 +85,12 @@ const Home: React.FC = () => {
               Dark &nbsp;<Switch checked={currentTheme !== 'dark'} onChange={() => switcher({ theme: currentTheme === 'dark' ? themes.light : themes.dark })} />&nbsp; Light
             </Typography.Paragraph>
           </Col>
-          <Col lg={15} style={{ textAlign: 'left', padding: '24px 12px 56px 36px' }}>
-            { currentTheme === 'dark' ? (
-              <img alt="asset-1" src="/assets/Screen Shot 2020-10-18 at 09.57.10.png" style={{ maxWidth: '850px', width: '100%' }} />
-            ) : (
-              <img alt="asset-1" src="/assets/Screen Shot 2020-10-18 at 10.02.18.png" style={{ maxWidth: '850px', width: '100%' }} />
-            ) }
-          </Col>
         </Row>
         <Row align="middle" style={{ padding: '10px' }}>
           <Col lg={12} style={{ textAlign: 'right', padding: '56px 36px 0 12px' }}>
             <img alt="asset-1" src="/assets/Screen Shot 2020-10-18 at 11.56.07.png" style={{ maxWidth: '380px', width: '100%' }} />
           </Col>
-          <Col lg={12} style={{ textAlign: 'left', padding: '36px 12px 0' }}>
+          <Col lg={12} style={{ textAlign: 'left', padding: '36px 12px 12px' }}>
             <Typography.Title level={3}>
               <em>"Those who don't know history are destined to repeat it"</em>
             </Typography.Title>
