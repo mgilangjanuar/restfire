@@ -1,11 +1,11 @@
-import { FireOutlined, HistoryOutlined, HomeOutlined, InfoCircleOutlined } from '@ant-design/icons'
+import { FireOutlined, HistoryOutlined, HomeOutlined, SettingOutlined } from '@ant-design/icons'
 import { Empty, Layout, Menu, Tag } from 'antd'
 import React, { useState } from 'react'
 import { useThemeSwitcher } from 'react-css-theme-switcher'
 import { Link, useHistory } from 'react-router-dom'
 import Header from '../../components/Header'
-import About from './About'
 import Main from './Main'
+import Settings from './Settings'
 
 interface Props {
   route: string
@@ -75,8 +75,8 @@ const App: React.FC<Props> = ({ route }) => {
               </Menu.Item>
             )) : <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} /> }
           </Menu.SubMenu>
-          <Menu.Item key="/about" icon={<InfoCircleOutlined />}>
-            <Link to="/app/about">About</Link>
+          <Menu.Item key="/settings" icon={<SettingOutlined />}>
+            <Link to="/app/settings">Settings</Link>
           </Menu.Item>
         </Menu>
       </Layout.Sider>
@@ -87,7 +87,7 @@ const App: React.FC<Props> = ({ route }) => {
             appendRequest={requestSent}
             onAppend={() => setRequestSent(undefined)}
             onSend={() => setHistories(window.localStorage.getItem('histories') ? JSON.parse(window.localStorage.getItem('histories')!) : [])} /> : '' }
-          { route === '/about' ? <About /> : '' }
+          { route === '/settings' ? <Settings /> : '' }
         </Layout.Content>
       </Layout>
     </Layout>
