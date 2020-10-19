@@ -2,7 +2,7 @@ import { BulbOutlined, FireOutlined, MenuFoldOutlined, MenuUnfoldOutlined } from
 import { Button, Layout, Menu, message } from 'antd'
 import React, { useEffect } from 'react'
 import { useThemeSwitcher } from 'react-css-theme-switcher'
-import { Link, useHistory } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 
 interface Props {
   withSidebar?: boolean,
@@ -11,7 +11,7 @@ interface Props {
 }
 
 const Header: React.FC<Props> = ({ withSidebar, collapseLeft, defaultSelectedKey }) => {
-  const history = useHistory()
+  // const history = useHistory()
   const { switcher, themes, currentTheme } = useThemeSwitcher()
 
   useEffect(() => {
@@ -31,7 +31,7 @@ const Header: React.FC<Props> = ({ withSidebar, collapseLeft, defaultSelectedKey
 
   const BulbButton = () => (
     <Button style={{ float: 'right', top: '16px', right: '24px', display: 'inline' }} type="text" icon={<BulbOutlined />} shape="circle" onClick={() => {
-      message.info('Sorry for the blinking 😂')
+      message.info('Sorry for the blinking 😂', 0.8)
       switcher({ theme: currentTheme === 'dark' ? themes.light : themes.dark })
     }} />
   )
@@ -49,11 +49,11 @@ const Header: React.FC<Props> = ({ withSidebar, collapseLeft, defaultSelectedKey
       ) : (
         <Menu mode="horizontal" defaultSelectedKeys={[defaultSelectedKey || 'home']}>
           <Title />
-          <Menu.Item key="home" onClick={() => history.push('/')}>Home</Menu.Item>
+          {/* <Menu.Item key="home" onClick={() => history.push('/')}>Home</Menu.Item>
           <Menu.Item key="pricing" onClick={() => history.push('/pricing')}>Pricing</Menu.Item>
           <Menu.Item key="about" onClick={() => history.push('/about')}>About</Menu.Item>
           <Menu.Item key="privacy" onClick={() => history.push('/privacy')}>Privacy</Menu.Item>
-          <Menu.Item key="terms" onClick={() => history.push('/terms')}>Terms</Menu.Item>
+          <Menu.Item key="terms" onClick={() => history.push('/terms')}>Terms</Menu.Item> */}
           <BulbButton />
         </Menu>
       ) }
