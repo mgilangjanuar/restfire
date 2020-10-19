@@ -31,7 +31,7 @@ const Home: React.FC = () => {
           </Col>
         </Row>
         <Row align="middle" style={{ padding: '10px', backgroundColor: currentTheme === 'dark' ? '#1f1f1f' : '#fff' }}>
-          <Col lg={12} style={{ textAlign: 'right', padding: '36px 12px 0' }}>
+          <Col lg={12} style={{ textAlign: 'right', padding: '36px 12px 0', width: '100%' }}>
             <Typography.Title level={3}>
               Now in your hand
             </Typography.Title>
@@ -39,7 +39,7 @@ const Home: React.FC = () => {
               Open <strong><FireOutlined /> RestFire Studio</strong> anytime and anywhere.
             </Typography.Paragraph>
           </Col>
-          <Col lg={12} style={{ textAlign: 'left', padding: '56px 12px 56px 36px' }}>
+          <Col lg={12} style={{ textAlign: 'left', padding: '56px 12px 56px 36px', width: '100%' }}>
             <img alt="asset-1" src="/assets/smartmockups_kgewcl0o.png" style={{ maxWidth: '270px', width: '100%' }} />
           </Col>
         </Row>

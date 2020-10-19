@@ -1,5 +1,5 @@
 import { BulbOutlined, FireOutlined, MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons'
-import { Button, Layout, Menu, message } from 'antd'
+import { Button, Layout, message } from 'antd'
 import React, { useEffect } from 'react'
 import { useThemeSwitcher } from 'react-css-theme-switcher'
 import { Link } from 'react-router-dom'
@@ -37,7 +37,7 @@ const Header: React.FC<Props> = ({ withSidebar, collapseLeft, defaultSelectedKey
   )
 
   return (
-    <Layout.Header style={{ padding: 0, ...currentTheme === 'dark' ? {} : { backgroundColor: '#fff' } }}>
+    <Layout.Header style={{ padding: 0, border: 'none', ...currentTheme === 'dark' ? { backgroundColor: '#000' } : { backgroundColor: '#f0f2f5' } }}>
       { withSidebar ? (
         <>
           <Button type="text" onClick={() => collapseLeft?.[1](!collapseLeft[0])}>
@@ -47,15 +47,17 @@ const Header: React.FC<Props> = ({ withSidebar, collapseLeft, defaultSelectedKey
           <BulbButton />
         </>
       ) : (
-        <Menu mode="horizontal" defaultSelectedKeys={[defaultSelectedKey || 'home']}>
-          <Title />
-          {/* <Menu.Item key="home" onClick={() => history.push('/')}>Home</Menu.Item>
-          <Menu.Item key="pricing" onClick={() => history.push('/pricing')}>Pricing</Menu.Item>
-          <Menu.Item key="about" onClick={() => history.push('/about')}>About</Menu.Item>
-          <Menu.Item key="privacy" onClick={() => history.push('/privacy')}>Privacy</Menu.Item>
-          <Menu.Item key="terms" onClick={() => history.push('/terms')}>Terms</Menu.Item> */}
+        <>
+          <div style={{ float: 'left' }}><Title /></div>
+          {/* <Menu mode="horizontal" defaultSelectedKeys={[defaultSelectedKey || 'home']} style={{ border: 'none', display: 'flex', ...currentTheme === 'dark' ? { backgroundColor: '#000' } : { backgroundColor: '#f0f2f5' } }}>
+            <Menu.Item key="home" onClick={() => history.push('/')}>Home</Menu.Item>
+            <Menu.Item key="pricing" onClick={() => history.push('/pricing')}>Pricing</Menu.Item>
+            <Menu.Item key="about" onClick={() => history.push('/about')}>About</Menu.Item>
+            <Menu.Item key="privacy" onClick={() => history.push('/privacy')}>Privacy</Menu.Item>
+            <Menu.Item key="terms" onClick={() => history.push('/terms')}>Terms</Menu.Item>
+          </Menu> */}
           <BulbButton />
-        </Menu>
+        </>
       ) }
     </Layout.Header>
   )
