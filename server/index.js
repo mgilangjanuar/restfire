@@ -4,6 +4,7 @@ const cors = require('cors')
 const express = require('express')
 const FormData = require('form-data')
 const fs = require('fs')
+const os = require('os')
 const path = require('path')
 
 const app = express()
@@ -13,15 +14,12 @@ app.use(bodyParser.json({ limit: '100mb' }))
 
 app.post('/proxy', async (req, res) => {
   const config = { ...req.body }
-  if (!fs.existsSync('./tmp')){
-    fs.mkdirSync('./tmp')
-  }
   if (config.headers && config.headers.contentType === 'multipart/form-data') {
     const formData = new FormData()
     for (const key of Object.keys(config.data)) {
       if (config.data[key].file) {
-        fs.writeFileSync(`${__dirname}/tmp/${config.data[key].file.name}`, config.data[key].base64.split(';base64,')[1], { encoding: 'base64' })
-        formData.append(key, fs.createReadStream(`${__dirname}/tmp/${config.data[key].file.name}`))
+        fs.writeFileSync(`${os.tmpdir()}/${config.data[key].file.name}`, config.data[key].base64.split(';base64,')[1], { encoding: 'base64' })
+        formData.append(key, fs.createReadStream(`${os.tmpdir()}/${config.data[key].file.name}`))
       } else {
         formData.append(key, config.data[key])
       }
