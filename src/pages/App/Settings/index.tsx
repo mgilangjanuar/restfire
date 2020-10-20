@@ -5,7 +5,7 @@ import { useThemeSwitcher } from 'react-css-theme-switcher'
 
 const Settings: React.FC = () => {
   const { switcher, themes, currentTheme } = useThemeSwitcher()
-  const [proxy, setProxy] = useState<string | undefined>(window.localStorage.getItem('proxy') || process.env.REACT_APP_PROXY || undefined)
+  const [proxy, setProxy] = useState<string | undefined>(window.localStorage.getItem('proxy') || process.env.REACT_APP_PROXY || `${window.location.origin}/proxy`)
 
   const save = async () => {
     window.localStorage.setItem('proxy', proxy!)
