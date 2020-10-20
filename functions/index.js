@@ -10,6 +10,9 @@ const fs = require('fs')
 exports.proxy = functions.https.onRequest((req, res) => {
   cors(req, res, async () => {
     const config = { ...req.body }
+    if (!fs.existsSync('./tmp')){
+      fs.mkdirSync('./tmp')
+    }
     if (config.headers && config.headers.contentType === 'multipart/form-data') {
       const formData = new FormData()
       for (const key of Object.keys(config.data)) {

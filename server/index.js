@@ -13,6 +13,9 @@ app.use(bodyParser.json({ limit: '100mb' }))
 
 app.post('/proxy', async (req, res) => {
   const config = { ...req.body }
+  if (!fs.existsSync('./tmp')){
+    fs.mkdirSync('./tmp')
+  }
   if (config.headers && config.headers.contentType === 'multipart/form-data') {
     const formData = new FormData()
     for (const key of Object.keys(config.data)) {

@@ -49,7 +49,7 @@ const FieldList: React.FC<Props> = ({ name, form, tab, activeRequest, updateTab,
 
   const getFileName = (i: number): string | null => {
     const file = activeRequest?.request[name]?.[i]?.file
-    if (!file) {
+    if (!file?.name) {
       return null
     }
     return `${file?.name.substr(0, 5)}${file?.name.length > 5 ? '...' : ''} ${filesize(file?.size)}`
