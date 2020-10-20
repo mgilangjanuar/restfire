@@ -7,12 +7,9 @@ import Header from '../../components/Header'
 import Main from './Main'
 import Settings from './Settings'
 
-interface Props {
-  route: string
-}
-
-const App: React.FC<Props> = ({ route }) => {
+const App: React.FC = () => {
   const history = useHistory()
+  const [route, setRoute] = useState<string>(window.location.pathname)
   const [collapseLeft, setCollapseLeft] = useState<boolean>()
   const [requestSent, setRequestSent] = useState<any>()
   const [histories, setHistories] = useState<any[]>(window.localStorage.getItem('histories') ? JSON.parse(window.localStorage.getItem('histories')!) : [])
@@ -44,9 +41,10 @@ const App: React.FC<Props> = ({ route }) => {
     return <><Tag color={color}>{data.request.method?.toUpperCase()}</Tag> {urlParsed}</>
   }
 
-  const sendRequest = async (req: any) => {
+  const sendRequest = async (req: any, i: number) => {
     history.push('/app')
     await new Promise(res => setTimeout(res, 100))
+    setRoute(`/app/${i}`)
     setRequestSent(req)
   }
 
@@ -64,30 +62,31 @@ const App: React.FC<Props> = ({ route }) => {
         style={{ overflow: 'auto', minHeight: '100vh' }}
       >
         <Title hideText={collapseLeft} style={{ display: 'block', margin: '2px 0 1px' }} />
-        <Menu mode="inline" defaultSelectedKeys={[route]} defaultOpenKeys={['/history']} theme={currentTheme as any || 'dark'}>
-          <Menu.Item key="/" icon={<HomeOutlined />}>
-            <Link to="/app">Main</Link>
+        <Menu mode="inline" defaultSelectedKeys={[route]} selectedKeys={[route]} defaultOpenKeys={['/app/history']} theme={currentTheme as any || 'dark'}>
+          <Menu.Item key="/app" icon={<HomeOutlined />}>
+            <Link to="/app" onClick={() => setRoute('/app')}>Main</Link>
           </Menu.Item>
-          <Menu.SubMenu key="/history" icon={<HistoryOutlined />} title="History">
+          <Menu.SubMenu key="/app/history" icon={<HistoryOutlined />} title="History">
             { histories?.length ? histories?.map((req: any, i: number) => (
-              <Menu.Item key={i} onClick={() => sendRequest(req)}>
+              <Menu.Item key={`/app/${i}`} onClick={() => sendRequest(req, i)}>
                 <TitleHistory data={req} />
               </Menu.Item>
             )) : <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} /> }
           </Menu.SubMenu>
-          <Menu.Item key="/settings" icon={<SettingOutlined />}>
-            <Link to="/app/settings">Settings</Link>
+          <Menu.Item key="/app/settings" icon={<SettingOutlined />}>
+            <Link to="/app/settings" onClick={() => setRoute('/app/settings')}>Settings</Link>
           </Menu.Item>
         </Menu>
       </Layout.Sider>
       <Layout>
         <Header withSidebar collapseLeft={[!!collapseLeft, setCollapseLeft]} />
         <Layout.Content style={{ margin: '7px 10px', padding: 24 }}>
-          { route === '/' ? <Main
+          { /^\/app[/]*[0-9]*$/.test(route) ? <Main
             appendRequest={requestSent}
             onAppend={() => setRequestSent(undefined)}
-            onSend={() => setHistories(window.localStorage.getItem('histories') ? JSON.parse(window.localStorage.getItem('histories')!) : [])} /> : '' }
-          { route === '/settings' ? <Settings /> : '' }
+            onSend={() => setHistories(window.localStorage.getItem('histories') ? JSON.parse(window.localStorage.getItem('histories')!) : [])}
+            goToSettings={() => setRoute('/app/settings')} /> : '' }
+          { route === '/app/settings' ? <Settings /> : '' }
         </Layout.Content>
       </Layout>
     </Layout>

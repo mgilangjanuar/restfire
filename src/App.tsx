@@ -17,12 +17,9 @@ function App() {
     <BrowserRouter>
       <Layout>
         <Switch>
-          <Route path="/app" exact><MyApp route="/" /></Route>
-          <Route path="/app/history" exact><MyApp route="/history" /></Route>
-          <Route path="/app/settings" exact><MyApp route="/settings" /></Route>
+          <Route path="/app"><MyApp /></Route>
           <Route path="/" exact component={Home} />
-          <Route path="/pricing" exact component={Pricing
-          } />
+          <Route path="/pricing" exact component={Pricing} />
           <Route path="/about" exact component={About} />
           <Route path="/terms" exact component={Terms} />
           <Route path="/privacy" exact component={Privacy} />

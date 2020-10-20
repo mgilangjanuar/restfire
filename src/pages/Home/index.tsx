@@ -39,7 +39,7 @@ const Home: React.FC = () => {
               Open <strong><FireOutlined /> RestFire Studio</strong> anytime and anywhere.
             </Typography.Paragraph>
           </Col>
-          <Col lg={12} style={{ textAlign: 'left', padding: '56px 12px 56px 36px', width: '100%' }}>
+          <Col lg={12} style={{ textAlign: 'left', padding: '36px 12px 36px 36px', width: '100%' }}>
             <img alt="asset-1" src="/assets/smartmockups_kgewcl0o.png" style={{ maxWidth: '270px', width: '100%' }} />
           </Col>
         </Row>
@@ -52,7 +52,7 @@ const Home: React.FC = () => {
               We built <strong><FireOutlined /> RestFire Studio</strong> for developers to make it easier for you to keep track of your API. You can fully customize the request with your own configuration and show the response log in debug mode.
             </Typography.Paragraph>
           </Col>
-          <Col lg={12} style={{ textAlign: 'left', padding: '56px 12px 56px 36px' }}>
+          <Col lg={12} style={{ textAlign: 'left', padding: '36px 12px 36px 36px' }}>
             <Carousel autoplay dots={false} effect="scrollx">
               <div>
                 <img alt="asset-1" src="/assets/Screen Shot 2020-10-18 at 11.50.23.png" style={{ maxWidth: '650px', width: '100%' }} />
@@ -70,14 +70,14 @@ const Home: React.FC = () => {
           </Col>
         </Row>
         <Row align="middle" style={{ padding: '10px', backgroundColor: currentTheme === 'dark' ? '#1f1f1f' : '#fff' }}>
-          <Col lg={12} style={{ textAlign: 'right', padding: '24px 36px 0 12px' }}>
+          <Col lg={12} style={{ textAlign: 'right', padding: '24px 36px 36px 12px' }}>
             { currentTheme === 'dark' ? (
               <img alt="asset-1" src="/assets/Screen Shot 2020-10-18 at 09.57.10.png" style={{ maxWidth: '850px', width: '100%' }} />
             ) : (
               <img alt="asset-1" src="/assets/Screen Shot 2020-10-18 at 10.02.18.png" style={{ maxWidth: '850px', width: '100%' }} />
             ) }
           </Col>
-          <Col lg={12} style={{ textAlign: 'left', padding: '36px 12px 56px' }}>
+          <Col lg={12} style={{ textAlign: 'left', padding: '36px 12px 12px' }}>
             <Typography.Title level={3}>
               With two theme options
             </Typography.Title>

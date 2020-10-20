@@ -41,10 +41,11 @@ type RequestData = {
 interface Props {
   onSend: () => void,
   appendRequest?: any,
-  onAppend?: () => void
+  onAppend?: () => void,
+  goToSettings: () => any
 }
 
-const Main: React.FC<Props> = ({ onSend, appendRequest, onAppend }) => {
+const Main: React.FC<Props> = ({ onSend, appendRequest, onAppend, goToSettings }) => {
   const [form] = useForm()
   const [requestData, setRequestData] = useState<RequestData[]>()
   const [activeRequest, setActiveRequest] = useState<RequestData>()
@@ -342,7 +343,7 @@ const Main: React.FC<Props> = ({ onSend, appendRequest, onAppend }) => {
         const initial = buildInitialRequestData()
         setRequestData([initial])
         setActiveTab(initial.id)
-      }} /> : '' }
+      }} goToSettings={goToSettings} /> : '' }
     </>
   )
 }
