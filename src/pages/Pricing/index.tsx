@@ -11,10 +11,10 @@ const Pricing: React.FC = () => {
       <Layout.Content style={{ minHeight: '90vh', padding: '20px 24px' }}>
         <Typography.Title level={2} style={{ textAlign: 'center', marginBottom: '36px' }}>Pricing</Typography.Title>
         <Row>
-          <Col span={24} lg={{ span: 6, offset: 6 }} style={{ padding: '0 10px 20px' }}>
+          <Col span={24} sm={{ span: 11, offset: 1 }} lg={{ span: 6, offset: 6 }} style={{ padding: '0 10px 20px' }}>
             <Card
               title="Frreeee"
-              cover={<img src="/assets/frog.png" alt="frog" />}
+              cover={<img style={{ maxWidth: '248px', width: '100%', margin: '0 auto' }} src="/assets/frog.png" alt="frog" />}
               actions={[<Link to="/app"><Button>Select &nbsp; <span role="img" aria-label="emoji">😋</span></Button></Link>]}>
               <ul>
                 <li>Basic functionality</li>
@@ -24,10 +24,10 @@ const Pricing: React.FC = () => {
               </ul>
             </Card>
           </Col>
-          <Col span={24} lg={{ span: 6, offset: 0 }} style={{ padding: '0 10px 20px' }}>
+          <Col span={24} sm={11} lg={{ span: 6, offset: 0 }} style={{ padding: '0 10px 20px' }}>
             <Card
               title="Premium"
-              cover={<img src="/assets/wolf.png" alt="wolf" />}
+              cover={<img style={{ maxWidth: '248px', width: '100%', margin: '0 auto' }} src="/assets/wolf.png" alt="wolf" />}
               actions={[<Link to="#"><Button onClick={() => message.info('Sorry, this is not available yet :(')} type="primary">Select &nbsp; <span role="img" aria-label="emoji">🎉</span></Button></Link>]}>
               <ul>
                 <li>All in <em>Frreeee</em></li>
