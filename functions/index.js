@@ -3,6 +3,7 @@ const Axios = require('axios')
 const cors = require('cors')({ origin: true })
 const FormData = require('form-data')
 const fs = require('fs')
+const os = require('os')
 
 // // Create and Deploy Your First Cloud Functions
 // // https://firebase.google.com/docs/functions/write-firebase-functions
@@ -10,15 +11,12 @@ const fs = require('fs')
 exports.proxy = functions.https.onRequest((req, res) => {
   cors(req, res, async () => {
     const config = { ...req.body }
-    if (!fs.existsSync('./tmp')){
-      fs.mkdirSync('./tmp')
-    }
     if (config.headers && config.headers.contentType === 'multipart/form-data') {
       const formData = new FormData()
       for (const key of Object.keys(config.data)) {
         if (config.data[key].file) {
-          fs.writeFileSync(`${__dirname}/tmp/${config.data[key].file.name}`, config.data[key].base64.split(';base64,')[1], { encoding: 'base64' })
-          formData.append(key, fs.createReadStream(`${__dirname}/tmp/${config.data[key].file.name}`))
+          fs.writeFileSync(`${os.tmpdir()}/${config.data[key].file.name}`, config.data[key].base64.split(';base64,')[1], { encoding: 'base64' })
+          formData.append(key, fs.createReadStream(`${os.tmpdir()}/${config.data[key].file.name}`))
         } else {
           formData.append(key, config.data[key])
         }
