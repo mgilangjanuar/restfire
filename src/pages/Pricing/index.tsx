@@ -1,4 +1,4 @@
-import { Button, Card, Col, Layout, Row, Typography } from 'antd'
+import { Button, Card, Col, Layout, message, Row, Typography } from 'antd'
 import React from 'react'
 import { Link } from 'react-router-dom'
 import Footer from '../../components/Footer'
@@ -15,7 +15,7 @@ const Pricing: React.FC = () => {
             <Card
               title="Frreeee"
               cover={<img src="/assets/frog.png" alt="frog" />}
-              actions={[<Link to="/app"><Button>Select &nbsp; <span role="img" aria-label="emoji">🤔</span></Button></Link>]}>
+              actions={[<Link to="/app"><Button>Select &nbsp; <span role="img" aria-label="emoji">😋</span></Button></Link>]}>
               <ul>
                 <li>Basic functionality</li>
                 <li>Web-based only</li>
@@ -28,7 +28,7 @@ const Pricing: React.FC = () => {
             <Card
               title="Premium"
               cover={<img src="/assets/wolf.png" alt="wolf" />}
-              actions={[<Link to="/app"><Button type="primary">Select &nbsp; <span role="img" aria-label="emoji">🎉</span></Button></Link>]}>
+              actions={[<Link to="#"><Button onClick={() => message.info('Sorry, this is not available yet :(')} type="primary">Select &nbsp; <span role="img" aria-label="emoji">🎉</span></Button></Link>]}>
               <ul>
                 <li>All in <em>Frreeee</em></li>
                 <li>Desktop installable</li>
@@ -43,11 +43,17 @@ const Pricing: React.FC = () => {
             <Typography.Title level={5}><em>"Hi! I want to help this development, but I've no idea what I should do"</em></Typography.Title>
             <Typography.Paragraph>
               Your're the person like this? Don't worry, you can help us to make it better and keep
-              it up by buying us a bag of sunflower seeds for our hamsters <span role="img" aria-label="emoji">😚 🐹</span>.
-              Ya! we have hamsters here, you can play with them anytime. They have 8 kids, now! <span role="img" aria-label="emoji">🐹 🐹 🐹 🐹 🐹 🐹 🐹 🐹 🤣</span>
+              it up by buying us a bag of sunflower seeds for our hamsters. Ya! we have hamsters here,
+              you can play with them anytime. They have 8 kids, now!
             </Typography.Paragraph>
             <Typography.Paragraph style={{ textAlign: 'center' }}>
-              <a href="https://karyakarsa.com/mgilangjanuar/restfire-studio"><Button type="default">Buy sunflower seeds now!</Button></a>
+              <span role="img" aria-label="emoji">🐹 🐹 🐹 🐹 🐹 🐹 🐹 🐹 🤣</span>
+            </Typography.Paragraph>
+            <br />
+            <Typography.Paragraph style={{ textAlign: 'center' }}>
+              <a href="https://karyakarsa.com/mgilangjanuar/restfire-studio">
+                <Button type="default" size="large">Buy sunflower seeds now!</Button>
+              </a>
             </Typography.Paragraph>
           </Col>
         </Row>
