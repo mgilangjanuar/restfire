@@ -14,7 +14,7 @@ const Home: React.FC = () => {
       <Header defaultSelectedKey="home" />
       <Layout.Content style={{ minHeight: '90vh', padding: '10px 0' }}>
         <Row align="middle" style={{ padding: '10px' }}>
-          <Col lg={14} style={{ textAlign: 'right', padding: '56px 36px 56px 12px' }}>
+          <Col lg={14} style={{ textAlign: 'right', padding: '12px 36px 36px 12px' }}>
             <img alt="asset-1" src="/assets/Untitled 2.png" style={{ maxWidth: '850px', width: '100%' }} />
           </Col>
           <Col lg={10} style={{ textAlign: 'left', padding: '12px' }}>
@@ -26,7 +26,7 @@ const Home: React.FC = () => {
               Pssttt, <strong>no need to register/login</strong> either.
             </Typography.Paragraph>
             <Typography.Paragraph>
-              <Link to="/app"><Button size="large" type="primary">Get Started</Button></Link>
+              <Link to="/pricing"><Button size="large" type="primary">Get Started</Button></Link>
             </Typography.Paragraph>
           </Col>
         </Row>
