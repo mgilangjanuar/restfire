@@ -1,19 +1,27 @@
 import { FireOutlined, HistoryOutlined, HomeOutlined, SettingOutlined } from '@ant-design/icons'
 import { Empty, Layout, Menu, Tag } from 'antd'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useThemeSwitcher } from 'react-css-theme-switcher'
 import { Link, useHistory } from 'react-router-dom'
 import Header from '../../components/Header'
 import Main from './Main'
 import Settings from './Settings'
 
-const App: React.FC = () => {
+interface Props {
+  appRoute: string
+}
+
+const App: React.FC<Props> = ({ appRoute }) => {
   const history = useHistory()
-  const [route, setRoute] = useState<string>(window.location.pathname)
+  const [route, setRoute] = useState<string>(appRoute || window.location.pathname)
   const [collapseLeft, setCollapseLeft] = useState<boolean>()
   const [requestSent, setRequestSent] = useState<any>()
   const [histories, setHistories] = useState<any[]>(window.localStorage.getItem('histories') ? JSON.parse(window.localStorage.getItem('histories')!) : [])
   const { currentTheme } = useThemeSwitcher()
+
+  useEffect(() => {
+    setRoute(appRoute || window.location.pathname)
+  }, [appRoute])
 
   const Title = ({ style = {}, useIcon = true, hideText = false }) => (
     <Link to="/">
