@@ -3,11 +3,10 @@ import React from 'react'
 import Editor from './Editor'
 
 interface Props {
-  activeRequest?: any,
-  isLoading?: boolean
+  activeRequest?: any
 }
 
-const ResponseSection: React.FC<Props> = ({ activeRequest, isLoading }) => {
+const ResponseSection: React.FC<Props> = ({ activeRequest }) => {
   const findMode = (): string => {
     const candidate = activeRequest?.response?.headers?.['content-type']?.split(';')[0].split('/')?.[1]
     if (!candidate || candidate === 'plain') {
@@ -17,7 +16,7 @@ const ResponseSection: React.FC<Props> = ({ activeRequest, isLoading }) => {
   }
 
   return (
-    <Spin spinning={isLoading}>
+    <Spin spinning={!!activeRequest?.response?.isLoading}>
       <Typography.Paragraph type="secondary">
         Response {activeRequest?.response?.status ? <Typography.Text>{activeRequest?.response?.status}</Typography.Text> : '' }
         <Typography.Text style={{ float: 'right' }}>

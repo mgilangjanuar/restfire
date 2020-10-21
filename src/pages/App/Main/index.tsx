@@ -15,7 +15,8 @@ type Response = {
   body: any,
   responseTime?: number,
   headers: any,
-  debugLog?: any
+  debugLog?: any,
+  isLoading?: boolean
 }
 
 type Request = {
@@ -50,7 +51,6 @@ const Main: React.FC<Props> = ({ onSend, appendRequest, onAppend, goToSettings }
   const [requestData, setRequestData] = useState<RequestData[]>()
   const [activeRequest, setActiveRequest] = useState<RequestData>()
   const [activeTab, setActiveTab] = useState<string>()
-  const [isLoading, setIsLoading] = useState<boolean>(false)
 
   const buildInitialRequestData = (): RequestData => ({
     id: createId(),
@@ -178,7 +178,7 @@ const Main: React.FC<Props> = ({ onSend, appendRequest, onAppend, goToSettings }
     if (!activeRequest?.request.url) {
       return message.error('Please fill the URL first')
     }
-    setIsLoading(true)
+    updateTab({}, { isLoading: true })
     let method = activeRequest.request.method
     if (method === 'del') {
       method = 'delete'
@@ -227,6 +227,7 @@ const Main: React.FC<Props> = ({ onSend, appendRequest, onAppend, goToSettings }
       const { error, response } = data
       if (response) {
         savedResponse = {
+          isLoading: false,
           status: response?.status,
           body: response?.data || JSON.stringify(error),
           headers: response?.headers,
@@ -235,6 +236,7 @@ const Main: React.FC<Props> = ({ onSend, appendRequest, onAppend, goToSettings }
         }
       } else {
         savedResponse = {
+          isLoading: false,
           headers: { 'content-type': 'application/json' },
           body: typeof error === 'object' ? JSON.stringify(error, null, 2) : error.toString(),
           responseTime: 0,
@@ -245,6 +247,7 @@ const Main: React.FC<Props> = ({ onSend, appendRequest, onAppend, goToSettings }
       }
     } else {
       savedResponse = {
+        isLoading: false,
         status: data.status,
         body: data?.data || data,
         headers: data.headers,
@@ -258,7 +261,6 @@ const Main: React.FC<Props> = ({ onSend, appendRequest, onAppend, goToSettings }
       [{ ...activeRequest, response: savedResponse }, ...(window.localStorage.getItem('histories') ? JSON.parse(window.localStorage.getItem('histories')!) : []).slice(0, 15)]
     ))
     onSend()
-    setIsLoading(false)
   }
 
   const SelectMethod = () => (
@@ -335,7 +337,7 @@ const Main: React.FC<Props> = ({ onSend, appendRequest, onAppend, goToSettings }
                 </Tabs.TabPane>
               </Tabs>
             </Form>
-            <ResponseSection activeRequest={activeRequest} isLoading={isLoading} />
+            <ResponseSection activeRequest={activeRequest} />
           </Tabs.TabPane>
         )) }
       </Tabs>
