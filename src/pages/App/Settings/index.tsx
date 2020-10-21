@@ -15,7 +15,7 @@ const Settings: React.FC = () => {
   return (
     <>
       <Card title={<><SettingOutlined /> Settings</>}>
-        <Form labelCol={{ lg: { span: 4 } }} wrapperCol={{ lg: { span: 20 } }} onFinish={save}>
+        <Form labelCol={{ lg: { span: 4 } }} wrapperCol={{ lg: { span: 13 } }} onFinish={save}>
           <Form.Item name="theme" label="Dark Mode">
             <Switch checked={currentTheme === 'dark'} onChange={() => switcher({ theme: currentTheme === 'dark' ? themes.light : themes.dark })} />
           </Form.Item>
