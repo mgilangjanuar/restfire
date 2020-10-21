@@ -1,5 +1,5 @@
-import { ArrowRightOutlined } from '@ant-design/icons'
-import { Button, Card, Col, Row, Typography } from 'antd'
+import { ArrowRightOutlined, RocketOutlined } from '@ant-design/icons'
+import { Button, Card, Col, Result, Row, Space, Typography } from 'antd'
 import React, { useEffect, useState } from 'react'
 import Confetti from 'react-confetti'
 import { Link } from 'react-router-dom'
@@ -29,28 +29,30 @@ const GettingStarted: React.FC<Props> = ({ init, goToSettings }) => {
         width={width}
         height={height}
         recycle={runConfetti} /> : '' }
-      <Card title={<em>Welcome, {name}!</em>}>
+      <Card>
         <Row align="middle">
           <Col span={24} lg={16}>
+            <Result
+              icon={<img style={{ width: '100%', maxWidth: '420px' }} alt="welcome" src="/assets/welcome.png" />}
+              title={<>Welcome, {name}!</>}
+              subTitle={<small><a href="http://www.freepik.com">Designed by Freepik</a></small>}
+            />
             <Typography.Paragraph>
-              Since we decide to make it seamless and no need to register/login, we'll call you {name}.
-              Err... we know it sounds like Musk's baby, right? We hope you have no problem with that.
+              Since we decide to make it seamless and no need to register/login, we'll call you <strong>{name}</strong>. Err... we know it sounds like Musk's baby, right? We hope you have no problem with that.
             </Typography.Paragraph>
             <Typography.Paragraph>
               Before you jump in, by default we'll use proxy to request the API to prevent the CORS
-              or some errors like that. We know, it should be mentioned in the terms or privacy policy
-              page. But, our intern is still figure out how to create that fucking page with React.
-              We've already told him to just build it with the plain HTML. But, he refused. We're
-              considering firing him next month.
-            </Typography.Paragraph>
-            <Typography.Paragraph>
-              Go to the <Link to="/app/settings" onClick={goToSettings}>settings page</Link> and use your own proxy.
+              or some errors like that. If you want to keep feel safe go to the <Link to="/app/settings" onClick={goToSettings}>settings page</Link> and use your own
+              proxy. <strong>Unless</strong> you're running it in an installable desktop app, keep calm and don't worry about that 😁
             </Typography.Paragraph>
             <br />
           </Col>
           <Col span={24} lg={8}>
             <Typography.Paragraph style={{ textAlign: 'center' }}>
-              <Button onClick={init}>Get Started <ArrowRightOutlined /></Button>
+              <Space direction="vertical">
+                <Link to="/"><Button>Maybe later &nbsp; <span role="img" aria-label="emoji">🤔</span></Button></Link>
+                <Button size="large" onClick={init} type="primary" icon={<RocketOutlined />}>I Agree! <ArrowRightOutlined /></Button>
+              </Space>
             </Typography.Paragraph>
           </Col>
         </Row>

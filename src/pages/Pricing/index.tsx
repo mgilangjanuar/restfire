@@ -33,7 +33,7 @@ const Pricing: React.FC = () => {
                 <li>All in <em>Frreeee</em></li>
                 <li>Desktop installable</li>
                 <li>Localhost API support</li>
-                <li>Etc.</li>
+                <li>Super fast</li>
               </ul>
             </Card>
           </Col>
