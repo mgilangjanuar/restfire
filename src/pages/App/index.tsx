@@ -1,9 +1,10 @@
-import { FireOutlined, HistoryOutlined, HomeOutlined, SettingOutlined } from '@ant-design/icons'
+import { FireOutlined, HistoryOutlined, HomeOutlined, SettingOutlined, ImportOutlined } from '@ant-design/icons'
 import { Empty, Layout, Menu, Tag } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { useThemeSwitcher } from 'react-css-theme-switcher'
 import { Link, useHistory } from 'react-router-dom'
 import Header from '../../components/Header'
+import Import from './Import'
 import Main from './Main'
 import Settings from './Settings'
 
@@ -49,10 +50,12 @@ const App: React.FC<Props> = ({ appRoute }) => {
     return <><Tag color={color}>{data.request.method?.toUpperCase()}</Tag> {urlParsed}</>
   }
 
-  const sendRequest = async (req: any, i: number) => {
+  const sendRequest = async (req: any, i?: number) => {
     history.push('/app')
     await new Promise(res => setTimeout(res, 100))
-    setRoute(`/app/${i}`)
+    if (i) {
+      setRoute(`/app/${i}`)
+    }
     setRequestSent(req)
   }
 
@@ -73,6 +76,9 @@ const App: React.FC<Props> = ({ appRoute }) => {
         <Menu mode="inline" defaultSelectedKeys={[route]} selectedKeys={[route]} defaultOpenKeys={['/app/history']} theme={currentTheme as any || 'dark'}>
           <Menu.Item key="/app" icon={<HomeOutlined />}>
             <Link to="/app" onClick={() => setRoute('/app')}>Main</Link>
+          </Menu.Item>
+          <Menu.Item key="/app/import" icon={<ImportOutlined />}>
+            <Link to="/app/import" onClick={() => setRoute('/app/import')}>Import</Link>
           </Menu.Item>
           <Menu.SubMenu key="/app/history" icon={<HistoryOutlined />} title="History">
             { histories?.length ? histories?.map((req: any, i: number) => (
@@ -95,6 +101,7 @@ const App: React.FC<Props> = ({ appRoute }) => {
             onSend={() => setHistories(window.localStorage.getItem('histories') ? JSON.parse(window.localStorage.getItem('histories')!) : [])}
             goToSettings={() => setRoute('/app/settings')} /> : '' }
           { route === '/app/settings' ? <Settings /> : '' }
+          { route === '/app/import' ? <Import onSendRequest={sendRequest} /> : '' }
         </Layout.Content>
       </Layout>
     </Layout>

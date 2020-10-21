@@ -27,6 +27,7 @@
     "filesize": "^6.1.0",
     "form-data": "^3.0.0",
     "immutability-helper": "^3.1.1",
+    "parse-curl": "^0.2.6",
     "qs": "^6.9.4",
     "query-string": "^6.13.5",
     "react": "^16.13.1",
@@ -53,9 +54,21 @@
   "build": {
     "appId": "com.mgilangjanuar.restfire",
     "productName": "RestFire Studio (Beta)",
-    "win": { "publish": ["github"] },
-    "mac": { "publish": ["github"] },
-    "linux": { "publish": ["github"] }
+    "win": {
+      "publish": [
+        "github"
+      ]
+    },
+    "mac": {
+      "publish": [
+        "github"
+      ]
+    },
+    "linux": {
+      "publish": [
+        "github"
+      ]
+    }
   },
   "eslintConfig": {
     "extends": "react-app"
