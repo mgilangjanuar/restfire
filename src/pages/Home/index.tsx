@@ -1,6 +1,6 @@
 import { FireOutlined } from '@ant-design/icons'
 import { Button, Carousel, Col, Layout, Row, Switch, Typography } from 'antd'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useThemeSwitcher } from 'react-css-theme-switcher'
 import { Link } from 'react-router-dom'
 import Footer from '../../components/Footer'
@@ -8,6 +8,10 @@ import Header from '../../components/Header'
 
 const Home: React.FC = () => {
   const { switcher, themes, currentTheme } = useThemeSwitcher()
+
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [])
 
   return (
     <Layout>

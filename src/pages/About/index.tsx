@@ -1,10 +1,14 @@
 import { Layout } from 'antd'
-import React from 'react'
+import React, { useEffect } from 'react'
 import Footer from '../../components/Footer'
 import Header from '../../components/Header'
 import Maintenance from '../../components/Maintenance'
 
 const About: React.FC = () => {
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [])
+
   return (
     <Layout>
       <Header defaultSelectedKey="about" />
