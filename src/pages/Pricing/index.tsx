@@ -1,10 +1,14 @@
 import { Button, Card, Col, Layout, message, Row, Typography } from 'antd'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import Footer from '../../components/Footer'
 import Header from '../../components/Header'
 
 const Pricing: React.FC = () => {
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [])
+
   return (
     <Layout>
       <Header defaultSelectedKey="pricing" />

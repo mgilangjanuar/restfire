@@ -99,6 +99,10 @@ const Main: React.FC<Props> = ({ onSend, appendRequest, onAppend, goToSettings }
     }
   }
 
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [])
+
   const updateTab = async (data: Partial<Request>, resp?: Partial<Response>) => {
     const title = buildTitle(data)
     if (activeRequest && requestData) {
