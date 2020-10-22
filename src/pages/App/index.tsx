@@ -94,7 +94,7 @@ const App: React.FC<Props> = ({ appRoute }) => {
       </Layout.Sider>
       <Layout>
         <Header withSidebar collapseLeft={[!!collapseLeft, setCollapseLeft]} />
-        <Layout.Content style={{ margin: '7px 10px', padding: 24 }}>
+        <Layout.Content style={{ padding: '0 20px' }}>
           { /^\/app[/]*[0-9]*$/.test(route) ? <Main
             appendRequest={requestSent}
             onAppend={() => setRequestSent(undefined)}

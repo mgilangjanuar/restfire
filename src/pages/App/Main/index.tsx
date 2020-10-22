@@ -1,5 +1,7 @@
-import { Form, Input, message, Select, Tabs, Tag, Typography } from 'antd'
+import { ShareAltOutlined } from '@ant-design/icons'
+import { Button, Card, Form, Input, message, Select, Tabs, Tag, Typography } from 'antd'
 import { useForm } from 'antd/lib/form/Form'
+import Modal from 'antd/lib/modal/Modal'
 import Axios, { AxiosBasicCredentials, AxiosRequestConfig } from 'axios'
 import qs from 'qs'
 import queryString from 'query-string'
@@ -51,6 +53,8 @@ const Main: React.FC<Props> = ({ onSend, appendRequest, onAppend, goToSettings }
   const [requestData, setRequestData] = useState<RequestData[]>()
   const [activeRequest, setActiveRequest] = useState<RequestData>()
   const [activeTab, setActiveTab] = useState<string>()
+  const [showShareModal, setShowShareModal] = useState<boolean>(false)
+  const [curl, setCurl] = useState<any>()
 
   const buildInitialRequestData = (): RequestData => ({
     id: createId(),
@@ -263,6 +267,40 @@ const Main: React.FC<Props> = ({ onSend, appendRequest, onAppend, goToSettings }
     onSend()
   }
 
+  const share = async () => {
+    setShowShareModal(true)
+    let method = activeRequest?.request.method || 'get'
+    if (method === 'del') {
+      method = 'delete'
+    } else if (method === 'opt') {
+      method = 'options'
+    }
+    let result = `curl --location --request ${method.toUpperCase()} '${activeRequest?.request.url}'`
+    if (activeRequest?.request.contentType) {
+      result = `${result} \\\n--header 'Content-Type: ${activeRequest?.request.contentType}'`
+    }
+    const header = activeRequest?.request.headers?.map((header: any) => `--header '${header.key}: ${header.value}'`)
+    if (header?.length) {
+      result = `${result} \\\n${header.join(' \\\n')}`
+    }
+    if (activeRequest?.request.contentType === 'multipart/form-data') {
+      const forms = activeRequest?.request.forms?.map((form: any) => `--form '${form.key}=${form.type === 'file' ? `@${form.file.name}` : form.value}'`)
+      if (forms?.length) {
+        result = `${result} \\\n${forms.join(' \\\n')}`
+      }
+    }
+    if (activeRequest?.request.contentType === 'application/x-www-form-urlencoded') {
+      const forms = activeRequest?.request.formsEncoded?.map((form: any) => `--data-urlencode '${form.key}=${form.value}'`)
+      if (forms?.length) {
+        result = `${result} \\\n${forms.join(' \\\n')}`
+      }
+    }
+    if (activeRequest?.request.contentType === 'application/json') {
+      result = `${result} \\\n--data-raw '${activeRequest.request.body}'`
+    }
+    setCurl(result)
+  }
+
   const SelectMethod = () => (
     <Select
       defaultValue={activeRequest?.request?.method || 'get'}
@@ -285,7 +323,7 @@ const Main: React.FC<Props> = ({ onSend, appendRequest, onAppend, goToSettings }
           <Tabs.TabPane tab={<tab.title />} key={tab.id}>
             <Form form={form} onFinish={send}>
               <Form.Item name="url">
-                <span>
+                <span style={{ display: 'flex' }}>
                   <Input.Search
                     placeholder="Enter URL"
                     addonBefore={<SelectMethod />}
@@ -294,6 +332,7 @@ const Main: React.FC<Props> = ({ onSend, appendRequest, onAppend, goToSettings }
                     required
                     onSearch={send}
                     onChange={e => updateTab({ url: e.target.value || '' })} />
+                  <Button onClick={share} type="link" style={{ marginLeft: '5px' }} icon={<ShareAltOutlined />}></Button>
                 </span>
               </Form.Item>
               <Tabs defaultActiveKey="0">
@@ -346,6 +385,15 @@ const Main: React.FC<Props> = ({ onSend, appendRequest, onAppend, goToSettings }
         setRequestData([initial])
         setActiveTab(initial.id)
       }} goToSettings={goToSettings} /> : '' }
+      <Modal
+        visible={showShareModal}
+        onCancel={() => setShowShareModal(false)}
+        onOk={() => setShowShareModal(false)}
+        title={<><ShareAltOutlined /> Share Request</>}>
+        <Card title="cURL snippets">
+          {curl?.split('\n')?.map((line: string) => (<>{line}<br /></>))}
+        </Card>
+      </Modal>
     </>
   )
 }
