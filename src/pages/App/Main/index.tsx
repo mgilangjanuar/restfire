@@ -332,7 +332,7 @@ const Main: React.FC<Props> = ({ onSend, appendRequest, onAppend, goToSettings }
                     required
                     onSearch={send}
                     onChange={e => updateTab({ url: e.target.value || '' })} />
-                  <Button onClick={share} type="link" style={{ marginLeft: '5px' }} icon={<ShareAltOutlined />}></Button>
+                  <Button disabled={!activeRequest?.request.url} onClick={share} type="link" style={{ marginLeft: '5px' }} icon={<ShareAltOutlined />}></Button>
                 </span>
               </Form.Item>
               <Tabs defaultActiveKey="0">
