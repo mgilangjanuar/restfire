@@ -25,6 +25,7 @@ const Pricing: React.FC = () => {
                 <li>Web-based only</li>
                 <li>Using custom proxy</li>
                 <li>Request history</li>
+                <li>More features coming soon</li>
               </ul>
             </Card>
           </Col>
@@ -38,6 +39,7 @@ const Pricing: React.FC = () => {
                 <li>Desktop installable</li>
                 <li>Localhost API support</li>
                 <li>Super fast</li>
+                <li>More features coming soon</li>
               </ul>
             </Card>
           </Col>

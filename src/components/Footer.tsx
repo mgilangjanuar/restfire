@@ -1,4 +1,4 @@
-import { AntDesignOutlined, FireOutlined } from '@ant-design/icons'
+import { FireOutlined } from '@ant-design/icons'
 import { Divider, Layout, Space, Typography } from 'antd'
 import React from 'react'
 import { Link } from 'react-router-dom'
@@ -8,7 +8,7 @@ const Footer: React.FC = () => {
     <Layout.Footer style={{ textAlign: 'center' }}>
       <Divider />
       <Typography.Paragraph>
-        <FireOutlined /> RestFire Studio &copy; 2020 &mdash; React components by <a href="https://ant.design"><AntDesignOutlined /> Ant Design</a>
+        <FireOutlined /> RestFire Studio &copy; 2020
       </Typography.Paragraph>
       <Typography.Paragraph>
         <Space split={<>&middot;</>}>
