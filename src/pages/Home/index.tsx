@@ -17,7 +17,7 @@ const Home: React.FC = () => {
     <Layout>
       <Header defaultSelectedKey="home" />
       <Layout.Content style={{ minHeight: '90vh' }}>
-        <Row align="middle" style={{ padding: '0 15px 15px' }}>
+        <Row align="middle" style={{ padding: '56px 15px' }}>
           <Col lg={14} style={{ textAlign: 'right', padding: '12px 36px 36px 12px' }}>
             <img alt="asset-1" src="/assets/Untitled 2.png" style={{ maxWidth: '850px', width: '100%' }} />
           </Col>
@@ -34,7 +34,7 @@ const Home: React.FC = () => {
             </Typography.Title>
           </Col>
         </Row>
-        <Row align="middle" style={{ padding: '0 15px', backgroundColor: currentTheme === 'dark' ? '#1f1f1f' : '#fff' }}>
+        <Row align="middle" style={{ padding: '56px 15px', backgroundColor: currentTheme === 'dark' ? '#1f1f1f' : '#fff' }}>
           <Col lg={12} style={{ textAlign: 'right', padding: '36px 12px 0', width: '100%' }}>
             <Typography.Title level={1}>
               Now in your hand
@@ -47,7 +47,7 @@ const Home: React.FC = () => {
             <img alt="asset-1" src="/assets/smartmockups_kgewcl0o.png" style={{ maxWidth: '270px', width: '100%' }} />
           </Col>
         </Row>
-        <Row style={{ padding: '0 15px' }}>
+        <Row style={{ padding: '56px 15px' }}>
           <Col lg={12} style={{ textAlign: 'right', padding: '36px 12px 0' }}>
             <Typography.Title level={1}>
               Designed for developers
@@ -73,7 +73,7 @@ const Home: React.FC = () => {
             </Carousel>
           </Col>
         </Row>
-        <Row align="middle" style={{ padding: '15px', backgroundColor: currentTheme === 'dark' ? '#1f1f1f' : '#fff' }}>
+        <Row align="middle" style={{ padding: '56px 15px', backgroundColor: currentTheme === 'dark' ? '#1f1f1f' : '#fff' }}>
           <Col lg={12} style={{ textAlign: 'right', padding: '24px 36px 36px 12px' }}>
             { currentTheme === 'dark' ? (
               <img alt="asset-1" src="/assets/Screen Shot 2020-10-18 at 09.57.10.png" style={{ maxWidth: '850px', width: '100%' }} />
@@ -90,7 +90,7 @@ const Home: React.FC = () => {
             </Typography.Title>
           </Col>
         </Row>
-        <Row align="middle" style={{ padding: '0 15px 15px' }}>
+        <Row align="middle" style={{ padding: '56px 15px 56px' }}>
           <Col lg={12} style={{ textAlign: 'right', padding: '56px 36px 0 12px' }}>
             <img alt="asset-1" src="/assets/Screen Shot 2020-10-18 at 11.56.07.png" style={{ maxWidth: '380px', width: '100%' }} />
           </Col>
@@ -103,7 +103,7 @@ const Home: React.FC = () => {
             </Typography.Title>
           </Col>
         </Row>
-        <Row align="middle" style={{ marginTop: '128px', marginBottom: '48px', padding: '15px' }}>
+        <Row align="middle" style={{ marginTop: '86px', marginBottom: '48px', padding: '15px' }}>
           <Col span={24} lg={{ span: 14, offset: 5 }} style={{ padding: '56px', textAlign: 'center', backgroundColor: currentTheme === 'dark' ? '#1f1f1f' : '#fff' }}>
             <Typography.Title level={3}>
               Try for free &nbsp; &nbsp;

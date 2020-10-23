@@ -19,7 +19,7 @@ const Pricing: React.FC = () => {
             <Card
               title="Frreeee"
               cover={<img style={{ maxWidth: '248px', width: '100%', margin: '0 auto' }} src="/assets/frog.png" alt="frog" />}
-              actions={[<Link to="/app"><Button>Select &nbsp; <span role="img" aria-label="emoji">😋</span></Button></Link>]}>
+              actions={[<Link to="/app"><Button type="link" size="large">Select &nbsp; <span role="img" aria-label="emoji">😋</span></Button></Link>]}>
               <ul>
                 <li>Basic functionality</li>
                 <li>Web-based only</li>
@@ -32,7 +32,7 @@ const Pricing: React.FC = () => {
             <Card
               title="Premium"
               cover={<img style={{ maxWidth: '248px', width: '100%', margin: '0 auto' }} src="/assets/wolf.png" alt="wolf" />}
-              actions={[<Link to="#"><Button onClick={() => message.info('Sorry, this is not available yet :(')} type="primary">Select &nbsp; <span role="img" aria-label="emoji">🎉</span></Button></Link>]}>
+              actions={[<Link to="#"><Button size="large" onClick={() => message.info('Sorry, this is not available yet :(')} type="link">Select &nbsp; <span role="img" aria-label="emoji">🎉</span></Button></Link>]}>
               <ul>
                 <li>All in <em>Frreeee</em></li>
                 <li>Desktop installable</li>
@@ -45,19 +45,16 @@ const Pricing: React.FC = () => {
         <Row style={{ marginTop: '36px' }}>
           <Col span={24} lg={{ span: 12, offset: 6 }}>
             <Card
-              title={<em>"I want to help this development, but I've no idea what I should do"</em>}
+              title="Donate"
               actions={[
                 <a href="https://karyakarsa.com/mgilangjanuar/restfire-studio">
                   <Button type="link" size="large">Buy sunflower seeds now!</Button>
                 </a>
               ]}>
               <Typography.Paragraph>
-                Your're the person like this? Don't worry, you can help us to make it better and keep
-                it up by buying us a bag of sunflower seeds for our hamsters. Ya! we have hamsters here,
-                you can play with them anytime. They have 8 kids, now!
-              </Typography.Paragraph>
-              <Typography.Paragraph style={{ textAlign: 'center' }}>
-                <span role="img" aria-label="emoji">🐹 🐹 🐹 🐹 🐹 🐹 🐹 🐹 🤣</span>
+                You can help us to make it better and keep it up by buying us a bag of sunflowerseeds for our
+                hamsters. Ya! we have hamsters here, you can play with them anytime. They have 8 kids, now!
+                <span role="img" aria-label="emoji"> 🐹 🐹 🐹 🐹 🐹 🐹 🐹 🐹 🤣</span>
               </Typography.Paragraph>
             </Card>
           </Col>
