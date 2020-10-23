@@ -1,7 +1,7 @@
 {
   "name": "restfire",
   "description": "The Web-based Test and Design API Platform",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "private": true,
   "repository": {
     "url": "https://github.com/mgilangjanuar/restfire"
