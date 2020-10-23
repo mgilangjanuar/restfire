@@ -33,7 +33,7 @@ const Pricing: React.FC = () => {
             <Card
               title="Premium"
               cover={<img style={{ maxWidth: '248px', width: '100%', margin: '0 auto' }} src="/assets/wolf.png" alt="wolf" />}
-              actions={[<Link to="#"><Button size="large" onClick={() => message.info('Sorry, this is not available yet :(')} type="link">Select &nbsp; <span role="img" aria-label="emoji">🎉</span></Button></Link>]}>
+              actions={[<Link to="#"><Button size="large" onClick={() => message.info('Sorry, this is not available yet :(')} type="link">Download &nbsp; <span role="img" aria-label="emoji">🎉</span></Button></Link>]}>
               <ul>
                 <li>All in <em>Frreeee</em></li>
                 <li>Desktop installable</li>

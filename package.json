@@ -47,10 +47,9 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "electron-prebuild": "react-scripts build && mkdir buildelectron && cp -r build buildelectron && cp -r server buildelectron && cp electron.js buildelectron && rm -rf build && mv buildelectron build",
+    "electron-prebuild": "react-scripts build && mkdir buildelectron && cp -r build buildelectron && cp -r server buildelectron && rm -rf build && cp electron.js public/ && cp electron.js buildelectron/ && mv buildelectron build",
     "electron-build": "npm run electron-prebuild && electron-builder"
   },
-  "main": "electron.js",
   "build": {
     "appId": "com.mgilangjanuar.restfire",
     "productName": "RestFire Studio (Beta)",
