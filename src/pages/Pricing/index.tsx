@@ -42,7 +42,7 @@ const Pricing: React.FC = () => {
             </Card>
           </Col>
         </Row>
-        <Row style={{ marginTop: '36px' }}>
+        {/* <Row style={{ marginTop: '36px' }}>
           <Col span={24} lg={{ span: 12, offset: 6 }}>
             <Card
               title="Donate"
@@ -58,7 +58,7 @@ const Pricing: React.FC = () => {
               </Typography.Paragraph>
             </Card>
           </Col>
-        </Row>
+        </Row> */}
       </Layout.Content>
       <Footer />
     </Layout>
