@@ -56,7 +56,7 @@ const GettingStarted: React.FC<Props> = ({ init, goToSettings }) => {
             </Typography.Paragraph>
           </Col>
         </Row>
-        v0.0.4
+        v0.0.5
       </Card>
     </>
   )
