@@ -21,12 +21,10 @@ const Header: React.FC<Props> = ({ withSidebar, collapseLeft, defaultSelectedKey
   }, [currentTheme])
 
   const Title = () => (
-    <Link to="/">
-      <span style={{ fontSize: '1.2em', paddingLeft: '24px', color: currentTheme === 'dark' ? '#fff' : '#000' }}>
-        { collapseLeft?.[0] ? <>RestFire Studio</> : '' }
-        { !withSidebar ? <><FireOutlined /> RestFire Studio</> : '' }
-      </span>
-    </Link>
+    <span style={{ fontSize: '1.2em', paddingLeft: '24px', color: currentTheme === 'dark' ? '#fff' : '#000' }}>
+      { collapseLeft?.[0] ? <>RestFire Studio</> : '' }
+      { !withSidebar ? <><FireOutlined /> RestFire Studio</> : '' }
+    </span>
   )
 
   const BulbButton = () => (
@@ -48,7 +46,9 @@ const Header: React.FC<Props> = ({ withSidebar, collapseLeft, defaultSelectedKey
         </>
       ) : (
         <>
-          <div style={{ float: 'left' }}><Title /></div>
+          <div style={{ float: 'left' }}>
+            <Link to="/"><Title /></Link>
+          </div>
           {/* <Menu mode="horizontal" defaultSelectedKeys={[defaultSelectedKey || 'home']} style={{ border: 'none', display: 'flex', ...currentTheme === 'dark' ? { backgroundColor: '#000' } : { backgroundColor: '#f0f2f5' } }}>
             <Menu.Item key="home" onClick={() => history.push('/')}>Home</Menu.Item>
             <Menu.Item key="pricing" onClick={() => history.push('/pricing')}>Pricing</Menu.Item>

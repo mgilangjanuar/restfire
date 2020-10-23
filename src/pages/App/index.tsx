@@ -25,11 +25,9 @@ const App: React.FC<Props> = ({ appRoute }) => {
   }, [appRoute])
 
   const Title = ({ style = {}, useIcon = true, hideText = false }) => (
-    <Link to="/">
-      <span style={{ fontSize: '1.2em', padding: '16px 5px 16px', marginBottom: 0, textAlign: 'center', color: currentTheme === 'dark' ? '#fff' : '#000', ...style }}>
-        { useIcon ? <FireOutlined /> : '' } { hideText ? '' : 'RestFire Studio' }
-      </span>
-    </Link>
+    <span style={{ fontSize: '1.2em', padding: '16px 5px 16px', marginBottom: 0, textAlign: 'center', color: currentTheme === 'dark' ? '#fff' : '#000', ...style }}>
+      { useIcon ? <FireOutlined /> : '' } { hideText ? '' : 'RestFire Studio' }
+    </span>
   )
 
   const TitleHistory = ({ data }) => {
