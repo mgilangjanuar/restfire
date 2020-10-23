@@ -25,23 +25,23 @@ const Home: React.FC = () => {
             <Typography.Title>
               The Web-based Test and Design API Platform
             </Typography.Title>
-            <Typography.Paragraph>
-              This platform will help your API development easy to test <strong>without installing</strong> any software on your device.
+            <Typography.Title level={4} type="secondary">
+              A platform that will help your API development easy to test <strong>without installing</strong> any software on your device.
               Pssttt, <strong>no need to register/login</strong> either.
-            </Typography.Paragraph>
-            <Typography.Paragraph>
+            </Typography.Title>
+            <Typography.Title level={4}>
               <Link to="/pricing"><Button size="large" type="primary">Get Started</Button></Link>
-            </Typography.Paragraph>
+            </Typography.Title>
           </Col>
         </Row>
         <Row align="middle" style={{ padding: '0 15px', backgroundColor: currentTheme === 'dark' ? '#1f1f1f' : '#fff' }}>
           <Col lg={12} style={{ textAlign: 'right', padding: '36px 12px 0', width: '100%' }}>
-            <Typography.Title level={3}>
+            <Typography.Title level={1}>
               Now in your hand
             </Typography.Title>
-            <Typography.Paragraph>
-              Open <strong><FireOutlined /> RestFire Studio</strong> anytime and anywhere.
-            </Typography.Paragraph>
+            <Typography.Title level={4} type="secondary">
+              Open <strong><FireOutlined /> RestFire Studio</strong> <u>anytime</u> and <u>anywhere</u>.
+            </Typography.Title>
           </Col>
           <Col lg={12} style={{ textAlign: 'left', padding: '36px 12px 36px 36px', width: '100%' }}>
             <img alt="asset-1" src="/assets/smartmockups_kgewcl0o.png" style={{ maxWidth: '270px', width: '100%' }} />
@@ -49,12 +49,12 @@ const Home: React.FC = () => {
         </Row>
         <Row style={{ padding: '0 15px' }}>
           <Col lg={12} style={{ textAlign: 'right', padding: '36px 12px 0' }}>
-            <Typography.Title level={3}>
+            <Typography.Title level={1}>
               Designed for developers
             </Typography.Title>
-            <Typography.Paragraph>
+            <Typography.Title level={4} type="secondary">
               We built <strong><FireOutlined /> RestFire Studio</strong> for developers to make it easier for you to keep track of your API. You can fully customize the request with your own configuration and show the response log in debug mode.
-            </Typography.Paragraph>
+            </Typography.Title>
           </Col>
           <Col lg={12} style={{ textAlign: 'left', padding: '36px 12px 24px 36px' }}>
             <Carousel autoplay dots={false} effect="scrollx">
@@ -82,12 +82,12 @@ const Home: React.FC = () => {
             ) }
           </Col>
           <Col lg={12} style={{ textAlign: 'left', padding: '36px 12px 12px' }}>
-            <Typography.Title level={3}>
+            <Typography.Title level={1}>
               With two theme options
             </Typography.Title>
-            <Typography.Paragraph>
+            <Typography.Title level={4} type="secondary">
               <Switch checkedChildren="Light" unCheckedChildren="Dark" checked={currentTheme !== 'dark'} onChange={() => switcher({ theme: currentTheme === 'dark' ? themes.light : themes.dark })} />
-            </Typography.Paragraph>
+            </Typography.Title>
           </Col>
         </Row>
         <Row align="middle" style={{ padding: '0 15px 15px' }}>
@@ -95,19 +95,22 @@ const Home: React.FC = () => {
             <img alt="asset-1" src="/assets/Screen Shot 2020-10-18 at 11.56.07.png" style={{ maxWidth: '380px', width: '100%' }} />
           </Col>
           <Col lg={12} style={{ textAlign: 'left', padding: '36px 12px 12px' }}>
-            <Typography.Title level={3}>
+            <Typography.Title level={1}>
               <em>"Those who don't know history are destined to repeat it"</em>
             </Typography.Title>
-            <Typography.Paragraph>
+            <Typography.Title level={4} type="secondary">
               So, we save it in your local storage of browser to keep you safe and secure.
-            </Typography.Paragraph>
+            </Typography.Title>
           </Col>
         </Row>
-        <Row align="middle" style={{ marginTop: '36px', padding: '15px' }}>
-          <Col span={24} lg={{ span: 8, offset: 8 }}>
-            <Link to="/pricing">
-              <Button size="large" type="primary" block>See Pricing</Button>
-            </Link>
+        <Row align="middle" style={{ marginTop: '128px', marginBottom: '48px', padding: '15px' }}>
+          <Col span={24} lg={{ span: 14, offset: 5 }} style={{ padding: '56px', textAlign: 'center', backgroundColor: currentTheme === 'dark' ? '#1f1f1f' : '#fff' }}>
+            <Typography.Title level={3}>
+              Try for free &nbsp; &nbsp;
+              <Link to="/pricing">
+                <Button size="large" type="primary">Get Started</Button>
+              </Link>
+            </Typography.Title>
           </Col>
         </Row>
       </Layout.Content>
