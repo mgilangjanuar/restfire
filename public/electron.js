@@ -4,6 +4,8 @@ const { autoUpdater } = require("electron-updater")
 require('./server')
 
 app.on('ready', () => {
+  autoUpdater.checkForUpdatesAndNotify()
+
   const win = new BrowserWindow({
     icon: `${__dirname}/icon.png`
   })
@@ -11,6 +13,4 @@ app.on('ready', () => {
   win.maximize()
 
   win.loadURL('http://localhost:4002/app')
-
-  autoUpdater.checkForUpdatesAndNotify()
 })
