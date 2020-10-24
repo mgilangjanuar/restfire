@@ -12,7 +12,7 @@ app.on('ready', () => {
   const platform = os.platform() + '_' + os.arch()
   autoUpdater.setFeedURL({
     // provider: 'generic',
-    url: `http://lang-updater.herokuapp.com/update/${platform}/${version}`
+    url: `https://lang-updater.herokuapp.com/update/${platform}/${version}`
   })
   autoUpdater.on('checking-for-update', () => console.log('checking update'))
   autoUpdater.on('update-available', () => console.log('update ready!'))
