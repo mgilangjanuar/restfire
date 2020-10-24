@@ -4,7 +4,10 @@ const { autoUpdater } = require("electron-updater")
 require('./server')
 
 app.on('ready', () => {
-  autoUpdater.setFeedURL({ url: 'https://lang-updater.herokuapp.com/' });
+  autoUpdater.setFeedURL({
+    provider: 'generic',
+    url: 'https://lang-updater.herokuapp.com/'
+  })
   autoUpdater.checkForUpdatesAndNotify()
 
   const win = new BrowserWindow({
