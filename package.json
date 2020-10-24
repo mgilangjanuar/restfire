@@ -63,7 +63,7 @@
       },
       {
         "provider": "generic",
-        "url": "https://lang-updater.herokuapp.com/"
+        "url": "https://lang-updater.herokuapp.com/download"
       }
     ],
     "win": {
