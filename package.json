@@ -60,6 +60,10 @@
         "owner": "mgilangjanuar",
         "repo": "restfire",
         "token": "9589c5fa66de4dbe15663ef6aac16793380eb714"
+      },
+      {
+        "provider": "generic",
+        "url": "https://lang-updater.herokuapp.com/"
       }
     ],
     "win": {

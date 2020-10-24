@@ -4,12 +4,7 @@ const { autoUpdater } = require("electron-updater")
 require('./server')
 
 app.on('ready', () => {
-  autoUpdater.setFeedURL({
-    provider: 'github',
-    owner: 'mgilangjanuar',
-    repo: 'restfire',
-    token: '9589c5fa66de4dbe15663ef6aac16793380eb714'
-  })
+  autoUpdater.setFeedURL({ url: 'https://lang-updater.herokuapp.com/' });
   autoUpdater.checkForUpdatesAndNotify()
 
   const win = new BrowserWindow({
