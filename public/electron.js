@@ -6,7 +6,7 @@ require('./server')
 app.on('ready', () => {
   autoUpdater.setFeedURL({
     provider: 'generic',
-    url: 'https://lang-updater.herokuapp.com/'
+    url: 'https://lang-updater.herokuapp.com/download'
   })
   autoUpdater.checkForUpdatesAndNotify()
 
