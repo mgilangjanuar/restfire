@@ -1,7 +1,10 @@
 const { app, BrowserWindow } = require('electron')
-const { autoUpdater } = require("electron-updater")
+const { autoUpdater } = require('electron-updater')
 
 require('./server')
+
+autoUpdater.logger = require('electron-log')
+autoUpdater.logger.transports.file.level = 'info'
 
 app.on('ready', () => {
   autoUpdater.setFeedURL({
