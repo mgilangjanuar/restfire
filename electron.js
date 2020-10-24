@@ -9,7 +9,7 @@ require('./server')
 app.on('ready', () => {
   autoUpdater.setFeedURL({
     // provider: 'generic',
-    url: 'https://lang-updater.herokuapp.com/download'
+    url: 'https://lang-updater.herokuapp.com/'
   })
   autoUpdater.on('checking-for-update', () => console.log('checking update'))
   autoUpdater.on('update-available', () => console.log('update ready!'))
