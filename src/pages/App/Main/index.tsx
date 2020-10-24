@@ -287,6 +287,9 @@ const Main: React.FC<Props> = ({ onSend, appendRequest, onAppend, goToSettings }
     if (header?.length) {
       result = `${result} \\\n${header.join(' \\\n')}`
     }
+    if (activeRequest?.request.basicAuth) {
+      result = `${result} \\\n--header 'Authorization: Basic ${Buffer.from(`${activeRequest?.request.basicAuth.username}:${activeRequest.request.basicAuth.password}`).toString('base64')}'`
+    }
     if (activeRequest?.request.contentType === 'multipart/form-data') {
       const forms = activeRequest?.request.forms?.map((form: any) => `--form '${form.key}=${form.type === 'file' ? `@${form.file.name}` : form.value}'`)
       if (forms?.length) {

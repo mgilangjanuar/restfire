@@ -1,7 +1,7 @@
 {
   "name": "restfire",
   "description": "The Web-based Test and Design API Platform",
-  "version": "0.0.25",
+  "version": "0.0.24",
   "private": true,
   "repository": {
     "url": "https://github.com/mgilangjanuar/restfire"
@@ -53,19 +53,6 @@
   "build": {
     "appId": "com.mgilangjanuar.restfire",
     "productName": "RestFire Studio (Beta)",
-    "publish": [
-      {
-        "provider": "github",
-        "private": true,
-        "owner": "mgilangjanuar",
-        "repo": "restfire",
-        "token": "9589c5fa66de4dbe15663ef6aac16793380eb714"
-      },
-      {
-        "provider": "generic",
-        "url": "https://lang-updater.herokuapp.com/download"
-      }
-    ],
     "win": {
       "publish": [
         "github"

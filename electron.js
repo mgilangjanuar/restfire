@@ -7,19 +7,21 @@ require('./server')
 // autoUpdater.logger = require('electron-log')
 // autoUpdater.logger.transports.file.level = 'info'
 
+const version = app.getVersion()
+const platform = os.platform() + '_' + os.arch()
+autoUpdater.setFeedURL({
+  // provider: 'generic',
+  url: `http://lang-updater.herokuapp.com/update/${platform}/${version}`
+})
+autoUpdater.on('checking-for-update', () => console.log('checking update'))
+autoUpdater.on('update-available', () => console.log('update ready!'))
+autoUpdater.on('error', error => console.error(error))
+autoUpdater.on('update-downloaded', event => {
+  console.log(event)
+  autoUpdater.quitAndInstall()
+})
+
 app.on('ready', () => {
-  const version = app.getVersion()
-  const platform = os.platform() + '_' + os.arch()
-  autoUpdater.setFeedURL({
-    // provider: 'generic',
-    url: `https://lang-updater.herokuapp.com/update/${platform}/${version}`
-  })
-  autoUpdater.on('checking-for-update', () => console.log('checking update'))
-  autoUpdater.on('update-available', () => console.log('update ready!'))
-  autoUpdater.on('update-downloaded', event => {
-    console.log(event)
-    autoUpdater.quitAndInstall()
-  })
   autoUpdater.checkForUpdates()
 
   const win = new BrowserWindow({
