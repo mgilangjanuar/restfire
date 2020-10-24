@@ -65,12 +65,6 @@
       "extendInfo": {
         "NSAppTransportSecurity": {
           "NSAllowsArbitraryLoads": true
-        },
-        "NSExceptionDomains": {
-          "lang-updater.herokuapp.com": {
-            "NSTemporaryExceptionAllowsInsecureHTTPLoads": true,
-            "NSTemporaryExceptionRequiresForwardSecrecy": false
-          }
         }
       }
     },
