@@ -1,14 +1,14 @@
-const { app, BrowserWindow } = require('electron')
-const { autoUpdater } = require('electron-updater')
+const { app, BrowserWindow, autoUpdater } = require('electron')
+// const { autoUpdater } = require('electron-updater')
 
 require('./server')
 
-autoUpdater.logger = require('electron-log')
-autoUpdater.logger.transports.file.level = 'info'
+// autoUpdater.logger = require('electron-log')
+// autoUpdater.logger.transports.file.level = 'info'
 
 app.on('ready', () => {
   autoUpdater.setFeedURL({
-    provider: 'generic',
+    // provider: 'generic',
     url: 'https://lang-updater.herokuapp.com/download'
   })
   autoUpdater.checkForUpdatesAndNotify()

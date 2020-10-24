@@ -11,7 +11,13 @@ app.on('ready', () => {
     // provider: 'generic',
     url: 'https://lang-updater.herokuapp.com/download'
   })
-  autoUpdater.checkForUpdatesAndNotify()
+  autoUpdater.on('checking-for-update', () => console.log('checking update'))
+  autoUpdater.on('update-available', () => console.log('update ready!'))
+  autoUpdater.on('update-downloaded', event => {
+    console.log(event)
+    autoUpdater.quitAndInstall()
+  })
+  autoUpdater.checkForUpdates()
 
   const win = new BrowserWindow({
     icon: `${__dirname}/icon.png`
