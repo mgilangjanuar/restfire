@@ -13,9 +13,14 @@ autoUpdater.setFeedURL({
 autoUpdater.on('checking-for-update', () => console.log('Checking updates...'))
 autoUpdater.on('update-available', info => {
   dialog.showMessageBox(null, {
-    type: 'info',
-    message: 'Update available!',
-    detail: `${info.version} released.`
+    type: 'question',
+    buttons: ['Download', 'Cancel'],
+    message: 'Download update?',
+    detail: `${info.version} released and will downloading in background.`
+  }, response => {
+    if (response === 0) {
+      autoUpdater.downloadUpdate()
+    }
   })
 })
 autoUpdater.on('error', error => console.error(`Error: ${error}`))
@@ -23,8 +28,8 @@ autoUpdater.on('update-downloaded', () => {
   console.log('Update downloaded!')
   dialog.showMessageBox(null, {
     type: 'question',
-    buttons: ['Quit and install', 'Later'],
-    message: 'Update downloaded!'
+    buttons: ['Quit and install', 'Cancel'],
+    message: 'Install update?'
   }, response => {
     if (response === 0) {
       autoUpdater.quitAndInstall()

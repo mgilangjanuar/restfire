@@ -1,4 +1,4 @@
-const { app, BrowserWindow } = require('electron')
+const { app, BrowserWindow, dialog } = require('electron')
 const { autoUpdater } = require('electron-updater')
 const { generate } = require('shortid')
 
@@ -10,18 +10,30 @@ autoUpdater.setFeedURL({
   provider: 'generic',
   url: 'https://lang-updater.herokuapp.com/download/latest'
 })
-autoUpdater.on('checking-for-update', () => win.webContents.send('message', 'Checking updates...'))
-autoUpdater.on('update-available', () => win.webContents.send('message', 'Update available!'))
-autoUpdater.on('error', error => win.webContents.send('message', `Error: ${error}`))
+autoUpdater.on('checking-for-update', () => console.log('Checking updates...'))
+autoUpdater.on('update-available', info => {
+  dialog.showMessageBox(null, {
+    type: 'info',
+    message: 'Update available!',
+    detail: `${info.version} released.`
+  })
+})
+autoUpdater.on('error', error => console.error(`Error: ${error}`))
 autoUpdater.on('update-downloaded', () => {
-  win.webContents.send('message', 'Update downloaded!')
-  autoUpdater.quitAndInstall()
+  console.log('Update downloaded!')
+  dialog.showMessageBox(null, {
+    type: 'question',
+    buttons: ['Quit and install', 'Later'],
+    message: 'Update downloaded!'
+  }, response => {
+    if (response === 0) {
+      autoUpdater.quitAndInstall()
+    }
+  })
 })
 autoUpdater.on('download-progress', (info) => {
-  let message = `Download speed: ${info.bytesPerSecond}`
-  message = `${message} - Downloaded ${info.percent}%`
-  message = `${message} (${info.transferred}/${info.total})`
-  win.webContents.send('message', message)
+  const message = `Download speed: ${info.bytesPerSecond} - Downloaded ${info.percent}% (${info.transferred}/${info.total})`
+  console.log(message)
 })
 
 app.on('ready', () => {
