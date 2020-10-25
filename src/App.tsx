@@ -8,6 +8,7 @@ import MyApp from './pages/App'
 // import Pricing from './pages/Pricing'
 import Privacy from './pages/Privacy'
 import Terms from './pages/Terms'
+import Thanks from './pages/Thanks'
 import NotFoundPage from './pages/Error/404'
 
 import './App.css'
@@ -27,6 +28,7 @@ function App() {
           <Route path="/about" exact component={About} />
           <Route path="/terms" exact component={Terms} />
           <Route path="/privacy" exact component={Privacy} />
+          <Route path="/thanks" exact component={Thanks} />
           <Route component={NotFoundPage} />
         </Switch>
       </Layout>

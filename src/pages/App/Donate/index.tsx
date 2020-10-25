@@ -36,7 +36,7 @@ const Donate: React.FC = () => {
             name="amount">
             <Row>
               <Col span={24} lg={4}>
-                <InputNumber min={10} value={amount} onChange={amount => setAmount(Number(amount))} /> IDR
+                IDR &nbsp; <InputNumber min={10} value={amount} onChange={amount => setAmount(Number(amount))} />
               </Col>
               <Col span={24} lg={20}>
                 <Slider defaultValue={10} value={amount} min={10} max={999} marks={{ 10: '10k', 999: '999k' }} onChange={(amount: number) => setAmount(amount)} />
@@ -44,7 +44,7 @@ const Donate: React.FC = () => {
             </Row>
           </Form.Item>
           <Form.Item style={{ textAlign: 'center' }}>
-            <Button htmlType="submit" type="primary">Donate</Button>
+            <Button htmlType="submit" type="primary" icon={<CoffeeOutlined />}>Please :(</Button>
           </Form.Item>
         </Form>
       </Spin>
