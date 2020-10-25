@@ -5,7 +5,7 @@ import { BrowserRouter, Switch, Route } from 'react-router-dom'
 import Home from './pages/Home'
 import About from './pages/About'
 import MyApp from './pages/App'
-import Pricing from './pages/Pricing'
+// import Pricing from './pages/Pricing'
 import Privacy from './pages/Privacy'
 import Terms from './pages/Terms'
 import NotFoundPage from './pages/Error/404'
@@ -19,9 +19,11 @@ function App() {
         <Switch>
           <Route path="/app/settings" exact><MyApp appRoute="/app/settings" /></Route>
           <Route path="/app/import" exact><MyApp appRoute="/app/import" /></Route>
+          <Route path="/app/download" exact><MyApp appRoute="/app/download" /></Route>
+          <Route path="/app/donate" exact><MyApp appRoute="/app/donate" /></Route>
           <Route path="/app"><MyApp appRoute="/app" /></Route>
           <Route path="/" exact component={Home} />
-          <Route path="/pricing" exact component={Pricing} />
+          {/* <Route path="/pricing" exact component={Pricing} /> */}
           <Route path="/about" exact component={About} />
           <Route path="/terms" exact component={Terms} />
           <Route path="/privacy" exact component={Privacy} />

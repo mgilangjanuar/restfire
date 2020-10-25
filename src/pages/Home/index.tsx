@@ -30,7 +30,7 @@ const Home: React.FC = () => {
               Pssttt, <strong>no need to register/login</strong> either.
             </Typography.Title>
             <Typography.Title level={4}>
-              <Link to="/pricing"><Button size="large" type="primary">Get Started</Button></Link>
+              <Link to="/app"><Button size="large" type="primary">Get Started</Button></Link>
             </Typography.Title>
           </Col>
         </Row>
@@ -107,7 +107,7 @@ const Home: React.FC = () => {
           <Col span={24} lg={{ span: 14, offset: 5 }} style={{ padding: '56px', textAlign: 'center', backgroundColor: currentTheme === 'dark' ? '#1f1f1f' : '#fff' }}>
             <Typography.Title level={3}>
               Try for free &nbsp; &nbsp;
-              <Link to="/pricing">
+              <Link to="/app">
                 <Button size="large" type="primary">Get Started</Button>
               </Link>
             </Typography.Title>

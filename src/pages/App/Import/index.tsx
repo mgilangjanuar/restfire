@@ -56,10 +56,10 @@ const Import: React.FC<Props> = ({ onSendRequest }) => {
           </Form.Item>
         </Form>
       </Card>
-      <br />
+      {/* <br />
       <Card title={<><ImportOutlined /> Import a collection</>}>
         Work in progress
-      </Card>
+      </Card> */}
     </>
   )
 }

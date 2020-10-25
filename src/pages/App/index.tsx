@@ -1,9 +1,11 @@
-import { FireOutlined, HistoryOutlined, HomeOutlined, ImportOutlined, SettingOutlined } from '@ant-design/icons'
+import { DownloadOutlined, FireOutlined, HistoryOutlined, HomeOutlined, ImportOutlined, SettingOutlined, CoffeeOutlined } from '@ant-design/icons'
 import { Empty, Layout, Menu, Tag } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { useThemeSwitcher } from 'react-css-theme-switcher'
 import { Link, useHistory } from 'react-router-dom'
 import Header from '../../components/Header'
+import Donate from './Donate'
+import Download from './Download'
 import Import from './Import'
 import Main from './Main'
 import Settings from './Settings'
@@ -78,6 +80,9 @@ const App: React.FC<Props> = ({ appRoute }) => {
           <Menu.Item key="/app/import" icon={<ImportOutlined />}>
             <Link to="/app/import" onClick={() => setRoute('/app/import')}>Import</Link>
           </Menu.Item>
+          <Menu.Item key="/app/settings" icon={<SettingOutlined />}>
+            <Link to="/app/settings" onClick={() => setRoute('/app/settings')}>Settings</Link>
+          </Menu.Item>
           <Menu.SubMenu key="/app/history" icon={<HistoryOutlined />} title="History">
             { histories?.length ? histories?.map((req: any, i: number) => (
               <Menu.Item key={`/app/${i}`} onClick={() => sendRequest(req, i)}>
@@ -85,8 +90,11 @@ const App: React.FC<Props> = ({ appRoute }) => {
               </Menu.Item>
             )) : <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} /> }
           </Menu.SubMenu>
-          <Menu.Item key="/app/settings" icon={<SettingOutlined />}>
-            <Link to="/app/settings" onClick={() => setRoute('/app/settings')}>Settings</Link>
+          <Menu.Item key="/app/download" icon={<DownloadOutlined />}>
+            <Link to="/app/download" onClick={() => setRoute('/app/download')}>Download</Link>
+          </Menu.Item>
+          <Menu.Item key="/app/donate" icon={<CoffeeOutlined />}>
+            <Link to="/app/donate" onClick={() => setRoute('/app/donate')}>Donate</Link>
           </Menu.Item>
         </Menu>
       </Layout.Sider>
@@ -99,6 +107,8 @@ const App: React.FC<Props> = ({ appRoute }) => {
             onSend={() => setHistories(window.localStorage.getItem('histories') ? JSON.parse(window.localStorage.getItem('histories')!) : [])}
             goToSettings={() => setRoute('/app/settings')} /> : '' }
           { route === '/app/settings' ? <Settings /> : '' }
+          { route === '/app/download' ? <Download /> : '' }
+          { route === '/app/donate' ? <Donate /> : '' }
           { route === '/app/import' ? <Import onSendRequest={sendRequest} /> : '' }
         </Layout.Content>
       </Layout>

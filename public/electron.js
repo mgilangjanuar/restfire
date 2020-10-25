@@ -13,16 +13,6 @@ autoUpdater.setFeedURL({
 autoUpdater.on('checking-for-update', () => win.webContents.executeJavaScript(`console.log('checking update...')`))
 autoUpdater.on('update-available', info => {
   win.webContents.executeJavaScript(`console.log('v${info.version} released and will downloading in background...')`)
-  // dialog.showMessageBox(null, {
-  //   type: 'question',
-  //   buttons: ['Download', 'Cancel'],
-  //   message: 'Download update?',
-  //   detail: `v${info.version} released and will downloading in background.`
-  // }, response => {
-  //   if (response === 0) {
-  //     autoUpdater.downloadUpdate()
-  //   }
-  // })
 })
 autoUpdater.on('error', error => {
   win.webContents.executeJavaScript(`console.error(${error})`)
@@ -32,7 +22,8 @@ autoUpdater.on('update-downloaded', () => {
   dialog.showMessageBox(null, {
     type: 'question',
     buttons: ['Quit and install', 'Cancel'],
-    message: 'Install update?'
+    message: 'Install update?',
+    detail: 'Update available and ready to install.'
   }, response => {
     if (response === 0) {
       autoUpdater.quitAndInstall()
