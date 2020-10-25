@@ -1,4 +1,4 @@
-import { FireOutlined, HistoryOutlined, HomeOutlined, SettingOutlined, ImportOutlined } from '@ant-design/icons'
+import { FireOutlined, HistoryOutlined, HomeOutlined, ImportOutlined, SettingOutlined } from '@ant-design/icons'
 import { Empty, Layout, Menu, Tag } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { useThemeSwitcher } from 'react-css-theme-switcher'
