@@ -91,7 +91,7 @@ const App: React.FC<Props> = ({ appRoute }) => {
             )) : <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} /> }
           </Menu.SubMenu>
           <Menu.Item key="/app/download" icon={<DownloadOutlined />}>
-            <Link to="/app/download" onClick={() => setRoute('/app/download')}>Download</Link>
+            <Link to="/app/download" onClick={() => setRoute('/app/download')}>Desktop App</Link>
           </Menu.Item>
           <Menu.Item key="/app/donate" icon={<CoffeeOutlined />}>
             <Link to="/app/donate" onClick={() => setRoute('/app/donate')}>Donate</Link>
