@@ -1,17 +1,17 @@
-const { app, BrowserWindow, autoUpdater } = require('electron')
-const os = require('os')
-// const { autoUpdater } = require('electron-updater')
+const { app, BrowserWindow } = require('electron')
+const { autoUpdater } = require('electron-updater')
+// const os = require('os')
 
 require('./server')
 
 // autoUpdater.logger = require('electron-log')
 // autoUpdater.logger.transports.file.level = 'info'
 
-const version = app.getVersion()
-const platform = os.platform() + '_' + os.arch()
+// const version = app.getVersion()
+// const platform = os.platform() + '_' + os.arch()
 autoUpdater.setFeedURL({
-  // provider: 'generic',
-  url: `http://lang-updater.herokuapp.com/update/${platform}/${version}`
+  provider: 'generic',
+  url: 'https://lang-updater.herokuapp.com/download/latest'
 })
 autoUpdater.on('checking-for-update', () => console.log('checking update'))
 autoUpdater.on('update-available', () => console.log('update ready!'))
@@ -22,7 +22,9 @@ autoUpdater.on('update-downloaded', event => {
 })
 
 app.on('ready', () => {
-  autoUpdater.checkForUpdates()
+  setTimeout(() => {
+    autoUpdater.checkForUpdatesAndNotify()
+  }, 3000)
 
   const win = new BrowserWindow({
     icon: `${__dirname}/icon.png`
