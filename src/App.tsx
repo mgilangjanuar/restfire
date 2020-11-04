@@ -21,7 +21,6 @@ function App() {
           <Route path="/app/settings" exact><MyApp appRoute="/app/settings" /></Route>
           <Route path="/app/import" exact><MyApp appRoute="/app/import" /></Route>
           <Route path="/app/download" exact><MyApp appRoute="/app/download" /></Route>
-          <Route path="/app/donate" exact><MyApp appRoute="/app/donate" /></Route>
           <Route path="/app"><MyApp appRoute="/app" /></Route>
           <Route path="/" exact component={Home} />
           {/* <Route path="/pricing" exact component={Pricing} /> */}

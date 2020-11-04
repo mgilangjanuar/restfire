@@ -4,7 +4,6 @@ import React, { useEffect, useState } from 'react'
 import { useThemeSwitcher } from 'react-css-theme-switcher'
 import { Link, useHistory } from 'react-router-dom'
 import Header from '../../components/Header'
-import Donate from './Donate'
 import Download from './Download'
 import Import from './Import'
 import Main from './Main'
@@ -108,7 +107,6 @@ const App: React.FC<Props> = ({ appRoute }) => {
             goToSettings={() => setRoute('/app/settings')} /> : '' }
           { route === '/app/settings' ? <Settings /> : '' }
           { route === '/app/download' ? <Download /> : '' }
-          { route === '/app/donate' ? <Donate /> : '' }
           { route === '/app/import' ? <Import onSendRequest={sendRequest} /> : '' }
         </Layout.Content>
       </Layout>
