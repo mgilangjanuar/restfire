@@ -1,4 +1,4 @@
-import { DownloadOutlined, FireOutlined, HistoryOutlined, HomeOutlined, ImportOutlined, SettingOutlined, CoffeeOutlined } from '@ant-design/icons'
+import { DownloadOutlined, FireOutlined, HistoryOutlined, HomeOutlined, ImportOutlined, SettingOutlined } from '@ant-design/icons'
 import { Empty, Layout, Menu, Tag } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { useThemeSwitcher } from 'react-css-theme-switcher'
@@ -91,9 +91,6 @@ const App: React.FC<Props> = ({ appRoute }) => {
           </Menu.SubMenu>
           <Menu.Item key="/app/download" icon={<DownloadOutlined />}>
             <Link to="/app/download" onClick={() => setRoute('/app/download')}>Desktop App</Link>
-          </Menu.Item>
-          <Menu.Item key="/app/donate" icon={<CoffeeOutlined />}>
-            <Link to="/app/donate" onClick={() => setRoute('/app/donate')}>Donate</Link>
           </Menu.Item>
         </Menu>
       </Layout.Sider>
