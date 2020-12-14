@@ -1,5 +1,5 @@
-import { BulbOutlined, FireOutlined, MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons'
-import { Button, Layout, message } from 'antd'
+import { BulbOutlined, FireOutlined, MenuFoldOutlined, MenuUnfoldOutlined, CoffeeOutlined } from '@ant-design/icons'
+import { Button, Layout, Menu, message } from 'antd'
 import React, { useEffect } from 'react'
 import { useThemeSwitcher } from 'react-css-theme-switcher'
 import { Link } from 'react-router-dom'
@@ -46,9 +46,21 @@ const Header: React.FC<Props> = ({ withSidebar, collapseLeft, defaultSelectedKey
         </>
       ) : (
         <>
-          <div style={{ float: 'left' }}>
-            <Link to="/"><Title /></Link>
-          </div>
+          <Menu mode="horizontal">
+            <Menu.Item>
+              <Link to="/"><Title /></Link>
+            </Menu.Item>
+            <Menu.Item>
+              <a target="_blank" rel="noopener noreferrer" href="https://github.com/mgilangjanuar/restfire-extension">
+                Extension (Beta)
+              </a>
+            </Menu.Item>
+            <Menu.Item>
+              <a target="_blank" rel="noopener noreferrer" href="https://karyakarsa.com/mgilangjanuar">
+                Donate <CoffeeOutlined />
+              </a>
+            </Menu.Item>
+          </Menu>
           {/* <Menu mode="horizontal" defaultSelectedKeys={[defaultSelectedKey || 'home']} style={{ border: 'none', display: 'flex', ...currentTheme === 'dark' ? { backgroundColor: '#000' } : { backgroundColor: '#f0f2f5' } }}>
             <Menu.Item key="home" onClick={() => history.push('/')}>Home</Menu.Item>
             <Menu.Item key="pricing" onClick={() => history.push('/pricing')}>Pricing</Menu.Item>
