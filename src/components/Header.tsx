@@ -56,7 +56,7 @@ const Header: React.FC<Props> = ({ withSidebar, collapseLeft, defaultSelectedKey
               </a>
             </Menu.Item>
             <Menu.Item>
-              <a target="_blank" rel="noopener noreferrer" href="https://karyakarsa.com/mgilangjanuar">
+              <a target="_blank" rel="noopener noreferrer" href="https://paypal.me/mgilangjanuar">
                 Donate <CoffeeOutlined />
               </a>
             </Menu.Item>
