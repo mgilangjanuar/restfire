@@ -19,6 +19,9 @@ const Footer: React.FC = () => {
           <Link to="/terms">Terms</Link>
         </Space>
       </Typography.Paragraph>
+      <Typography.Paragraph>
+        <img src="https://www.datocms-assets.com/31049/1618983297-powered-by-vercel.svg" alt="Powered by Vercel" />
+      </Typography.Paragraph>
     </Layout.Footer>
   )
 }

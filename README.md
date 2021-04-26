@@ -30,3 +30,5 @@ See the section about [deployment](https://facebook.github.io/create-react-app/d
 ## License
 
 [MIT](./LICENSE.md)
+
+![high-five](https://media0.giphy.com/media/26BREWfA5cRZJbMd2/giphy.gif?cid=ecf05e4721370e49dc41cdc59e140f4c0337fcaa46553ddb&rid=giphy.gif)
