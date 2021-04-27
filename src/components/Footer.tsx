@@ -20,7 +20,9 @@ const Footer: React.FC = () => {
         </Space>
       </Typography.Paragraph>
       <Typography.Paragraph>
-        <img src="https://www.datocms-assets.com/31049/1618983297-powered-by-vercel.svg" alt="Powered by Vercel" />
+        <a href="https://vercel.com?utm_source=restfire-studio&utm_campaign=oss">
+          <img src="https://www.datocms-assets.com/31049/1618983297-powered-by-vercel.svg" alt="Powered by Vercel" />
+        </a>
       </Typography.Paragraph>
     </Layout.Footer>
   )
