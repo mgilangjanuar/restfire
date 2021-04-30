@@ -21,7 +21,7 @@
     "@types/react-dom": "^16.9.0",
     "ace-builds": "^1.4.12",
     "antd": "^4.7.0",
-    "axios": "^0.20.0",
+    "axios": ">=0.21.1",
     "cors": "^2.8.5",
     "electron-log": "^4.2.4",
     "electron-updater": "^4.3.5",
