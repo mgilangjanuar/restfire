@@ -1,8 +1,11 @@
-import { DownloadOutlined, FireOutlined, HistoryOutlined, HomeOutlined, ImportOutlined, SettingOutlined } from '@ant-design/icons'
-import { Empty, Layout, Menu, Tag } from 'antd'
+import { AppstoreAddOutlined, DeleteOutlined, DownloadOutlined, FireOutlined, HistoryOutlined, HomeOutlined, ImportOutlined, PlusOutlined, SettingOutlined } from '@ant-design/icons'
+import { Empty, Form, Input, Layout, Menu, message, Popconfirm, Tag } from 'antd'
+import { useForm } from 'antd/lib/form/Form'
+import Modal from 'antd/lib/modal/Modal'
 import React, { useEffect, useState } from 'react'
 import { useThemeSwitcher } from 'react-css-theme-switcher'
 import { Link, useHistory } from 'react-router-dom'
+import { generate as createId } from 'shortid'
 import Header from '../../components/Header'
 import Download from './Download'
 import Import from './Import'
@@ -19,6 +22,9 @@ const App: React.FC<Props> = ({ appRoute }) => {
   const [collapseLeft, setCollapseLeft] = useState<boolean>()
   const [requestSent, setRequestSent] = useState<any>()
   const [histories, setHistories] = useState<any[]>(window.localStorage.getItem('histories') ? JSON.parse(window.localStorage.getItem('histories')!) : [])
+  const [collections, setCollections] = useState<any[]>(window.localStorage.getItem('collections') ? JSON.parse(window.localStorage.getItem('collections')!).sort((a, b) => a.title.localeCompare(b.title)) : [])
+  const [isAddFolder, setIsAddFolder] = useState<boolean>(false)
+  const [formNewFolder] = useForm()
   const { currentTheme } = useThemeSwitcher()
 
   useEffect(() => {
@@ -31,7 +37,7 @@ const App: React.FC<Props> = ({ appRoute }) => {
     </span>
   )
 
-  const TitleHistory = ({ data }) => {
+  const TitleHistory = ({ data, col, i }) => {
     let color: string | undefined = undefined
     if (data.request.method === 'post') {
       color = 'green'
@@ -45,8 +51,19 @@ const App: React.FC<Props> = ({ appRoute }) => {
       color = 'lime'
     }
 
-    const urlParsed = data.request.url?.split('?')[0]?.replace(/^http[s]*:\/\//gi, '')
-    return <><Tag color={color}>{data.request.method?.toUpperCase()}</Tag> {urlParsed}</>
+    const urlParsed = data.name || data.request.url?.split('?')[0]?.replace(/^http[s]*:\/\//gi, '')
+    return <>
+      <span onClick={() => sendRequest(data, i)}>
+        <Tag color={color}>{data.request.method?.toUpperCase()}</Tag> {urlParsed}
+      </span>
+      <span style={{ float: 'right' }}>
+        <Popconfirm
+          title="Are you sure to delete this request?"
+          onConfirm={() => remove(col?.id, data.id)}>
+          <DeleteOutlined />
+        </Popconfirm>
+      </span>
+    </>
   }
 
   const sendRequest = async (req: any, i?: number) => {
@@ -57,6 +74,52 @@ const App: React.FC<Props> = ({ appRoute }) => {
     }
     setRequestSent(req)
   }
+
+  const onSend = () => {
+    setHistories(window.localStorage.getItem('histories') ? JSON.parse(window.localStorage.getItem('histories')!) : [])
+    setTimeout(() => {
+      setCollections(window.localStorage.getItem('collections') ? JSON.parse(window.localStorage.getItem('collections')!).sort((a, b) => a.title.localeCompare(b.title)) : [])
+    }, 500)
+  }
+
+  const addFolder = async () => {
+    if (!formNewFolder.getFieldValue('title') || collections.find(col => col.title === formNewFolder.getFieldValue('title'))) {
+      return message.error(`${formNewFolder.getFieldValue('title')} already exists`)
+    }
+    setCollections([...collections || [], {
+      id: createId(),
+      title: formNewFolder.getFieldValue('title'),
+      isFolder: true
+    }].sort((a, b) => a.title.localeCompare(b.title)))
+    setIsAddFolder(false)
+    formNewFolder.resetFields()
+  }
+
+  const remove = async (colId?: string, id?: string) => {
+    if (!id) {
+      return setCollections(collections.map(col => col.id === colId ? null : col).filter(Boolean))
+    }
+    if (!colId) {
+      return setHistories(histories.map(req => req.id === id ? null : req).filter(Boolean))
+    }
+    return setCollections(collections.map(col => {
+      if (col.id === colId) {
+        return {
+          ...col,
+          requests: col?.requests.map((req: any) => req.id === id ? null : req).filter(Boolean)
+        }
+      }
+      return col
+    }))
+  }
+
+  useEffect(() => {
+    localStorage.setItem('collections', JSON.stringify(collections.sort((a, b) => a.title.localeCompare(b.title))))
+  }, [collections])
+
+  useEffect(() => {
+    localStorage.setItem('histories', JSON.stringify(histories))
+  }, [histories])
 
   return (
     <Layout>
@@ -72,7 +135,7 @@ const App: React.FC<Props> = ({ appRoute }) => {
         style={{ overflow: 'auto', minHeight: '100vh' }}
       >
         <Title hideText={collapseLeft} style={{ display: 'block', margin: '2px 0 1px' }} />
-        <Menu mode="inline" defaultSelectedKeys={[route]} selectedKeys={[route]} defaultOpenKeys={['/app/history']} theme={currentTheme as any || 'dark'}>
+        <Menu mode="inline" defaultSelectedKeys={[route]} selectedKeys={[route]} defaultOpenKeys={['/app/history', '/app/collections']} theme={currentTheme as any || 'dark'}>
           <Menu.Item key="/app" icon={<HomeOutlined />}>
             <Link to="/app" onClick={() => setRoute('/app')}>Main</Link>
           </Menu.Item>
@@ -82,10 +145,35 @@ const App: React.FC<Props> = ({ appRoute }) => {
           <Menu.Item key="/app/settings" icon={<SettingOutlined />}>
             <Link to="/app/settings" onClick={() => setRoute('/app/settings')}>Settings</Link>
           </Menu.Item>
+          <Menu.SubMenu key="/app/collections" icon={<AppstoreAddOutlined />} title="Collections">
+            <Menu.Item key={'/app/collections/add'} onClick={() => setIsAddFolder(true)}>
+              <PlusOutlined /> Add Collection
+            </Menu.Item>
+            { collections?.length ? collections?.map((col: any, i: number) => (
+              <Menu.SubMenu key={`app/collections/folder/${i}`} title={
+                <span>
+                  <span>{col.title}</span>
+                  <span style={{ float: 'right' }}>
+                    <Popconfirm
+                      title="Are you sure to delete this collection?"
+                      onConfirm={() => remove(col.id)}>
+                      <DeleteOutlined />
+                    </Popconfirm>
+                  </span>
+                </span>
+              }>
+                { col.requests?.length ? col.requests.map((req: any, i: number) => (
+                  <Menu.Item key={`/app/${i}`}>
+                    <TitleHistory data={req} col={col} i={i} />
+                  </Menu.Item>
+                )) : <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} /> }
+              </Menu.SubMenu>
+            )) : <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} /> }
+          </Menu.SubMenu>
           <Menu.SubMenu key="/app/history" icon={<HistoryOutlined />} title="History">
             { histories?.length ? histories?.map((req: any, i: number) => (
-              <Menu.Item key={`/app/${i}`} onClick={() => sendRequest(req, i)}>
-                <TitleHistory data={req} />
+              <Menu.Item key={`/app/${i}`}>
+                <TitleHistory data={req} col={undefined} i={i} />
               </Menu.Item>
             )) : <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} /> }
           </Menu.SubMenu>
@@ -100,13 +188,21 @@ const App: React.FC<Props> = ({ appRoute }) => {
           { /^\/app[/]*[0-9]*$/.test(route) ? <Main
             appendRequest={requestSent}
             onAppend={() => setRequestSent(undefined)}
-            onSend={() => setHistories(window.localStorage.getItem('histories') ? JSON.parse(window.localStorage.getItem('histories')!) : [])}
+            onSend={onSend}
+            initialCollections={collections}
             goToSettings={() => setRoute('/app/settings')} /> : '' }
           { route === '/app/settings' ? <Settings /> : '' }
           { route === '/app/download' ? <Download /> : '' }
           { route === '/app/import' ? <Import onSendRequest={sendRequest} /> : '' }
         </Layout.Content>
       </Layout>
+      <Modal title="Add Collection" visible={isAddFolder} onOk={addFolder} onCancel={() => setIsAddFolder(false)}>
+        <Form form={formNewFolder} layout="vertical">
+          <Form.Item label="Title" name="title" rules={[{ required: true, message: 'Please input the title' }]}>
+            <Input placeholder="My Collection" />
+          </Form.Item>
+        </Form>
+      </Modal>
     </Layout>
   )
 }
