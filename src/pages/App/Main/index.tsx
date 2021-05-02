@@ -37,6 +37,7 @@ type Request = {
 type RequestData = {
   id: string,
   title: any,
+  name?: string,
   request: Request,
   response?: Response
 }
@@ -45,16 +46,24 @@ interface Props {
   onSend: () => void,
   appendRequest?: any,
   onAppend?: () => void,
-  goToSettings: () => any
+  goToSettings: () => any,
+  initialCollections: any[]
 }
 
-const Main: React.FC<Props> = ({ onSend, appendRequest, onAppend, goToSettings }) => {
+const Main: React.FC<Props> = ({ onSend, appendRequest, onAppend, goToSettings, initialCollections }) => {
   const [form] = useForm()
   const [requestData, setRequestData] = useState<RequestData[]>()
   const [activeRequest, setActiveRequest] = useState<RequestData>()
   const [activeTab, setActiveTab] = useState<string>()
   const [showShareModal, setShowShareModal] = useState<boolean>(false)
+  const [isSaving, setIsSaving] = useState<boolean>(false)
+  const [collections, setCollections] = useState<any[]>(initialCollections)
   const [curl, setCurl] = useState<any>()
+  const [formSave] = useForm()
+
+  useEffect(() => {
+    setCollections(initialCollections)
+  }, [initialCollections])
 
   const buildInitialRequestData = (): RequestData => ({
     id: createId(),
@@ -101,6 +110,9 @@ const Main: React.FC<Props> = ({ onSend, appendRequest, onAppend, goToSettings }
 
   useEffect(() => {
     window.scrollTo(0, 0)
+    window.onbeforeunload = function () {
+      return 'Do you really want to close?'
+    }
   }, [])
 
   const updateTab = async (data: Partial<Request>, resp?: Partial<Response>) => {
@@ -323,6 +335,37 @@ const Main: React.FC<Props> = ({ onSend, appendRequest, onAppend, goToSettings }
     </Select>
   )
 
+  const save = () => {
+    const data = formSave.getFieldsValue()
+    const request = {
+      ...activeRequest,
+      name: data.name
+    } as RequestData
+    setActiveRequest(request)
+    setCollections([...collections.map(col => {
+      if (col.id === data.collection) {
+        return {
+          ...col,
+          requests: [
+            ...col.requests || [],
+            {
+              ...request,
+              id: createId()
+            }
+          ]
+        }
+      }
+      return col
+    }) || []])
+    formSave.setFieldsValue({ name: null })
+    setIsSaving(false)
+    onSend()
+  }
+
+  useEffect(() => {
+    localStorage.setItem('collections', JSON.stringify(collections.sort((a, b) => a.title.localeCompare(b.title))))
+  }, [collections])
+
   return (
     <>
       <Tabs defaultActiveKey={activeTab?.toString() || requestData?.[0]?.id} activeKey={activeTab} type="editable-card" onEdit={mutateTabs} onChange={setActiveTab} size="small">
@@ -339,6 +382,7 @@ const Main: React.FC<Props> = ({ onSend, appendRequest, onAppend, goToSettings }
                     required
                     onSearch={send}
                     onChange={e => updateTab({ url: e.target.value || '' })} />
+                  <Button onClick={() => setIsSaving(true)}>Save</Button>
                   <Button disabled={!activeRequest?.request.url} onClick={share} type="link" style={{ marginLeft: '5px' }} icon={<ShareAltOutlined />}></Button>
                 </span>
               </Form.Item>
@@ -400,6 +444,18 @@ const Main: React.FC<Props> = ({ onSend, appendRequest, onAppend, goToSettings }
         <Card title="cURL snippets">
           {curl?.split('\n')?.map((line: string) => (<>{line}<br /></>))}
         </Card>
+      </Modal>
+      <Modal title="Save" visible={isSaving} onOk={save} onCancel={() => setIsSaving(false)}>
+        <Form form={formSave} layout="vertical">
+          <Form.Item label="Collection" name="collection" rules={[{ required: true, message: 'Please input the collection' }]}>
+            <Select>
+              { collections?.map((col, i) => <Select.Option value={col.id} key={i}>{col.title}</Select.Option>) }
+            </Select>
+          </Form.Item>
+          <Form.Item label="Name" name="name" rules={[{ required: true, message: 'Please input the name' }]}>
+            <Input placeholder="My Request" />
+          </Form.Item>
+        </Form>
       </Modal>
     </>
   )
