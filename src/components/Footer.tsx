@@ -8,7 +8,7 @@ const Footer: React.FC = () => {
     <Layout.Footer style={{ textAlign: 'center' }}>
       <Divider />
       <Typography.Paragraph>
-        <FireOutlined /> RestFire Studio &copy; 2020
+        <FireOutlined /> RestFire Studio &copy; 2021
       </Typography.Paragraph>
       <Typography.Paragraph>
         <Space split={<>&middot;</>}>
