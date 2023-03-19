@@ -71,4 +71,6 @@ app.post('/proxy', async (req, res) => {
 app.use(express.static(path.join(__dirname, '..', 'build')))
 app.use((_, res) => res.sendFile(path.join(__dirname, '..', 'build', 'index.html')))
 
-app.listen(4002, () => console.log('started...'))
+const server = app.listen(4002, () => console.log('started...'))
+
+module.exports = { server }

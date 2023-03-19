@@ -97,10 +97,10 @@ const App: React.FC<Props> = ({ appRoute }) => {
 
   const remove = async (i: number, colId?: string, id?: string) => {
     if (!id) {
-      return setCollections(collections.map(col => col.id === colId ? null : col).filter(Boolean))
+      return setCollections(collections => collections.map(col => col.id === colId ? null : col).filter(Boolean))
     }
     if (!colId) {
-      return setHistories(histories.map((req, j) => j === i ? null : req).filter(Boolean))
+      return setHistories(histories => histories.map((req, j) => j === i ? null : req).filter(Boolean))
     }
     return setCollections(collections.map(col => {
       if (col.id === colId) {
@@ -156,7 +156,7 @@ const App: React.FC<Props> = ({ appRoute }) => {
                   <span style={{ float: 'right' }}>
                     <Popconfirm
                       title="Are you sure to delete this collection?"
-                      onConfirm={() => remove(col.id)}>
+                      onConfirm={() => remove(i, col.id)}>
                       <DeleteOutlined />
                     </Popconfirm>
                   </span>

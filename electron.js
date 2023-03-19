@@ -1,8 +1,7 @@
 const { app, BrowserWindow } = require('electron')
-const { autoUpdater } = require('electron-updater')
 const { generate } = require('shortid')
 
-require('./server')
+const { server } = require('./server')
 
 let win
 
@@ -45,7 +44,12 @@ app.on('ready', () => {
   win.webContents.executeJavaScript(`if (window.localStorage.getItem('download-token')) window.localStorage.setItem('download-token', '${generate()}')`)
   win.maximize()
   win.loadURL('http://localhost:4002/app')
-  setTimeout(() => {
-    autoUpdater.checkForUpdatesAndNotify()
-  }, 2000)
+  // setTimeout(() => {
+  //   autoUpdater.checkForUpdatesAndNotify()
+  // }, 2000)
+})
+
+app.on('before-quit', () => {
+  server.close()
+  process.exit(0)
 })
