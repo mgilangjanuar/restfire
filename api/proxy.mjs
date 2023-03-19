@@ -1,7 +1,7 @@
-const Axios = require('axios')
-const FormData = require('form-data')
-const fs = require('fs')
-const os = require('os')
+import Axios from 'axios'
+import FormData from 'form-data'
+import fs from 'fs'
+import os from 'os'
 
 export default async function handler(req, res) {
   const config = { ...req.body }
