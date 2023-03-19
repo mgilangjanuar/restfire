@@ -53,15 +53,15 @@ const App: React.FC<Props> = ({ appRoute }) => {
 
     const urlParsed = data.name || data.request.url?.split('?')[0]?.replace(/^http[s]*:\/\//gi, '')
     return <>
-      <span onClick={() => sendRequest(data, i)}>
-        <Tag color={color}>{data.request.method?.toUpperCase()}</Tag> {urlParsed}
-      </span>
-      <span style={{ float: 'right' }}>
+      <span>
         <Popconfirm
           title="Are you sure to delete this request?"
-          onConfirm={() => remove(col?.id, data.id)}>
+          onConfirm={() => remove(i, col?.id, data.id)}>
           <DeleteOutlined />
         </Popconfirm>
+      </span>
+      <span onClick={() => sendRequest(data, i)}>
+        <Tag color={color}>{data.request.method?.toUpperCase()}</Tag> {urlParsed}
       </span>
     </>
   }
@@ -95,12 +95,12 @@ const App: React.FC<Props> = ({ appRoute }) => {
     formNewFolder.resetFields()
   }
 
-  const remove = async (colId?: string, id?: string) => {
+  const remove = async (i: number, colId?: string, id?: string) => {
     if (!id) {
       return setCollections(collections.map(col => col.id === colId ? null : col).filter(Boolean))
     }
     if (!colId) {
-      return setHistories(histories.map(req => req.id === id ? null : req).filter(Boolean))
+      return setHistories(histories.map((req, j) => j === i ? null : req).filter(Boolean))
     }
     return setCollections(collections.map(col => {
       if (col.id === colId) {

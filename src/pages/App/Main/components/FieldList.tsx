@@ -62,24 +62,24 @@ const FieldList: React.FC<Props> = ({ name, form, tab, activeRequest, updateTab,
           {fields.map((field, i) => (
             <Space key={i} className="space" align="baseline">
               { useTypeField ? (
-                <Form.Item style={{ width: '79px' }} { ...field } name={[field.name, `${tab.id}_type`]} fieldKey={[field.fieldKey, `${tab.id}_type`]}>
+                <Form.Item style={{ width: '79px' }} { ...field } name={[field.name, `${tab.id}_type`]} fieldKey={[field.fieldKey!, `${tab.id}_type`]}>
                   <Select onChange={e => updateListField(i, 'type', { target: { value: e } })} bordered={false}>
                     <Select.Option value="string">string</Select.Option>
                     <Select.Option value="file">file</Select.Option>
                   </Select>
                 </Form.Item>
               ) : '' }
-              <Form.Item { ...field } name={[field.name, `${tab.id}_key`]} fieldKey={[field.fieldKey, `${tab.id}_key`]}>
+              <Form.Item { ...field } name={[field.name, `${tab.id}_key`]} fieldKey={[field.fieldKey!, `${tab.id}_key`]}>
                 <Input placeholder="Key" autoComplete="off" onChange={e => updateListField(i, 'key', e)} />
               </Form.Item>
               { form.getFieldValue([name, i, `${tab.id}_type`]) === 'file' ? (
-                <Form.Item { ...field } name={[field.name, `${tab.id}_file`]} fieldKey={[field.fieldKey, `${tab.id}_file`]} valuePropName="files">
+                <Form.Item { ...field } name={[field.name, `${tab.id}_file`]} fieldKey={[field.fieldKey!, `${tab.id}_file`]} valuePropName="files">
                   <Upload beforeUpload={file => getFile(i, file)} showUploadList={false}>
                     <Button icon={getFileName(i) ? undefined : <UploadOutlined />}>{getFileName(i) || 'Upload'}</Button>
                   </Upload>
                 </Form.Item>
               ) : (
-                <Form.Item { ...field } name={[field.name, `${tab.id}_value`]} fieldKey={[field.fieldKey, `${tab.id}_value`]}>
+                <Form.Item { ...field } name={[field.name, `${tab.id}_value`]} fieldKey={[field.fieldKey!, `${tab.id}_value`]}>
                   <Input placeholder="Value" autoComplete="off" onChange={e => updateListField(i, 'value', e)} />
                 </Form.Item>
               ) }

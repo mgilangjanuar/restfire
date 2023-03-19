@@ -375,6 +375,7 @@ const Main: React.FC<Props> = ({ onSend, appendRequest, onAppend, goToSettings, 
               <Form.Item name="url">
                 <span style={{ display: 'flex' }}>
                   <Input.Search
+                    className="navigator-bar"
                     placeholder="Enter URL"
                     addonBefore={<SelectMethod />}
                     enterButton="Send"
