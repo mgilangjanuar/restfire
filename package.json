@@ -45,7 +45,7 @@
     "typescript": "^5.0.2"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "./server/restfire-server-aarch64-apple-darwin & react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
@@ -92,6 +92,8 @@
     ]
   },
   "devDependencies": {
+    "@tauri-apps/api": "^1.2.0",
+    "@tauri-apps/cli": "^1.2.3",
     "@types/antd": "^1.0.0",
     "@types/axios": "^0.14.0",
     "@types/electron": "^1.6.10",
@@ -103,6 +105,7 @@
     "@types/react-router-dom": "^5.1.6",
     "@types/shortid": "^0.0.29",
     "electron": "^23.1.4",
-    "electron-builder": "^23.6.0"
+    "electron-builder": "^23.6.0",
+    "execa": "^7.1.1"
   }
 }
