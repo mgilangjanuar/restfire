@@ -1,3 +1,0 @@
-cargo:rerun-if-changed=build/main.rs
-cargo:rustc-env=TYPENUM_BUILD_CONSTS=/Users/mgilangjanuar/Documents/workspace/personal/restfire/server/target/debug/build/typenum-bcb0e302ad0edc69/out/consts.rs
-cargo:rustc-env=TYPENUM_BUILD_OP=/Users/mgilangjanuar/Documents/workspace/personal/restfire/server/target/debug/build/typenum-bcb0e302ad0edc69/out/op.rs

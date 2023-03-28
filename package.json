@@ -24,8 +24,6 @@
     "antd": "4.10.0",
     "axios": ">=0.21.1",
     "cors": "^2.8.5",
-    "electron-log": "^4.2.4",
-    "electron-updater": "^4.3.5",
     "filesize": "^6.1.0",
     "form-data": "^3.0.0",
     "immutability-helper": "^3.1.1",
@@ -48,33 +46,7 @@
     "start": "./server/restfire-server-aarch64-apple-darwin & react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "electron-prebuild": "react-scripts build && mkdir buildelectron && cp -r build buildelectron && cp -r server buildelectron && rm -rf build && cp electron.js public/ && cp electron.js buildelectron/ && mv buildelectron build",
-    "electron-build": "npm run electron-prebuild && electron-builder"
-  },
-  "build": {
-    "appId": "com.mgilangjanuar.restfire",
-    "productName": "RestFire Studio (Beta)",
-    "win": {
-      "publish": [
-        "github"
-      ]
-    },
-    "mac": {
-      "publish": [
-        "github"
-      ],
-      "extendInfo": {
-        "NSAppTransportSecurity": {
-          "NSAllowsArbitraryLoads": true
-        }
-      }
-    },
-    "linux": {
-      "publish": [
-        "github"
-      ]
-    }
+    "eject": "react-scripts eject"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -96,7 +68,6 @@
     "@tauri-apps/cli": "^1.2.3",
     "@types/antd": "^1.0.0",
     "@types/axios": "^0.14.0",
-    "@types/electron": "^1.6.10",
     "@types/filesize": "^5.0.0",
     "@types/form-data": "^2.5.0",
     "@types/immutability-helper": "^2.6.3",
@@ -104,8 +75,6 @@
     "@types/query-string": "^6.3.0",
     "@types/react-router-dom": "^5.1.6",
     "@types/shortid": "^0.0.29",
-    "electron": "^23.1.4",
-    "electron-builder": "^23.6.0",
     "execa": "^7.1.1"
   }
 }

@@ -7,7 +7,7 @@ const Download: React.FC = () => {
   return (
     <Card title={<><DownloadOutlined /> Desktop App (Live Preview)</>}>
       <Typography.Paragraph>
-        <a href="https://lang-updater.herokuapp.com">
+        <a href="https://mgilangjanuar.gumroad.com/l/restfire">
           <Button style={{ marginBottom: '10px', marginRight: '10px' }} icon={<AppleFilled />}>Mac OS</Button>
         </a>
         <Button style={{ marginBottom: '10px', marginRight: '10px' }} disabled icon={<WindowsFilled />}>Windows (comming soon)</Button>
